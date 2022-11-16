@@ -34,7 +34,7 @@ export default function BurgerConstructor(props) {
   return (
     <section className={styles.burgerСonstructor}>
       <div className={`${styles.topsWrapper} pt-25`}>
-        <ConstructorElement text={`Флюоресцентная булка R2-D3 (верх)`} thumbnail='https://code.s3.yandex.net/react/code/meat-04.png' isLocked='true' price={1488} type='top' />
+        <ConstructorElement text={`Флюоресцентная булка R2-D3 (верх)`} thumbnail='https://code.s3.yandex.net/react/code/bun-01.png' isLocked='true' price={1488} type='top' />
       </div>
       <div className={styles.scrollDiv}>
         {elements[8]}
@@ -49,7 +49,7 @@ export default function BurgerConstructor(props) {
       </div>
       <div className='pt-4'></div>
       <div className={styles.topsWrapper}>
-        <ConstructorElement text={`Флюоресцентная булка R2-D3 (низ)`} thumbnail='https://code.s3.yandex.net/react/code/meat-04.png' isLocked='true' price={1488} type='bottom' />
+        <ConstructorElement text={`Флюоресцентная булка R2-D3 (низ)`} thumbnail='https://code.s3.yandex.net/react/code/bun-01.png' isLocked='true' price={1488} type='bottom' />
         <div className='pt-4'></div>
       </div>
       <div className='pt-10'></div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import appStyles from './App.css';
+import styles from './App.module.css';
 import AppHeader from '../AppHeader/AppHeader.jsx'
 import BurgerIngridients from '../BurgerIngridients/BurgerIngridients.jsx'
 import BurgerConstructor from '../BurgerConstructor/BurgerConstructor.jsx'
@@ -14,12 +14,13 @@ function App() {
         setData(res.data);
         return res.data
       })
+      .catch((err) => alert(err))
   }, [])
 
   return (
     <>
       <AppHeader />
-      <main className='main'>
+      <main className={styles.main}>
         <BurgerIngridients data={data} />
         <BurgerConstructor data={data} />
       </main>
