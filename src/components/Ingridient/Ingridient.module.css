@@ -2,6 +2,14 @@
   width: 272px;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.ingridientContent{
+  width: 272px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .ingridientName{

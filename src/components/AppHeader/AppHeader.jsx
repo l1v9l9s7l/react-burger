@@ -14,19 +14,13 @@ export default function AppHeader() {
           <a className={styles.headerConstructor}>
             <div className='pl-5'></div>
             <BurgerIcon />
-            <div className='pl-2'></div>
-            <p>Конструктор</p>
-            <div className='pl-5'></div>
+            <p className='pl-2 pr-5'>Конструктор</p>
           </a>
-          <div className='pl-2'></div>
-          <a className={styles.headerOrderList}>
-            <div className='pl-5'></div>
-            <div className={styles.navigationIcon}>
+          <a className={`${styles.headerOrderList} pl-2`}>
+            <div className={`${styles.navigationIcon} pl-5`}>
               <ListIcon type='secondary' />
             </div>
-            <div className='pl-2'></div>
-            <p className='text_color_inactive'>Лента заказов</p>
-            <div className='pl-5'></div>
+            <p className='text_color_inactive pl-2 pr-5'>Лента заказов</p>
           </a>
         </div>
         <div className={styles.logo}>

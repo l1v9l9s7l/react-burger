@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types'
 import styles from './BurgerIngridients.module.css'
-import { Counter } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import { BurgerIcon, CloseIcon, CheckMarkIcon, DragIcon, EditIcon, HideIcon, InfoIcon, ListIcon, LockIcon, LogoutIcon, ProfileIcon, ShowIcon, DeleteIcon, ArrowUpIcon, ArrowDownIcon, MenuIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import Ingridient from '../Ingridient/Ingridient';
-import ModalOverlay from '../ModalOverlay/ModalOverlay.jsx'
-import { fetchIngredients } from '../../utils/api';
 
-export default function BurgerIngridients() {
+export default function BurgerIngridients(props) {
   const [arr, setArr] = React.useState([]);
   const [sauces, setSauces] = React.useState([]);
   const [mains, setMains] = React.useState([]);
   const [buns, setBuns] = React.useState([]);
 
+  const data = props.data
+
   React.useEffect(() => {
-    fetchIngredients()
-      .then((res) => {
-        setArr(res.data);
-        return res.data
-      })
-  }, [])
+    setArr(data)
+  }, [data])
+
 
   React.useEffect(() => {
     const saucesArr = arr.filter(ingridient => {
@@ -28,7 +23,7 @@ export default function BurgerIngridients() {
         return ingridient
       }
     })
-    const sauces = saucesArr.map(x => <Ingridient name={x.name} image={x.image_large} price={x.price} calories={x.calories} proteins={x.proteins} fat={x.fat} carbohydrates={x.carbohydrates} />)
+    const sauces = saucesArr.map(i => <Ingridient name={i.name} image={i.image_large} price={i.price} calories={i.calories} proteins={i.proteins} fat={i.fat} carbohydrates={i.carbohydrates} key={i._id} />)
     setSauces(sauces)
   }, [arr])
 
@@ -38,7 +33,7 @@ export default function BurgerIngridients() {
         return ingridient
       }
     })
-    const mains = mainsArr.map(x => <Ingridient name={x.name} image={x.image_large} price={x.price} calories={x.calories} proteins={x.proteins} fat={x.fat} carbohydrates={x.carbohydrates} />)
+    const mains = mainsArr.map(i => <Ingridient name={i.name} image={i.image_large} price={i.price} calories={i.calories} proteins={i.proteins} fat={i.fat} carbohydrates={i.carbohydrates} key={i._id} />)
     setMains(mains)
   }, [arr])
 
@@ -48,7 +43,7 @@ export default function BurgerIngridients() {
         return ingridient
       }
     })
-    const buns = bunsArr.map(x => <Ingridient name={x.name} image={x.image_large} price={x.price} calories={x.calories} proteins={x.proteins} fat={x.fat} carbohydrates={x.carbohydrates} />)
+    const buns = bunsArr.map(i => <Ingridient name={i.name} image={i.image_large} price={i.price} calories={i.calories} proteins={i.proteins} fat={i.fat} carbohydrates={i.carbohydrates} key={i._id} />)
     setBuns(buns)
   }, [arr])
 
@@ -56,9 +51,7 @@ export default function BurgerIngridients() {
   return (
     <section className={styles.ingridients}>
 
-      <div className='pt-10'></div>
-      <h1 className={styles.title}>Соберите бургер</h1>
-      <div className='pt-5'></div>
+      <h1 className={`${styles.title} pt-10 pb-5`}>Соберите бургер</h1>
 
       <div className={styles.menu}>
         <Tab className={styles.menuButton} active='true'>Булки</Tab>
@@ -66,30 +59,28 @@ export default function BurgerIngridients() {
         <Tab className={styles.menuButton}>Начинки</Tab>
       </div>
 
-      <div className='pt-10'></div>
-      <div className={styles.scrollDiv}>
+      <div className={`${styles.scrollDiv} pt-10`}>
 
         <h3 className={styles.categories}>Булки</h3>
-        <div className='pt-6'></div>
-        <div className={styles.ingridientsGrid}>
+        <div className={`${styles.ingridientsGrid} pt-6 pb-10`}>
           {buns}
         </div>
-        <div className='pt-10'></div>
 
         <h3 className={styles.categories}>Cоусы</h3>
-        <div className='pt-6'></div>
-        <div className={styles.ingridientsGrid}>
+        <div className={`${styles.ingridientsGrid} pt-6 pb-10`}>
           {sauces}
         </div>
-        <div className='pt-10'></div>
 
         <h3 className={styles.categories}>Начинки</h3>
-        <div className='pt-6'></div>
-        <div className={styles.ingridientsGrid}>
+        <div className={`${styles.ingridientsGrid} pt-6`}>
           {mains}
         </div>
       </div>
 
     </section>
   )
+}
+
+BurgerIngridients.propTypes = {
+  data: PropTypes.array.isRequired
 }
