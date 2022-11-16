@@ -1,0 +1,17 @@
+.title{
+  font-size: 40px;
+}
+
+.nutritionals{
+  display: flex;
+  color: #8585AD;
+  justify-content: center;
+}
+
+.details{
+  text-align: center;
+}
+
+.resus{
+  font-size: 40px;
+}

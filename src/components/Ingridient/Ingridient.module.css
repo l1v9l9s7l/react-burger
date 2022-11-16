@@ -1,0 +1,24 @@
+.ingridient{
+  width: 272px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ingridientName{
+
+  text-align: center;
+  margin: 0;
+  height: 48px;
+}
+
+
+.priceWrapper{
+  display: flex;
+  align-items: start;
+  justify-content: center;
+}
+
+.price{
+  margin: 0;
+  margin-right: 9px;
+}

@@ -1,0 +1,14 @@
+.modal{
+  width: 720px;
+  height: 539px;
+  background-color: #1C1C21;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-right: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
