@@ -22,9 +22,7 @@ export default function Modal(props) {
 
   return ReactDOM.createPortal(
     <>
-      <div onClick={props.onModalClose}>
-        <ModalOverlay />
-      </div>
+      <ModalOverlay onClose={props.onModalClose} />
       <div className={styles.modalContent}>
         <div className={styles.modalWrapper}>
           <div className={`${styles.modalCloseIcon} pt-15 pr-10`} onClick={props.onModalClose} >
