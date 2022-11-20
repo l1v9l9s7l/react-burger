@@ -22,9 +22,9 @@ export default function BurgerConstructor(props) {
 
   React.useEffect(() => {
     const elements = props.data.map(i =>
-      <div className={`${styles.elementWrapper} pt-4`}>
+      <div className={`${styles.elementWrapper} pt-4`} key={i._id}>
         <DragIcon />
-        <ConstructorElement text={i.name} thumbnail={i.image} isLocked={false} price={i.price} key={i._id} />
+        <ConstructorElement text={i.name} thumbnail={i.image} isLocked={false} price={i.price} />
       </div>
     )
     setElements(elements)
@@ -34,22 +34,15 @@ export default function BurgerConstructor(props) {
     <>
       <section className={styles.burgerСonstructor}>
         <div className={`${styles.topsWrapper} pt-25`}>
-          <ConstructorElement text={`Флюоресцентная булка R2-D3 (верх)`} thumbnail='https://code.s3.yandex.net/react/code/bun-01.png' isLocked='true' price={1488} type='top' />
+          <ConstructorElement text={`Флюоресцентная булка R2-D3 (верх)`} thumbnail='https://code.s3.yandex.net/react/code/bun-01.png' isLocked='true' price={988} type='top' />
         </div>
         <div className={styles.scrollDiv}>
-          {elements[8]}
-          {elements[4]}
-          {elements[2]}
-          {elements[5]}
-          {elements[2]}
-          {elements[13]}
-          {elements[14]}
-          {elements[2]}
+          {elements.slice(2)}
           <div className='pt-4'></div>
         </div>
         <div className='pt-4'></div>
         <div className={styles.topsWrapper}>
-          <ConstructorElement text={`Флюоресцентная булка R2-D3 (низ)`} thumbnail='https://code.s3.yandex.net/react/code/bun-01.png' isLocked='true' price={1488} type='bottom' />
+          <ConstructorElement text={`Флюоресцентная булка R2-D3 (низ)`} thumbnail='https://code.s3.yandex.net/react/code/bun-01.png' isLocked='true' price={988} type='bottom' />
           <div className='pt-4'></div>
         </div>
         <div className='pt-10'></div>
