@@ -9,12 +9,10 @@ import Modal from '../Modal/Modal';
 
 
 export default function BurgerConstructor(props) {
-  const [arr, setArr] = React.useState([]);
   const [elements, setElements] = React.useState([])
   const [modalOpen, setModalOpen] = useState(false);
-  const data = props.data
 
-  const handlerModalOpen = (value) => {              //Создали обработчик открытия модального окна
+  const handlerModalOpen = () => {              //Создали обработчик открытия модального окна
     setModalOpen(true);                                   //Меняем состояние модального окна
   }
 
@@ -23,34 +21,14 @@ export default function BurgerConstructor(props) {
   }
 
   React.useEffect(() => {
-    const closeOnEsc = (evt) => {
-      evt.code === 'Escape' && setModalOpen(false);
-    };
-    document.addEventListener('keydown', closeOnEsc);
-
-    return () => {
-      document.removeEventListener('keydown', closeOnEsc);
-    }
-  }, []);
-
-
-
-  React.useEffect(() => {
-    setArr(data)
-  }, [data])
-
-  React.useEffect(() => {
-    const elements = arr.map(i =>
-      <>
-        <div className='pt-4'></div>
-        <div className={styles.elementWrapper}>
-          <DragIcon />
-          <ConstructorElement text={i.name} thumbnail={i.image} isLocked={false} price={i.price} key={i._id} />
-        </div>
-      </>
+    const elements = props.data.map(i =>
+      <div className={`${styles.elementWrapper} pt-4`}>
+        <DragIcon />
+        <ConstructorElement text={i.name} thumbnail={i.image} isLocked={false} price={i.price} key={i._id} />
+      </div>
     )
     setElements(elements)
-  }, [arr])
+  }, [props.data])
 
   return (
     <>
@@ -84,7 +62,7 @@ export default function BurgerConstructor(props) {
         </div>
       </section>
       {modalOpen && (   //Если true отобрази модальное окно
-        <Modal onModalClose={handlerModalClose} details={<OrderDetails />} />
+        <Modal onModalClose={handlerModalClose}><OrderDetails /></Modal>
       )}
     </>
   )

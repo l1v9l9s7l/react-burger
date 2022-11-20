@@ -7,24 +7,39 @@ import ModalOverlay from "../ModalOverlay/ModalOverlay";
 
 const modalRoot = document.getElementById('modal')
 
-export default function Modal({ onModalClose, details }) {
+export default function Modal(props) {
+
+  React.useEffect(() => {
+    const closeOnEsc = (evt) => {
+      evt.code === 'Escape' && props.onModalClose();
+    };
+    document.addEventListener('keydown', closeOnEsc);
+
+    return () => {
+      document.removeEventListener('keydown', closeOnEsc);
+    }
+  }, []);
 
   return ReactDOM.createPortal(
-    <>
-      <div>
-        <div className={styles.overlay} onClick={onModalClose}>
-          <ModalOverlay />
-        </div>
-        <div className={styles.modalContent}>
-          <div className={styles.modalWrapper}>
-            <div className={`${styles.modalCloseIcon} pt-15 pr-10`} onClick={onModalClose} >
-              <CloseIcon />
-            </div>
-            {details}
+    <div>
+      <div className={styles.overlay} onClick={props.onModalClose}>
+        <ModalOverlay />
+      </div>
+      <div className={styles.modalContent}>
+        <div className={styles.modalWrapper}>
+          <div className={`${styles.modalCloseIcon} pt-15 pr-10`} onClick={props.onModalClose} >
+            <CloseIcon />
           </div>
+          {props.children}
         </div>
-      </div >
-    </>
+      </div>
+    </div >
     , modalRoot
   )
+}
+
+
+Modal.propTypes = {
+  children: PropTypes.object,
+  onModalClose: PropTypes.func
 }

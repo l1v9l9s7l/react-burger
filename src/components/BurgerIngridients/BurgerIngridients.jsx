@@ -7,12 +7,10 @@ import Modal from '../Modal/Modal';
 import IngridientDetails from '../IngridientDetails/IngridientDetails';
 
 export default function BurgerIngridients(props) {
-  const [arr, setArr] = React.useState([]);
   const [sauces, setSauces] = React.useState([]);
   const [mains, setMains] = React.useState([]);
   const [buns, setBuns] = React.useState([]);
 
-  const data = props.data
 
   const [modalOpen, setModalOpen] = useState(false);
   const [modalInfo, setModalInfo] = useState({ name: '', image: '', calories: '', fat: '', proteins: '', carbohydrates: '' });
@@ -26,52 +24,36 @@ export default function BurgerIngridients(props) {
     setModalOpen(false);                                   //Меняем состояние модального окна
   }
 
-  React.useEffect(() => {
-    const closeOnEsc = (evt) => {
-      evt.code === 'Escape' && handlerModalClose();
-    };
-    document.addEventListener('keydown', closeOnEsc);
-
-    return () => {
-      document.removeEventListener('keydown', closeOnEsc);
-    }
-  }, []);
-
 
   React.useEffect(() => {
-    setArr(data)
-  }, [data])
-
-
-  React.useEffect(() => {
-    const saucesArr = arr.filter(ingridient => {
+    const saucesArr = props.data.filter(ingridient => {
       if (ingridient.type === 'sauce') {
         return ingridient
       }
     })
-    const sauces = saucesArr.map(i => <Ingridient onModalOpen={handlerModalOpen} name={i.name} image={i.image_large} price={i.price} calories={i.calories} proteins={i.proteins} fat={i.fat} carbohydrates={i.carbohydrates} key={i._id} />)
+    const sauces = saucesArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
     setSauces(sauces)
-  }, [arr])
+  }, [props.data])
 
   React.useEffect(() => {
-    const mainsArr = arr.filter(ingridient => {
+    const mainsArr = props.data.filter(ingridient => {
       if (ingridient.type === 'main') {
         return ingridient
       }
     })
-    const mains = mainsArr.map(i => <Ingridient onModalOpen={handlerModalOpen} name={i.name} image={i.image_large} price={i.price} calories={i.calories} proteins={i.proteins} fat={i.fat} carbohydrates={i.carbohydrates} key={i._id} />)
+    const mains = mainsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
     setMains(mains)
-  }, [arr])
+  }, [props.data])
 
   React.useEffect(() => {
-    const bunsArr = arr.filter(ingridient => {
+    const bunsArr = props.data.filter(ingridient => {
       if (ingridient.type === 'bun') {
         return ingridient
       }
     })
-    const buns = bunsArr.map(i => <Ingridient onModalOpen={handlerModalOpen} name={i.name} image={i.image_large} price={i.price} calories={i.calories} proteins={i.proteins} fat={i.fat} carbohydrates={i.carbohydrates} key={i._id} />)
+    const buns = bunsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
     setBuns(buns)
-  }, [arr])
+  }, [props.data])
 
 
   return (
@@ -103,9 +85,7 @@ export default function BurgerIngridients(props) {
         </div>
       </div>
       {modalOpen && (   //Если true отобрази модальное окно
-        <>
-          <Modal onModalClose={handlerModalClose} modalActive={true} details={<IngridientDetails name={modalInfo.name} image={modalInfo.image} proteins={modalInfo.proteins} fat={modalInfo.fat} carbohydrates={modalInfo.carbohydrates} calories={modalInfo.calories} />} />
-        </>
+        <Modal onModalClose={handlerModalClose} ><IngridientDetails name={modalInfo.name} image={modalInfo.image} proteins={modalInfo.proteins} fat={modalInfo.fat} carbohydrates={modalInfo.carbohydrates} calories={modalInfo.calories} /></Modal>
       )}
     </section>
   )

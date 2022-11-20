@@ -4,7 +4,6 @@ import styles from './ModalOverlay.module.css'
 export default function ModalOverlay() {
 
   return (
-    <div className={styles.modalOverlay}>
-    </div >
+    <div className={styles.modalOverlay} />
   )
 }
