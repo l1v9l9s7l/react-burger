@@ -21,8 +21,8 @@ export default function Modal(props) {
   }, []);
 
   return ReactDOM.createPortal(
-    <div>
-      <div className={styles.overlay} onClick={props.onModalClose}>
+    <>
+      <div onClick={props.onModalClose}>
         <ModalOverlay />
       </div>
       <div className={styles.modalContent}>
@@ -33,7 +33,7 @@ export default function Modal(props) {
           {props.children}
         </div>
       </div>
-    </div >
+    </>
     , modalRoot
   )
 }
