@@ -1,19 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types'
 import styles from './BurgerIngridients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import Ingridient from '../Ingridient/Ingridient';
 import Modal from '../Modal/Modal';
 import IngridientDetails from '../IngridientDetails/IngridientDetails';
+import { IngridientsContext } from '../../services/appContext';
 
 export default function BurgerIngridients(props) {
   const [sauces, setSauces] = React.useState([]);
   const [mains, setMains] = React.useState([]);
   const [buns, setBuns] = React.useState([]);
-
-
+  const [saucesArr, setSaucesArr] = React.useState([]);
+  const [mainsArr, setMainsArr] = React.useState([]);
+  const [bunsArr, setBunsArr] = React.useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalInfo, setModalInfo] = useState({ name: '', image: '', calories: '', fat: '', proteins: '', carbohydrates: '' });
+  const [ingridients, setIngridients] = useContext(IngridientsContext)
+
+  // useEffect(() => {
+  //   ingridients.saucesArr = saucesArr;
+  //   ingridients.mainsArr = mainsArr;
+  //   ingridients.bunsArr = bunsArr;
+  // }, [saucesArr])
+
+
+  useEffect(() => {
+    function check() {
+      if (props.data.length === 0) {
+        // console.log('Ожидайте, идет загрузка ...')
+      } else {
+        // console.log('Ответ получен:')
+        setIngridients(props.data)
+      }
+    }
+
+    check()
+  }, [props.data])
 
   const handlerModalOpen = (value) => {              //Создали обработчик открытия модального окна
     setModalInfo(value)                              //Задаем параметры при открытии модального окна
@@ -33,6 +56,7 @@ export default function BurgerIngridients(props) {
     })
     const sauces = saucesArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
     setSauces(sauces)
+    setSaucesArr(saucesArr)
   }, [props.data])
 
   React.useEffect(() => {
@@ -43,6 +67,7 @@ export default function BurgerIngridients(props) {
     })
     const mains = mainsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
     setMains(mains)
+    setMainsArr(mainsArr)
   }, [props.data])
 
   React.useEffect(() => {
@@ -53,6 +78,7 @@ export default function BurgerIngridients(props) {
     })
     const buns = bunsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
     setBuns(buns)
+    setBunsArr(bunsArr)
   }, [props.data])
 
 
