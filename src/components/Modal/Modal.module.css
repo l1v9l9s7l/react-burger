@@ -1,0 +1,35 @@
+.modal{
+  visibility: hidden;
+}
+
+.modalActive{
+
+  visibility: visible;
+}
+
+.modalContent{
+  display: flex;
+  flex-direction: column;
+  z-index: 3
+}
+
+.modalWrapper{
+  width: 720px;
+  min-height: 539px;
+  background-color: #1C1C21;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-right: 50%;
+  transform: translate(-50%,-50%);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modalCloseIcon{
+  position: absolute;
+  right: 0;
+  top: 0;
+}

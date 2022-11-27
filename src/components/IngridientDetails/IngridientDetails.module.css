@@ -1,0 +1,31 @@
+.title{
+  font-size: 40px;
+}
+
+.nutritionals{
+  display: flex;
+  color: #8585AD;
+  justify-content: center;
+  font-family: JetBrains Mono, Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: center;
+
+}
+
+.details{
+  text-align: center;
+  font-family: JetBrains Mono, Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: center;
+  
+}
+
+.resus{
+  font-size: 40px;
+}

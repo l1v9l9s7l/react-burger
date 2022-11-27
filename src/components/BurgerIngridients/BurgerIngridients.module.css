@@ -1,0 +1,70 @@
+.ingridients{
+  width: 600px;
+  height: 912px;
+  margin: 0;
+  margin-right: 40px;
+}
+
+.title{
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 40px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin: 0;
+}
+
+.menu{
+  display: flex;
+  flex-direction: row;
+}
+
+.menuButton{
+  background-color: rgba(0, 0, 0, 0);
+  color:  #8585AD;
+  width: 200px;
+  height: 56px;
+  border: none;
+  border-bottom: medium dashed blue;
+  cursor: pointer;
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;  
+}
+
+.ingridient{
+  width: 272px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ingridientsGrid{
+  display: grid;
+  grid-template-columns: repeat(2, 272px);
+}
+
+.categories{
+  margin: 0;
+}
+.ingridientName{
+  text-align: center;
+}
+
+.scrollDiv{
+  height: 612px;
+  overflow: hidden;
+  overflow-y: scroll;
+  margin: 0;
+}
+
+.scrollDiv::-webkit-scrollbar {
+  background-color: #2F2F37;
+  width: 8px;
+}
+
+.scrollDiv::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+  width: 8px;
+}

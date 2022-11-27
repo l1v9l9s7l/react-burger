@@ -1,0 +1,40 @@
+.burgerConstructor{
+  width: 600px;
+  height: 912px;
+  margin: 0;
+  margin-left: 62px;
+}
+
+.scrollDiv{
+  width: 584px;
+  height: 480px;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.scrollDiv::-webkit-scrollbar {
+  background-color: #2F2F37;
+  width: 8px;
+}
+
+.scrollDiv::-webkit-scrollbar-thumb {
+  background-color: #8585AD;
+  width: 8px;
+}
+
+.elementWrapper{
+  width: 568px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topsWrapper{
+  padding-left: 30px;
+}
+
+.constructorBottom{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

@@ -1,0 +1,7 @@
+.main{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  font-family: 'Jet Brains Mono';
+  min-width: 1200px;
+}
