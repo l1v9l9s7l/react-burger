@@ -18,23 +18,14 @@ export default function BurgerIngridients(props) {
   const [modalInfo, setModalInfo] = useState({ name: '', image: '', calories: '', fat: '', proteins: '', carbohydrates: '' });
   const [ingridients, setIngridients] = useContext(IngridientsContext)
 
-  // useEffect(() => {
-  //   ingridients.saucesArr = saucesArr;
-  //   ingridients.mainsArr = mainsArr;
-  //   ingridients.bunsArr = bunsArr;
-  // }, [saucesArr])
-
 
   useEffect(() => {
     function check() {
       if (props.data.length === 0) {
-        // console.log('Ожидайте, идет загрузка ...')
       } else {
-        // console.log('Ответ получен:')
         setIngridients(props.data)
       }
     }
-
     check()
   }, [props.data])
 

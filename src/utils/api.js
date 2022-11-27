@@ -1,7 +1,6 @@
 const config = {
-  baseURL: 'https://norma.nomoreparties.space/api/ingredients ',
+  baseURL: 'https://norma.nomoreparties.space/api/',
   headers: {
-    authorization: '54da0c89-ce48-4884-99bf-abf92ea9ad7d',
     'Content-Type': 'application/json'
   }
 }
@@ -16,10 +15,24 @@ const checkRes = (res) => {
 };
 
 const fetchIngredients = () => {
-  return fetch(`${config.baseURL}`)
+  return fetch(`${config.baseURL}ingredients`)
+    .then(checkRes)
+};
+
+const postOrder = (ingredientsId) => {
+  return fetch(`${config.baseURL}orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        ingredients: ingredientsId
+      })
+    })
     .then(checkRes)
 };
 
 export {
-  fetchIngredients
+  fetchIngredients,
+  postOrder
 };
