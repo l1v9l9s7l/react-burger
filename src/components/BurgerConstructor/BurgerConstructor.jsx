@@ -1,40 +1,41 @@
 import React, { useState, useContext, useEffect } from 'react';
 import styles from './BurgerConstructor.module.css'
+import { useSelector, useDispatch } from 'react-redux';
 import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
 import { CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import { Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import OrderDetails from '../OrderDetails/OrderDetails';
 import Modal from '../Modal/Modal';
-import { IngridientsContext } from '../../services/appContext';
 import { postOrder } from '../../utils/api';
 
 export default function BurgerConstructor() {
-  const [modalOpen, setModalOpen] = useState(false);
+  const dispatch = useDispatch()
   const [selectedIngridients, setSelectedIngridients] = useState([])
   const [saucesArr, setSaucesArr] = useState([])
   const [mainsArr, setMainsArr] = useState([])
   const [bunsArr, setBunsArr] = useState([])
   const [ingridientsIdArr, setIngridientsIdArr] = useState([])
-  const [orderId, setOrderId] = useState([])
-  const ingridients = useContext(IngridientsContext)
 
+  const orderNumber = useSelector(state => state.order.orderNumber)
+  const ingridients = useSelector(state => state.ingridients.ingridients)
+  const modalOpen = useSelector(state => state.order.openOrderModal)
 
   useEffect(() => {
     function check() {
-      if (ingridients[0].length === 0) {
+      if (ingridients.length === 0) {
         return
       } else {
-        setSaucesArr(ingridients[0].filter(ingridient => {
+        setSaucesArr(ingridients.filter(ingridient => {
           if (ingridient.type === 'sauce') {
             return ingridient
           }
         }))
-        setMainsArr(ingridients[0].filter(ingridient => {
+        setMainsArr(ingridients.filter(ingridient => {
           if (ingridient.type === 'main') {
             return ingridient
           }
         }))
-        setBunsArr(ingridients[0].filter(ingridient => {
+        setBunsArr(ingridients.filter(ingridient => {
           if (ingridient.type === 'bun') {
             return ingridient
           }
@@ -50,10 +51,9 @@ export default function BurgerConstructor() {
       if (ingridientsIdArr.length === 0) {
         return
       } else {
-        console.log()
         postOrder(ingridientsIdArr)
           .then((res) => {
-            setOrderId(res.order.number)
+            dispatch({type: 'GET_ORDER_NUMBER', payload: res.order.number })
           }
           )
       }
@@ -95,7 +95,6 @@ export default function BurgerConstructor() {
         return
       } else {
         const selectIngridients = mainsArr.concat(saucesArr)
-        console.log(selectIngridients)
         const idArr = selectIngridients.map(i => { return i._id })
         setIngridientsIdArr(idArr)
         const selectedIngridients = selectIngridients.map(i =>
@@ -110,11 +109,13 @@ export default function BurgerConstructor() {
   }, [saucesArr])
 
   const handlerModalOpen = () => {              //Создали обработчик открытия модального окна
-    setModalOpen(true);                                   //Меняем состояние модального окна
+    // setModalOpen(true);
+    dispatch({type: 'OPEN_ORDER_MODAL'})                                   //Меняем состояние модального окна
   }
 
   const handlerModalClose = () => {              //Создали обработчик открытия модального окна                             //Задаем параметры при открытии модального окна
-    setModalOpen(false);                                   //Меняем состояние модального окна
+    // setModalOpen(false); 
+    dispatch({type: 'CLOSE_ORDER_MODAL'})                                   //Меняем состояние модального окна
   }
 
   return (
@@ -164,7 +165,7 @@ export default function BurgerConstructor() {
         </div>
       </section>
       {modalOpen && (   //Если true отобрази модальное окно
-        <Modal onModalClose={handlerModalClose}><OrderDetails orderId={orderId} /></Modal>
+        <Modal onModalClose={handlerModalClose}><OrderDetails orderId={orderNumber} /></Modal>
       )}
     </>
   )
