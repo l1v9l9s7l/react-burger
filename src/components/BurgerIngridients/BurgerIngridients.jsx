@@ -20,7 +20,11 @@ export default function BurgerIngridients(props) {
   const ingridients = useSelector(state => state.ingridients.ingridients)
   const modalOpen = useSelector(state => state.ingridients.openIngridientModal)
   const modalDetail = useSelector(state => state.ingridients.modalDetails)
+  const [bunsCategoryActive, setBunsCategoryActive ] = useState(true)
+  const [mainsCategoryActive, setMainsCategoryActive ] = useState(false)
+  const [saucesCategoryActive, setSaucesCategoryActive ] = useState(false)
 
+//Изменения состояния активности модального окна через dispatch
   const handlerModalOpen = (value) => {              //Создали обработчик открытия модального окна
     dispatch({ type: 'OPEN_INGREDIENT_MODAL', payload: value})                              //Меняем состояние модального окна
   }
@@ -30,6 +34,7 @@ export default function BurgerIngridients(props) {
   }
 
 
+  //Формирование массивов по категориям и передача их в состояние
   React.useEffect(() => {
     const saucesArr = ingridients.filter(ingridient => {
       if (ingridient.type === 'sauce') {
@@ -66,7 +71,7 @@ export default function BurgerIngridients(props) {
 
   const [ingridientsTab, setIngridientsTab] = useState()
 
-
+//Функция переключения состояний кнопок при скролле
   useEffect(() => {
     setIngridientsTab(document.getElementById('ingridientsTab'))
     function check() {
@@ -74,7 +79,23 @@ export default function BurgerIngridients(props) {
         return
       } else {
         ingridientsTab.addEventListener('scroll', evt => {
-          console.log(evt.target.scrollTop)
+          const scrollPosition = evt.target.scrollTop;
+          if (scrollPosition > 280){
+            setBunsCategoryActive(false)
+            setSaucesCategoryActive(true)
+          }
+          if (scrollPosition < 280){
+            setBunsCategoryActive(true)
+            setSaucesCategoryActive(false)
+
+          }
+          if (scrollPosition > 800){
+            setMainsCategoryActive(true)
+            setSaucesCategoryActive(false)
+          }
+          if (scrollPosition < 800){
+            setMainsCategoryActive(false)
+          }
         } )
       }
     }
@@ -87,9 +108,9 @@ export default function BurgerIngridients(props) {
       <h1 className={`${styles.title} pt-10 pb-5`}>Соберите бургер</h1>
 
       <div className={styles.menu}>
-        <Tab className={styles.menuButton} active='true'>Булки</Tab>
-        <Tab className={styles.menuButton}  >Соусы</Tab>
-        <Tab className={styles.menuButton} >Начинки</Tab>
+        <Tab className={styles.menuButton} active={bunsCategoryActive}>Булки</Tab>
+        <Tab className={styles.menuButton} active={saucesCategoryActive} >Соусы</Tab>
+        <Tab className={styles.menuButton} active={mainsCategoryActive}>Начинки</Tab>
       </div>
 
       <div className={`${styles.scrollDiv} pt-10`} id='ingridientsTab'>

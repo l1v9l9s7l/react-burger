@@ -20,6 +20,7 @@ export default function BurgerConstructor() {
   const ingridients = useSelector(state => state.ingridients.ingridients)
   const modalOpen = useSelector(state => state.order.openOrderModal)
 
+//Формирование массивов после проверки наличия данных
   useEffect(() => {
     function check() {
       if (ingridients.length === 0) {
@@ -45,7 +46,7 @@ export default function BurgerConstructor() {
     check()
   }, [ingridients])
 
-
+//Отправка id-шников ингридиентов после проверки их наличия
   useEffect(() => {
     function check() {
       if (ingridientsIdArr.length === 0) {
@@ -61,6 +62,7 @@ export default function BurgerConstructor() {
     check()
   }, [ingridientsIdArr])
 
+  //Редьюсер подсчета состояния
   const costInitialState = { count: 0 };       //Начальное состояние
 
   const costReducer = (costState, action) => {           //costState - 0
@@ -87,7 +89,7 @@ export default function BurgerConstructor() {
     }
 
     check()
-  }, [saucesArr])
+  }, [ingridients])
 
   useEffect(() => {
     function check() {
