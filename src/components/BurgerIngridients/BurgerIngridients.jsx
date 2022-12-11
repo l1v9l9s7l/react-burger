@@ -8,6 +8,7 @@ import Modal from '../Modal/Modal';
 import IngridientDetails from '../IngridientDetails/IngridientDetails';
 import { IngridientsContext } from '../../services/appContext';
 import { store } from '../../services/reducers/rootReducer';
+import { useDrag, useDrop } from 'react-dnd/dist/hooks';
 
 export default function BurgerIngridients(props) {
   const [sauces, setSauces] = React.useState([]);
@@ -23,6 +24,25 @@ export default function BurgerIngridients(props) {
   const [bunsCategoryActive, setBunsCategoryActive ] = useState(true)
   const [mainsCategoryActive, setMainsCategoryActive ] = useState(false)
   const [saucesCategoryActive, setSaucesCategoryActive ] = useState(false)
+
+  function Drop(data){
+    const [{isDragging }, drag] = useDrag({        // 1. Выводит булевое значение переносится элемент или нет 2.ref
+      item: {id: data.id},
+      type: 'typeOne',   
+      collect: (monitor) => ({
+          isDragging: monitor.isDragging(),        // Выводит булевое значение переносится элемент или нет
+      }),
+    });
+    // console.log(data)
+    return (
+      !isDragging &&    //Скрыть элемент при перетаскивании
+        <div ref={drag}>
+            <div className={styles.drag}>
+              <p>{data.name}</p>
+            </div>
+        </div>
+    )
+  }
 
 //Изменения состояния активности модального окна через dispatch
   const handlerModalOpen = (value) => {              //Создали обработчик открытия модального окна
@@ -41,7 +61,7 @@ export default function BurgerIngridients(props) {
         return ingridient
       }
     })
-    const sauces = saucesArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
+    const sauces = saucesArr.map(i => <Ingridient ingridient={i}  id={i._id} onModalOpen={handlerModalOpen} key={i._id} />)
     setSauces(sauces)
     setSaucesArr(saucesArr)
   }, [ingridients])
@@ -52,7 +72,7 @@ export default function BurgerIngridients(props) {
         return ingridient
       }
     })
-    const mains = mainsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
+    const mains = mainsArr.map(i => <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />)
     setMains(mains)
     setMainsArr(mainsArr)
   }, [ingridients])
@@ -63,7 +83,7 @@ export default function BurgerIngridients(props) {
         return ingridient
       }
     })
-    const buns = bunsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
+    const buns = bunsArr.map(i => <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />)
     setBuns(buns)
     setBunsArr(bunsArr)
   }, [ingridients])

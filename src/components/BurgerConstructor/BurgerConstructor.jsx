@@ -1,24 +1,30 @@
-import React, { useState, useContext, useEffect } from 'react';
-import styles from './BurgerConstructor.module.css'
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
-import { CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components'
+import { useDrag, useDrop } from 'react-dnd/dist/hooks';
+import styles from './BurgerConstructor.module.css'
+import { CurrencyIcon, DragIcon, ConstructorElement, Button } from '@ya.praktikum/react-developer-burger-ui-components'
 import OrderDetails from '../OrderDetails/OrderDetails';
+// import BurgerConstructorElement from '../BurgerConstructorElement/BurgerConstructorElement';
 import Modal from '../Modal/Modal';
 import { postOrder } from '../../utils/api';
 
-export default function BurgerConstructor() {
+export default function BurgerConstructor({draggedElements, onDropHandler, setDraggedElements}) {
   const dispatch = useDispatch()
   const [selectedIngridients, setSelectedIngridients] = useState([])
-  const [saucesArr, setSaucesArr] = useState([])
-  const [mainsArr, setMainsArr] = useState([])
   const [bunsArr, setBunsArr] = useState([])
   const [ingridientsIdArr, setIngridientsIdArr] = useState([])
+  const [selectIngridients, setSelectIngridients] = useState([])
 
   const orderNumber = useSelector(state => state.order.orderNumber)
   const ingridients = useSelector(state => state.ingridients.ingridients)
   const modalOpen = useSelector(state => state.order.openOrderModal)
+
+  const[, drop] = useDrop({                            //2. ref
+    accept: 'typeOne',                                //Тип принимаего элемента
+    drop(itemId) {                                    //При сбрасывании элемента происходит drop - handleDrop, в itemId попадает item Дропа
+      onDropHandler(itemId);                          //Передаем в handleDrop itemId
+  },
+  })
 
 //Формирование массивов после проверки наличия данных
   useEffect(() => {
@@ -26,16 +32,6 @@ export default function BurgerConstructor() {
       if (ingridients.length === 0) {
         return
       } else {
-        setSaucesArr(ingridients.filter(ingridient => {
-          if (ingridient.type === 'sauce') {
-            return ingridient
-          }
-        }))
-        setMainsArr(ingridients.filter(ingridient => {
-          if (ingridient.type === 'main') {
-            return ingridient
-          }
-        }))
         setBunsArr(ingridients.filter(ingridient => {
           if (ingridient.type === 'bun') {
             return ingridient
@@ -64,7 +60,6 @@ export default function BurgerConstructor() {
 
   //Редьюсер подсчета состояния
   const costInitialState = { count: 0 };       //Начальное состояние
-
   const costReducer = (costState, action) => {           //costState - 0
     switch (action.type) {
       case "increment":
@@ -78,37 +73,63 @@ export default function BurgerConstructor() {
 
   const [costState, costDispatcher] = React.useReducer(costReducer, costInitialState);  //costState = count: 0
 
-
+//Счетчик
   useEffect(() => {
     function check() {
-      if (saucesArr.length === 0 || mainsArr === 0) {
+      if (draggedElements.length === 0) {
         return
       } else {
-        mainsArr.concat(saucesArr).concat(saucesArr).forEach(item => costDispatcher({ type: "increment", addpay: item.price }));
+        draggedElements.forEach(item => costDispatcher({ type: "increment", addpay: item.price }));
       }
     }
 
     check()
-  }, [ingridients])
+  }, [draggedElements])
+
+
+  //data - информация об ингридиенте, index - номер в массиве
+  function BurgerConstructorElement({data, index}){
+    const hoverIndex = index
+    const onSortHandler = (arr, dragIndex) => {
+      var element = arr[dragIndex];
+      arr.splice(dragIndex, 1);  //Удалить перетаскиваемый элемент со старого места
+      arr.splice(hoverIndex, 0, element); //Вставить перетаскиваемый элемент на место hover-элемента
+      const selectedIngridients = arr.map((i, index) => <BurgerConstructorElement data={i} index={index} />) //Массив с разметкой перетянутых ингридиентов
+      setSelectedIngridients(selectedIngridients)
+      console.log(arr)
+    }
+
+    const [, drag] = useDrag({       
+      item: {index},
+      type: 'typeTwo',   
+    });
+
+    const[, drop] = useDrop({                      
+      accept: 'typeTwo',                               
+      drop({index}) {    
+        const dragIndex = index                          
+        onSortHandler(draggedElements, dragIndex);                          
+    },
+    })
+
+    return(
+      <div ref={drop}>
+      <div className={`${styles.elementWrapper} pt-4`} key={data.id}  ref={drag}>
+            <DragIcon />
+            <ConstructorElement text={data.name} thumbnail={data.image} isLocked={false} price={data.price} />
+      </div>
+      </div>
+    )
+  }
 
   useEffect(() => {
-    function check() {
-      if (saucesArr.length === 0 || mainsArr === 0) {
-        return
-      } else {
-        const selectIngridients = mainsArr.concat(saucesArr)
+        setSelectIngridients(draggedElements)   //Массив с данными перетянутых ингридиентов
         const idArr = selectIngridients.map(i => { return i._id })
         setIngridientsIdArr(idArr)
-        const selectedIngridients = selectIngridients.map(i =>
-          <div className={`${styles.elementWrapper} pt-4`} key={i._id}>
-            <DragIcon />
-            <ConstructorElement text={i.name} thumbnail={i.image} isLocked={false} price={i.price} />
-          </div>)
+        const selectedIngridients = draggedElements.map((i, index) => <BurgerConstructorElement data={i} index={index} draggedElements={draggedElements} setSelectedIngridients={setSelectedIngridients} setDraggedElements={setDraggedElements} />) //Массив с разметкой перетянутых ингридиентов
         setSelectedIngridients(selectedIngridients)
-      }
-    }
-    check()
-  }, [saucesArr])
+  }, [draggedElements])
+
 
   const handlerModalOpen = () => {              //Создали обработчик открытия модального окна
     // setModalOpen(true);
@@ -119,10 +140,9 @@ export default function BurgerConstructor() {
     // setModalOpen(false); 
     dispatch({type: 'CLOSE_ORDER_MODAL'})                                   //Меняем состояние модального окна
   }
-
   return (
     <>
-      <section className={styles.burgerСonstructor}>
+      <section className={styles.burgerСonstructor} ref={drop}>
         <div className={`${styles.topsWrapper} pt-25`}>
           {bunsArr.filter((i, index) => index === 1)
             .map(i =>

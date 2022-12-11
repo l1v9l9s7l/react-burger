@@ -6,6 +6,7 @@ import IngridientDetails from '../IngridientDetails/IngridientDetails.jsx'
 import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal'
 import ingridientPropTypes from '../../utils/types'
+import { useDrag, useDrop } from 'react-dnd/dist/hooks';
 
 
 
@@ -14,6 +15,13 @@ import ingridientPropTypes from '../../utils/types'
 export default function Ingridient(props) {
 
   const [ingridient, setIngridient] = useState({})
+  const [{isDragging }, drag] = useDrag({        // 1. Выводит булевое значение переносится элемент или нет 2.ref
+    item: {id: props.id},
+    type: 'typeOne',   
+    collect: (monitor) => ({
+        isDragging: monitor.isDragging(),        // Выводит булевое значение переносится элемент или нет
+    }),
+  });
 
   React.useEffect(() => {
     setIngridient(props.ingridient)
@@ -24,9 +32,9 @@ export default function Ingridient(props) {
   }
 
   return (
-    <div className={styles.ingridient} onClick={handlerModalOpen}>
+    <div className={styles.ingridient} onClick={handlerModalOpen} >
       <Counter />
-      <img src={ingridient.image} />
+      <img src={ingridient.image} ref={drag} />
       <div className={`${styles.priceWrapper} pt-1`}>
         <p className={styles.price}>{ingridient.price}</p>
         <CurrencyIcon></CurrencyIcon>

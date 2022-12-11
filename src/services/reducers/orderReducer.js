@@ -12,6 +12,8 @@ import {
     MOVE_INGREDIENT_IN_ORDER
 } from "../actions/orderActions";
 
+import { useEffect } from "react";
+
 
 const defaultState = {
     count: 0,
@@ -28,16 +30,23 @@ const defaultState = {
     isCanCreateOrder: false
 };
 
+
+
 export const orderReducer = (state = defaultState, action) => {
     switch (action.type) {
         case ADD_INGREDIENTS: {
             return {
-
+                
             }
         }
-        case MOVE_INGREDIENT_IN_ORDER: {
-            
-        }
+        // case MOVE_INGREDIENT_IN_ORDER: {
+        //     const newOrder = [...state.ingredients];
+        //     moveElementInArray(newOrder, action.dragIndex, action.hoverIndex);
+        //     return {
+        //         ...state,
+        //         ingredients: newOrder
+        //     }
+        // }
         case CREATE_ORDER_REQUEST: {
             return {
                 ...state,
@@ -74,11 +83,11 @@ export const orderReducer = (state = defaultState, action) => {
             }
         }
         case OPEN_ORDER_MODAL: {
-          return {
-              ...state,
-              openOrderModal: true
-          }
-      }
+            return {
+                ...state,
+                openOrderModal: true
+            }
+        }
         case CLOSE_ORDER_MODAL: {
             return {
                 ...state,
@@ -86,11 +95,11 @@ export const orderReducer = (state = defaultState, action) => {
             }
         }
         case GET_ORDER_NUMBER: {
-          return {
-              ...state,
-              orderNumber: action.payload
-          }
-      }
+            return {
+                ...state,
+                orderNumber: action.payload
+            }
+        }
         case DELETE_INGREDIENT_FROM_ORDER: {
             
         }
