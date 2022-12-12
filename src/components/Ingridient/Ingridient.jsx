@@ -13,10 +13,9 @@ import { useDrag, useDrop } from 'react-dnd/dist/hooks';
 
 
 export default function Ingridient(props) {
-
   const [ingridient, setIngridient] = useState({})
   const [{isDragging }, drag] = useDrag({        // 1. Выводит булевое значение переносится элемент или нет 2.ref
-    item: {id: props.id},
+    item: {id: props.id, type: props.ingridient.type},
     type: 'typeOne',   
     collect: (monitor) => ({
         isDragging: monitor.isDragging(),        // Выводит булевое значение переносится элемент или нет

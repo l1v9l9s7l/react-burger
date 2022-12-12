@@ -1,22 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types'
 import styles from './BurgerIngridients.module.css'
 import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
 import Ingridient from '../Ingridient/Ingridient';
 import Modal from '../Modal/Modal';
 import IngridientDetails from '../IngridientDetails/IngridientDetails';
-import { IngridientsContext } from '../../services/appContext';
-import { store } from '../../services/reducers/rootReducer';
 import { useDrag, useDrop } from 'react-dnd/dist/hooks';
 
-export default function BurgerIngridients(props) {
+export default function BurgerIngridients() {
   const [sauces, setSauces] = React.useState([]);
   const [mains, setMains] = React.useState([]);
   const [buns, setBuns] = React.useState([]);
-  const [saucesArr, setSaucesArr] = React.useState([]);
-  const [mainsArr, setMainsArr] = React.useState([]);
-  const [bunsArr, setBunsArr] = React.useState([]);
   const dispatch = useDispatch()
   const ingridients = useSelector(state => state.ingridients.ingridients)
   const modalOpen = useSelector(state => state.ingridients.openIngridientModal)
@@ -25,32 +19,13 @@ export default function BurgerIngridients(props) {
   const [mainsCategoryActive, setMainsCategoryActive ] = useState(false)
   const [saucesCategoryActive, setSaucesCategoryActive ] = useState(false)
 
-  function Drop(data){
-    const [{isDragging }, drag] = useDrag({        // 1. Выводит булевое значение переносится элемент или нет 2.ref
-      item: {id: data.id},
-      type: 'typeOne',   
-      collect: (monitor) => ({
-          isDragging: monitor.isDragging(),        // Выводит булевое значение переносится элемент или нет
-      }),
-    });
-    // console.log(data)
-    return (
-      !isDragging &&    //Скрыть элемент при перетаскивании
-        <div ref={drag}>
-            <div className={styles.drag}>
-              <p>{data.name}</p>
-            </div>
-        </div>
-    )
-  }
-
 //Изменения состояния активности модального окна через dispatch
-  const handlerModalOpen = (value) => {              //Создали обработчик открытия модального окна
-    dispatch({ type: 'OPEN_INGREDIENT_MODAL', payload: value})                              //Меняем состояние модального окна
+  const handlerModalOpen = (value) => {              
+    dispatch({ type: 'OPEN_INGREDIENT_MODAL', payload: value})
   }
 
-  const handlerModalClose = () => {              //Создали обработчик открытия модального окна                             //Задаем параметры при открытии модального окна
-    dispatch({ type: 'CLOSE_INGREDIENT_MODAL' })                                       //Меняем состояние модального окна
+  const handlerModalClose = () => {
+    dispatch({ type: 'CLOSE_INGREDIENT_MODAL' })
   }
 
 
@@ -63,7 +38,6 @@ export default function BurgerIngridients(props) {
     })
     const sauces = saucesArr.map(i => <Ingridient ingridient={i}  id={i._id} onModalOpen={handlerModalOpen} key={i._id} />)
     setSauces(sauces)
-    setSaucesArr(saucesArr)
   }, [ingridients])
 
   React.useEffect(() => {
@@ -74,7 +48,6 @@ export default function BurgerIngridients(props) {
     })
     const mains = mainsArr.map(i => <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />)
     setMains(mains)
-    setMainsArr(mainsArr)
   }, [ingridients])
 
   React.useEffect(() => {
@@ -85,7 +58,6 @@ export default function BurgerIngridients(props) {
     })
     const buns = bunsArr.map(i => <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />)
     setBuns(buns)
-    setBunsArr(bunsArr)
   }, [ingridients])
 
 

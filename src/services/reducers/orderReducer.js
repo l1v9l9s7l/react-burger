@@ -1,6 +1,6 @@
 
 import {
-    ADD_INGREDIENTS,
+    SET_DRAGGED_INGREDIENTS,
     OPEN_ORDER_MODAL,
     CLOSE_ORDER_MODAL,
     CREATE_ORDER_REQUEST,
@@ -9,7 +9,8 @@ import {
     CREATE_ORDER_REQUEST_SUCCESS,
     GET_ORDER_NUMBER,
     DELETE_INGREDIENT_FROM_ORDER,
-    MOVE_INGREDIENT_IN_ORDER
+    MOVE_INGREDIENT_IN_ORDER,
+    SET_DRAGGED_INGREDIENTS_MARKUP
 } from "../actions/orderActions";
 
 import { useEffect } from "react";
@@ -19,7 +20,9 @@ const defaultState = {
     count: 0,
     price: 0,
     bun: {},
-    ingredients: [],
+    //Перенесенные ингридиенты
+    dragIngredients: [],
+    dragIngredientsMarkup: [],
     ingredientCount:[],
     orderIds: [],
     orderNumber: null,
@@ -34,19 +37,18 @@ const defaultState = {
 
 export const orderReducer = (state = defaultState, action) => {
     switch (action.type) {
-        case ADD_INGREDIENTS: {
+        case SET_DRAGGED_INGREDIENTS: {
             return {
-                
+                ...state,
+                dragIngredients: action.payload
             }
         }
-        // case MOVE_INGREDIENT_IN_ORDER: {
-        //     const newOrder = [...state.ingredients];
-        //     moveElementInArray(newOrder, action.dragIndex, action.hoverIndex);
-        //     return {
-        //         ...state,
-        //         ingredients: newOrder
-        //     }
-        // }
+        case SET_DRAGGED_INGREDIENTS_MARKUP: {
+            return {
+                ...state,
+                dragIngredientsMarkup: action.payload
+            }
+        }
         case CREATE_ORDER_REQUEST: {
             return {
                 ...state,

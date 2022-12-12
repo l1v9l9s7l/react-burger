@@ -1,42 +1,38 @@
 import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement , DragIcon} from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './BurgerConstructorElement.module.css'
-import { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { setDraggedIngredientsMarkup } from '../../services/actions/orderActions';
 
 
 
 
-export default function BurgerConstructorElement({data, index, draggedElements, setSelectedIngridients, setDraggedElements}){
 
+export default function BurgerConstructorElement({data, index}){
+  const dispatch = useDispatch()
   const hoverIndex = index
+  const storeDraggedIngredients = useSelector(state => state.order.dragIngredients)
+
   const onSortHandler = (arr, dragIndex) => {
-    console.log(setDraggedElements)
     var element = arr[dragIndex];
     arr.splice(dragIndex, 1);  //Удалить перетаскиваемый элемент со старого места
     arr.splice(hoverIndex, 0, element); //Вставить перетаскиваемый элемент на место hover-элемента
-    setDraggedElements(arr)
-    const selectedIngridients = arr.map((i, index) => <BurgerConstructorElement data={i} index={index} />) //Массив с разметкой перетянутых ингридиентов
-    setSelectedIngridients(selectedIngridients)
-    console.log(arr)
+    const ingredientsMarkup = arr.map((i, index) => <BurgerConstructorElement data={i} index={index} />) //Массив с разметкой перетянутых ингридиентов
+    dispatch(setDraggedIngredientsMarkup(ingredientsMarkup))
   }
 
-  useEffect(() => {
-    console.log(draggedElements)
-  }, [draggedElements])
-
   const [, drag] = useDrag({       
-    item: {data, index},
+    item: {index},
     type: 'typeTwo',   
   });
 
   const[, drop] = useDrop({                      
     accept: 'typeTwo',                               
-    drop({data, index}) {    
+    drop({index}) {    
       const dragIndex = index                          
-      onSortHandler(draggedElements, dragIndex);                          
+      onSortHandler(storeDraggedIngredients, dragIndex);                          
   },
   })
-
 
   return(
     <div ref={drop}>
