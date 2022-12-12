@@ -3,6 +3,10 @@ import { ConstructorElement , DragIcon} from '@ya.praktikum/react-developer-burg
 import styles from './BurgerConstructorElement.module.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { setDraggedIngredientsMarkup } from '../../services/actions/orderActions';
+import { setDraggedIngredients } from "../../services/actions/orderActions";
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+
+
 
 
 
@@ -34,11 +38,18 @@ export default function BurgerConstructorElement({data, index}){
   },
   })
 
+  const deleteIngredient= () => {
+    let arr = storeDraggedIngredients.map(i => i)
+    arr.splice(index,1)
+    dispatch(setDraggedIngredients(arr))
+  }
+  
+
   return(
     <div ref={drop}>
     <div className={`${styles.elementWrapper} pt-4`} key={data.id}  ref={drag}>
           <DragIcon />
-          <ConstructorElement text={data.name} thumbnail={data.image} isLocked={false} price={data.price} />
+          <ConstructorElement handleClose={deleteIngredient} text={data.name} thumbnail={data.image} isLocked={false} price={data.price} />
     </div>
     </div>
   )
