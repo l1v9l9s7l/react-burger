@@ -1,25 +1,15 @@
 
 import {
     SET_DRAGGED_INGREDIENTS,
+    SET_DRAGGED_INGREDIENTS_MARKUP,
+    SET_ORDER_IDS_ARR,
     OPEN_ORDER_MODAL,
     CLOSE_ORDER_MODAL,
-    CREATE_ORDER_REQUEST,
-    CREATE_ORDER_REQUEST_FAILED,
-    CREATE_ORDER_REQUEST_FINISH,
-    CREATE_ORDER_REQUEST_SUCCESS,
-    GET_ORDER_NUMBER,
-    DELETE_INGREDIENT_FROM_ORDER,
-    MOVE_INGREDIENT_IN_ORDER,
-    SET_DRAGGED_INGREDIENTS_MARKUP
+    GET_ORDER_NUMBER
 } from "../actions/orderActions";
 
-import { useEffect } from "react";
-
-
 const defaultState = {
-    count: 0,
-    price: 0,
-    bun: {},
+    count: [],
     //Перенесенные ингридиенты
     dragIngredients: [],
     dragIngredientsMarkup: [],
@@ -49,39 +39,10 @@ export const orderReducer = (state = defaultState, action) => {
                 dragIngredientsMarkup: action.payload
             }
         }
-        case CREATE_ORDER_REQUEST: {
+        case SET_ORDER_IDS_ARR: {
             return {
                 ...state,
-                orderRequest: true,
-                orderRequestFailed: false,
-                orderRequestFailedMessage: ''
-            }
-        }
-        case CREATE_ORDER_REQUEST_SUCCESS: {
-            return {
-                price: 0,
-                bun: {},
-                ingredients: [],
-                orderNumber: [],
-                ingredientCount:{},
-                orderNumber: action.orderNumber,
-                orderRequestFailed: false,
-                orderRequestFailedMessage: '',
-                showOrderModalInfo: true,
-                isCanCreateOrder: false
-            }
-        }
-        case CREATE_ORDER_REQUEST_FAILED: {
-            return {
-                ...state,
-                orderRequestFailed: false,
-                orderRequestFailedMessage: action.err
-            }
-        }
-        case CREATE_ORDER_REQUEST_FINISH: {
-            return {
-                ...state,
-                orderRequest: false
+                orderIds: action.payload
             }
         }
         case OPEN_ORDER_MODAL: {
@@ -101,9 +62,6 @@ export const orderReducer = (state = defaultState, action) => {
                 ...state,
                 orderNumber: action.payload
             }
-        }
-        case DELETE_INGREDIENT_FROM_ORDER: {
-            
         }
         default: {
             return state;

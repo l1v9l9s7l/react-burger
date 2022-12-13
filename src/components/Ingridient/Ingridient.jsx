@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styles from './Ingridient.module.css'
 import { CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
@@ -7,6 +7,7 @@ import { Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import Modal from '../Modal/Modal'
 import ingridientPropTypes from '../../utils/types'
 import { useDrag, useDrop } from 'react-dnd/dist/hooks';
+import { useSelector } from 'react-redux'
 
 
 
@@ -14,6 +15,9 @@ import { useDrag, useDrop } from 'react-dnd/dist/hooks';
 
 export default function Ingridient(props) {
   const [ingridient, setIngridient] = useState({})
+  const idsArr = useSelector(state => state.order.orderIds)
+  const [count, setCount] = useState()
+  
   const [{isDragging }, drag] = useDrag({        // 1. Выводит булевое значение переносится элемент или нет 2.ref
     item: {id: props.id, type: props.ingridient.type},
     type: 'typeOne',   
@@ -30,9 +34,15 @@ export default function Ingridient(props) {
     props.onModalOpen({ name: ingridient.name, image: ingridient.image, fat: ingridient.fat, proteins: ingridient.proteins, calories: ingridient.calories, carbohydrates: ingridient.carbohydrates });
   }
 
+
+  useEffect(() => {
+    const coincidences = idsArr.filter(i => i === props.id)
+    setCount(coincidences.length)
+  }, [idsArr])
+
   return (
     <div className={styles.ingridient} onClick={handlerModalOpen} >
-      <Counter />
+      <Counter count={count} />
       <img src={ingridient.image} ref={drag} />
       <div className={`${styles.priceWrapper} pt-1`}>
         <p className={styles.price}>{ingridient.price}</p>
