@@ -1,56 +1,55 @@
 import { useDrag, useDrop } from "react-dnd";
-import { ConstructorElement , DragIcon} from '@ya.praktikum/react-developer-burger-ui-components'
-import styles from './BurgerConstructorElement.module.css'
-import { useSelector, useDispatch } from 'react-redux';
-import { setDraggedIngredientsMarkup } from '../../services/actions/orderActions';
-import { setDraggedIngredients } from "../../services/actions/orderActions";
+import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import styles from "./BurgerConstructorElement.module.css";
+import { useSelector, useDispatch } from "react-redux";
+import { setDraggedIngredients } from "../../services/actions/orderAction";
 import { uuidv4 } from "../../utils/utils";
 
-
-
-
-
-
-
-export default function BurgerConstructorElement({data, index}){
-  const dispatch = useDispatch()
-  const hoverIndex = index
-  const storeDraggedIngredients = useSelector(state => state.order.dragIngredients)
+export default function BurgerConstructorElement({ data, index }) {
+  const dispatch = useDispatch();
+  const hoverIndex = index;
+  const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
 
   const onSortHandler = (arr, dragIndex) => {
-    var element = arr[dragIndex];
-    arr.splice(dragIndex, 1);  //Удалить перетаскиваемый элемент со старого места
-    arr.splice(hoverIndex, 0, element); //Вставить перетаскиваемый элемент на место hover-элемента
-    const ingredientsMarkup = arr.map((i, index) => <BurgerConstructorElement key={uuidv4()} data={i} index={index} />) //Массив с разметкой перетянутых ингридиентов
-    dispatch(setDraggedIngredientsMarkup(ingredientsMarkup))
-  }
+    console.log(arr);
+    const element = arr[dragIndex];
+    const newArr = [...arr];
+    newArr.splice(dragIndex, 1); //Удалить перетаскиваемый элемент со старого места
+    newArr.splice(hoverIndex, 0, element); //Вставить перетаскиваемый элемент на место hover-элемента
+    dispatch(setDraggedIngredients(newArr));
+  };
 
-  const [, drag] = useDrag({       
-    item: {index},
-    type: 'typeTwo',   
+  const [, drag] = useDrag({
+    item: { index },
+    type: "sort_ingr",
   });
 
-  const[, drop] = useDrop({                      
-    accept: 'typeTwo',                               
-    drop({index}) {    
-      const dragIndex = index                          
-      onSortHandler(storeDraggedIngredients, dragIndex);                          
-  },
-  })
+  const [, drop] = useDrop({
+    accept: "sort_ingr",
+    drop({ index }) {
+      const dragIndex = index;
+      onSortHandler(storeDraggedIngredients, dragIndex);
+    },
+  });
 
-  const deleteIngredient= () => {
-    let arr = storeDraggedIngredients.map(i => i)
-    arr.splice(index,1)
-    dispatch(setDraggedIngredients(arr))
-  }
-  
+  const deleteIngredient = () => {
+    const arr = storeDraggedIngredients.map((i) => i);
+    const newArr = arr.splice(index, 1);
+    dispatch(setDraggedIngredients(newArr));
+  };
 
-  return(
+  return (
     <div ref={drop}>
-    <div className={`${styles.elementWrapper} pt-4`} key={data.id}  ref={drag}>
-          <DragIcon />
-          <ConstructorElement handleClose={deleteIngredient} text={data.name} thumbnail={data.image} isLocked={false} price={data.price} />
+      <div className={`${styles.elementWrapper} pt-4`} key={data.id} ref={drag}>
+        <DragIcon />
+        <ConstructorElement
+          handleClose={deleteIngredient}
+          text={data.name}
+          thumbnail={data.image}
+          isLocked={false}
+          price={data.price}
+        />
+      </div>
     </div>
-    </div>
-  )
+  );
 }

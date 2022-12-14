@@ -1,16 +1,16 @@
-import {
-  combineReducers
-} from '@reduxjs/toolkit';
+import { combineReducers } from "redux";
 
-import {
-  ingridientsReducer
-} from './ingridientsReducer';
+import { ingredientsReducer } from "./ingredientsReducer";
 
-import {
-  orderReducer
-} from './orderReducer';
+import { ingredientDetailsReducer } from "./ingredientDetailsReducer";
+
+import { orderReducer } from "./orderReducer";
+
+import { orderDetailsReducer } from "./orderDetailsReducer";
 
 export const rootReducer = combineReducers({
-  ingridients: ingridientsReducer,
-  order: orderReducer
-})
+  ingridients: ingredientsReducer,
+  ingredientDetails: ingredientDetailsReducer,
+  order: orderReducer,
+  orderDetails: orderDetailsReducer,
+});
