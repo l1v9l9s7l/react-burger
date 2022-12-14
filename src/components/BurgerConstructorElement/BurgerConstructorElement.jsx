@@ -11,7 +11,6 @@ export default function BurgerConstructorElement({ data, index }) {
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
 
   const onSortHandler = (arr, dragIndex) => {
-    console.log(arr);
     const element = arr[dragIndex];
     const newArr = [...arr];
     newArr.splice(dragIndex, 1); //Удалить перетаскиваемый элемент со старого места
@@ -34,7 +33,8 @@ export default function BurgerConstructorElement({ data, index }) {
 
   const deleteIngredient = () => {
     const arr = storeDraggedIngredients.map((i) => i);
-    const newArr = arr.splice(index, 1);
+    const newArr = [...arr];
+    newArr.splice(index, 1);
     dispatch(setDraggedIngredients(newArr));
   };
 

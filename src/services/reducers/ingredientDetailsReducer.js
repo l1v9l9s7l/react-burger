@@ -4,7 +4,7 @@ const defaultState = {
   //Список всех полученных ингредиентов
   openIngridientModal: false,
   //Объект просматриваемого ингредиента
-  modalDetails: [],
+  modalDetails: null,
 };
 
 export const ingredientDetailsReducer = (state = defaultState, action) => {
@@ -21,7 +21,7 @@ export const ingredientDetailsReducer = (state = defaultState, action) => {
       return {
         ...state,
         openIngridientModal: false,
-        modalDetails: {},
+        modalDetails: null,
       };
     }
     default:
