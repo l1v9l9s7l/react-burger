@@ -22,13 +22,6 @@
   width: 8px;
 }
 
-.elementWrapper{
-  width: 568px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .topsWrapper{
   padding-left: 30px;
 }
@@ -37,4 +30,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.price{
+  font-size: 48px;
 }

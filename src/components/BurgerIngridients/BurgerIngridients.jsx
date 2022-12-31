@@ -1,114 +1,141 @@
-import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types'
-import styles from './BurgerIngridients.module.css'
-import { Tab } from '@ya.praktikum/react-developer-burger-ui-components'
-import Ingridient from '../Ingridient/Ingridient';
-import Modal from '../Modal/Modal';
-import IngridientDetails from '../IngridientDetails/IngridientDetails';
-import { IngridientsContext } from '../../services/appContext';
+import React, { useState, useEffect, useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import styles from "./BurgerIngridients.module.css";
+import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import Ingridient from "../Ingridient/Ingridient";
+import Modal from "../Modal/Modal";
+import IngridientDetails from "../IngridientDetails/IngridientDetails";
 
-export default function BurgerIngridients(props) {
+export default function BurgerIngridients() {
   const [sauces, setSauces] = React.useState([]);
   const [mains, setMains] = React.useState([]);
   const [buns, setBuns] = React.useState([]);
-  const [saucesArr, setSaucesArr] = React.useState([]);
-  const [mainsArr, setMainsArr] = React.useState([]);
-  const [bunsArr, setBunsArr] = React.useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalInfo, setModalInfo] = useState({ name: '', image: '', calories: '', fat: '', proteins: '', carbohydrates: '' });
-  const [ingridients, setIngridients] = useContext(IngridientsContext)
+  const dispatch = useDispatch();
+  const ingridients = useSelector((state) => state.ingridients.ingridients);
+  const modalOpen = useSelector((state) => state.ingredientDetails.openIngridientModal);
+  const modalDetail = useSelector((state) => state.ingredientDetails.modalDetails);
+  const [bunsCategoryActive, setBunsCategoryActive] = useState(true);
+  const [mainsCategoryActive, setMainsCategoryActive] = useState(false);
+  const [saucesCategoryActive, setSaucesCategoryActive] = useState(false);
 
+  //Изменения состояния активности модального окна через dispatch
+  const handlerModalOpen = (value) => {
+    dispatch({ type: "OPEN_INGREDIENT_MODAL", payload: value });
+  };
 
+  const handlerModalClose = () => {
+    dispatch({ type: "CLOSE_INGREDIENT_MODAL" });
+  };
+
+  //Формирование массивов по категориям и передача их в состояние
+  React.useEffect(() => {
+    const saucesArr = ingridients.filter((ingridient) => {
+      if (ingridient.type === "sauce") {
+        return ingridient;
+      }
+    });
+    const sauces = saucesArr.map((i) => (
+      <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />
+    ));
+    setSauces(sauces);
+  }, [ingridients]);
+
+  React.useEffect(() => {
+    const mainsArr = ingridients.filter((ingridient) => {
+      if (ingridient.type === "main") {
+        return ingridient;
+      }
+    });
+    const mains = mainsArr.map((i) => (
+      <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />
+    ));
+    setMains(mains);
+  }, [ingridients]);
+
+  React.useEffect(() => {
+    const bunsArr = ingridients.filter((ingridient) => {
+      if (ingridient.type === "bun") {
+        return ingridient;
+      }
+    });
+    const buns = bunsArr.map((i) => (
+      <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />
+    ));
+    setBuns(buns);
+  }, [ingridients]);
+
+  const [ingridientsTab, setIngridientsTab] = useState();
+
+  //Функция переключения состояний кнопок при скролле
   useEffect(() => {
+    setIngridientsTab(document.getElementById("ingridientsTab"));
     function check() {
-      if (props.data.length === 0) {
+      if (ingridientsTab === null || ingridientsTab === undefined) {
+        return;
       } else {
-        setIngridients(props.data)
+        ingridientsTab.addEventListener("scroll", (evt) => {
+          const scrollPosition = evt.target.scrollTop;
+          if (scrollPosition > 280) {
+            setBunsCategoryActive(false);
+            setSaucesCategoryActive(true);
+          }
+          if (scrollPosition < 280) {
+            setBunsCategoryActive(true);
+            setSaucesCategoryActive(false);
+          }
+          if (scrollPosition > 800) {
+            setMainsCategoryActive(true);
+            setSaucesCategoryActive(false);
+          }
+          if (scrollPosition < 800) {
+            setMainsCategoryActive(false);
+          }
+        });
       }
     }
-    check()
-  }, [props.data])
-
-  const handlerModalOpen = (value) => {              //Создали обработчик открытия модального окна
-    setModalInfo(value)                              //Задаем параметры при открытии модального окна
-    setModalOpen(true);                                   //Меняем состояние модального окна
-  }
-
-  const handlerModalClose = () => {              //Создали обработчик открытия модального окна                             //Задаем параметры при открытии модального окна
-    setModalOpen(false);                                   //Меняем состояние модального окна
-  }
-
-
-  React.useEffect(() => {
-    const saucesArr = props.data.filter(ingridient => {
-      if (ingridient.type === 'sauce') {
-        return ingridient
-      }
-    })
-    const sauces = saucesArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
-    setSauces(sauces)
-    setSaucesArr(saucesArr)
-  }, [props.data])
-
-  React.useEffect(() => {
-    const mainsArr = props.data.filter(ingridient => {
-      if (ingridient.type === 'main') {
-        return ingridient
-      }
-    })
-    const mains = mainsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
-    setMains(mains)
-    setMainsArr(mainsArr)
-  }, [props.data])
-
-  React.useEffect(() => {
-    const bunsArr = props.data.filter(ingridient => {
-      if (ingridient.type === 'bun') {
-        return ingridient
-      }
-    })
-    const buns = bunsArr.map(i => <Ingridient ingridient={i} onModalOpen={handlerModalOpen} key={i._id} />)
-    setBuns(buns)
-    setBunsArr(bunsArr)
-  }, [props.data])
-
+    check();
+  }, [ingridientsTab]);
 
   return (
     <section className={styles.ingridients}>
-
       <h1 className={`${styles.title} pt-10 pb-5`}>Соберите бургер</h1>
 
       <div className={styles.menu}>
-        <Tab className={styles.menuButton} active='true'>Булки</Tab>
-        <Tab className={styles.menuButton} >Соусы</Tab>
-        <Tab className={styles.menuButton}>Начинки</Tab>
+        <Tab className={styles.menuButton} active={bunsCategoryActive}>
+          Булки
+        </Tab>
+        <Tab className={styles.menuButton} active={saucesCategoryActive}>
+          Соусы
+        </Tab>
+        <Tab className={styles.menuButton} active={mainsCategoryActive}>
+          Начинки
+        </Tab>
       </div>
 
-      <div className={`${styles.scrollDiv} pt-10`}>
-
-        <h3 className={styles.categories}>Булки</h3>
-        <div className={`${styles.ingridientsGrid} pt-6 pb-10`}>
-          {buns}
-        </div>
+      <div className={`${styles.scrollDiv} pt-10`} id="ingridientsTab">
+        <h3 className={styles.categories} id="categoriesBuns">
+          Булки
+        </h3>
+        <div className={`${styles.ingridientsGrid} pt-6 pb-10`}>{buns}</div>
 
         <h3 className={styles.categories}>Cоусы</h3>
-        <div className={`${styles.ingridientsGrid} pt-6 pb-10`}>
-          {sauces}
-        </div>
+        <div className={`${styles.ingridientsGrid} pt-6 pb-10`}>{sauces}</div>
 
         <h3 className={styles.categories}>Начинки</h3>
-        <div className={`${styles.ingridientsGrid} pt-6`}>
-          {mains}
-        </div>
+        <div className={`${styles.ingridientsGrid} pt-6`}>{mains}</div>
       </div>
-      {modalOpen && (   //Если true отобрази модальное окно
-        <Modal onModalClose={handlerModalClose} ><IngridientDetails name={modalInfo.name} image={modalInfo.image} proteins={modalInfo.proteins} fat={modalInfo.fat} carbohydrates={modalInfo.carbohydrates} calories={modalInfo.calories} /></Modal>
+      {modalOpen && ( //Если true отобрази модальное окно
+        <Modal onModalClose={handlerModalClose}>
+          <IngridientDetails
+            name={modalDetail.name}
+            image={modalDetail.image}
+            proteins={modalDetail.proteins}
+            fat={modalDetail.fat}
+            carbohydrates={modalDetail.carbohydrates}
+            calories={modalDetail.calories}
+          />
+        </Modal>
       )}
     </section>
-  )
+  );
 }
-
-BurgerIngridients.propTypes = {
-  data: PropTypes.array.isRequired
-}
-

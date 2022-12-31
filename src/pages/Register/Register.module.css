@@ -1,0 +1,24 @@
+.content{
+  display: flex;
+  flex-direction: column;
+  padding-top: 180px;
+}
+
+.title{
+  text-align: center;
+}
+
+.enterButton{
+  margin: auto;
+}
+
+.loginText{
+  text-align: center;
+  color:  #8585AD;
+}
+
+.link{
+  text-decoration: none;
+  color:  #4C4CFF;
+  margin-left: 8px;
+}
