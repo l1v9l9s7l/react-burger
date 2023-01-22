@@ -1,171 +1,191 @@
-import React, { useState, useContext, useEffect } from 'react';
-import styles from './BurgerConstructor.module.css'
-import { ConstructorElement } from '@ya.praktikum/react-developer-burger-ui-components'
-import { CurrencyIcon, DragIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import { Button } from '@ya.praktikum/react-developer-burger-ui-components'
-import OrderDetails from '../OrderDetails/OrderDetails';
-import Modal from '../Modal/Modal';
-import { IngridientsContext } from '../../services/appContext';
-import { postOrder } from '../../utils/api';
+import React, { useState, useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useDrag, useDrop } from "react-dnd/dist/hooks";
+import styles from "./BurgerConstructor.module.css";
+import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
+import OrderDetails from "../OrderDetails/OrderDetails";
+import BurgerConstructorElement from "../BurgerConstructorElement/BurgerConstructorElement";
+import Modal from "../Modal/Modal";
+import { postOrder } from "../../utils/api";
+import { setDraggedIngredients } from "../../services/actions/orderAction";
+import { setOrderIdsArr } from "../../services/actions/orderDetailsAction";
+import { uuidv4 } from "../../utils/utils";
+import diamond from "../../images/diamond.svg";
 
 export default function BurgerConstructor() {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedIngridients, setSelectedIngridients] = useState([])
-  const [saucesArr, setSaucesArr] = useState([])
-  const [mainsArr, setMainsArr] = useState([])
-  const [bunsArr, setBunsArr] = useState([])
-  const [ingridientsIdArr, setIngridientsIdArr] = useState([])
-  const [orderId, setOrderId] = useState([])
-  const ingridients = useContext(IngridientsContext)
+  const dispatch = useDispatch();
+  const [ingridientsIdArr, setIngridientsIdArr] = useState([]);
+  const orderNumber = useSelector((state) => state.orderDetails.orderNumber);
+  const ingridients = useSelector((state) => state.ingridients.ingridients);
+  const modalOpen = useSelector((state) => state.orderDetails.openOrderModal);
+  const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
+  //Массив с данными пернесенных элементов
+  const [draggedElements, setDraggedElements] = useState([]);
+  //Массив с разметкой перенесенных ингредиентов
+  const [selectedIngridients, setSelectedIngridients] = useState([]);
+  //Массив с данными пернесенных булок
+  const [draggedBun, setDraggedBun] = useState([]);
+  const [ingredientsPrice, setIngredientsPrice] = useState(0);
+  const [bunPrice, setBunPrice] = useState(0);
 
-
+  //Связали локальное состояние с глобальным
   useEffect(() => {
-    function check() {
-      if (ingridients[0].length === 0) {
-        return
-      } else {
-        setSaucesArr(ingridients[0].filter(ingridient => {
-          if (ingridient.type === 'sauce') {
-            return ingridient
-          }
-        }))
-        setMainsArr(ingridients[0].filter(ingridient => {
-          if (ingridient.type === 'main') {
-            return ingridient
-          }
-        }))
-        setBunsArr(ingridients[0].filter(ingridient => {
-          if (ingridient.type === 'bun') {
-            return ingridient
-          }
-        }))
-      }
-    }
-    check()
-  }, [ingridients])
-
-
+    dispatch(setDraggedIngredients(draggedElements));
+  }, [draggedElements]);
   useEffect(() => {
-    function check() {
-      if (ingridientsIdArr.length === 0) {
-        return
-      } else {
-        console.log()
-        postOrder(ingridientsIdArr)
-          .then((res) => {
-            setOrderId(res.order.number)
-          }
-          )
-      }
+    setDraggedElements(storeDraggedIngredients);
+  }, [storeDraggedIngredients]);
+
+  const handleDrop = (data) => {
+    //data приходит из item у Drop
+
+    if (data.type === "sauce" || data.type === "main") {
+      setDraggedElements([
+        ...draggedElements,
+        ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedElements
+      ]);
+    } else if (data.type === "bun") {
+      setDraggedBun([
+        ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedBuns
+      ]);
+      return;
     }
-    check()
-  }, [ingridientsIdArr])
-
-  const costInitialState = { count: 0 };       //Начальное состояние
-
-  const costReducer = (costState, action) => {           //costState - 0
-    switch (action.type) {
-      case "increment":
-        return { count: costState.count + action.addpay };
-      case "decrement":
-        return { count: costState.count - action.addpay };
-      default:
-        throw new Error(`Wrong type of action: ${action.type}`);
-    };
   };
 
-  const [costState, costDispatcher] = React.useReducer(costReducer, costInitialState);  //costState = count: 0
+  const [, drop] = useDrop({
+    accept: "drop_ingr",
+    //data - приходит из Ingredient, содержит id и type ингредиента
+    //При сбрасывании элемента происходит drop - handleDrop, в data попадает data Дропа
+    drop(data) {
+      handleDrop(data);
+    },
+  });
 
+  //Отправка id-шников ингридиентов после проверки их наличия
+  const getOrderNumber = () => {
+    if (ingridientsIdArr.length === 0) {
+      return;
+    } else {
+      postOrder(ingridientsIdArr).then((res) => {
+        dispatch({ type: "GET_ORDER_NUMBER", payload: res.order.number });
+      });
+    }
+  };
+
+  //Получение айдишников выбранных ингредиентов
+  useEffect(() => {
+    const ingredientsIdsArr = storeDraggedIngredients.map((i) => {
+      return i._id;
+    });
+    const bunIdsArr = draggedBun.map((i) => {
+      return i._id;
+    });
+    const commonIdsArr = bunIdsArr.concat(ingredientsIdsArr, bunIdsArr);
+    setIngridientsIdArr(commonIdsArr);
+    setSelectedIngridients(
+      storeDraggedIngredients.map((i, index) => (
+        <BurgerConstructorElement data={i} index={index} key={uuidv4()} />
+      ))
+    );
+  }, [storeDraggedIngredients, draggedBun]);
+
+  //Разметка булок
+  const setBottomBun = () => {
+    if (draggedBun.length === 0) {
+      return;
+    } else {
+      return (
+        <ConstructorElement
+          type="bottom"
+          isLocked={true}
+          text={draggedBun[0].name + "(низ)"}
+          price={draggedBun[0].price}
+          thumbnail={draggedBun[0].image}
+          key={1}
+        />
+      );
+    }
+  };
+
+  const setTopBun = () => {
+    if (draggedBun.length === 0) {
+      return;
+    } else {
+      return (
+        <ConstructorElement
+          type="top"
+          isLocked={true}
+          text={draggedBun[0].name + "(верх)"}
+          price={draggedBun[0].price}
+          thumbnail={draggedBun[0].image}
+          key={1}
+        />
+      );
+    }
+  };
+
+  const bottomBun = useMemo(setBottomBun, [draggedBun]);
+  const topBun = useMemo(setTopBun, [draggedBun]);
+
+  //Подсчет стоимости ингредиентов
+  useEffect(() => {
+    const sum = storeDraggedIngredients.map((i) => i.price).reduce((a, b) => a + b, 0);
+    setIngredientsPrice(sum);
+  }, [storeDraggedIngredients]);
+  //Подсчет стоимости булок
+  useEffect(() => {
+    if (draggedBun.length > 0) {
+      const sum = draggedBun[0].price * 2;
+      setBunPrice(sum);
+    } else {
+      return;
+    }
+  }, [draggedBun]);
+
+  const handlerModalOpen = () => {
+    //Создали обработчик открытия модального окна
+    getOrderNumber();
+    dispatch({ type: "OPEN_ORDER_MODAL" }); //Меняем состояние модального окна
+  };
+
+  const handlerModalClose = () => {
+    //Создали обработчик открытия модального окна
+    dispatch({ type: "CLOSE_ORDER_MODAL" }); //Меняем состояние модального окна
+  };
 
   useEffect(() => {
-    function check() {
-      if (saucesArr.length === 0 || mainsArr === 0) {
-        return
-      } else {
-        mainsArr.concat(saucesArr).concat(saucesArr).forEach(item => costDispatcher({ type: "increment", addpay: item.price }));
-      }
-    }
-
-    check()
-  }, [saucesArr])
-
-  useEffect(() => {
-    function check() {
-      if (saucesArr.length === 0 || mainsArr === 0) {
-        return
-      } else {
-        const selectIngridients = mainsArr.concat(saucesArr)
-        console.log(selectIngridients)
-        const idArr = selectIngridients.map(i => { return i._id })
-        setIngridientsIdArr(idArr)
-        const selectedIngridients = selectIngridients.map(i =>
-          <div className={`${styles.elementWrapper} pt-4`} key={i._id}>
-            <DragIcon />
-            <ConstructorElement text={i.name} thumbnail={i.image} isLocked={false} price={i.price} />
-          </div>)
-        setSelectedIngridients(selectedIngridients)
-      }
-    }
-    check()
-  }, [saucesArr])
-
-  const handlerModalOpen = () => {              //Создали обработчик открытия модального окна
-    setModalOpen(true);                                   //Меняем состояние модального окна
-  }
-
-  const handlerModalClose = () => {              //Создали обработчик открытия модального окна                             //Задаем параметры при открытии модального окна
-    setModalOpen(false);                                   //Меняем состояние модального окна
-  }
+    dispatch(setOrderIdsArr(ingridientsIdArr));
+  }, [ingridientsIdArr]);
 
   return (
     <>
-      <section className={styles.burgerСonstructor}>
-        <div className={`${styles.topsWrapper} pt-25`}>
-          {bunsArr.filter((i, index) => index === 1)
-            .map(i =>
-              <div key="1">
-                <ConstructorElement
-                  type="top"
-                  isLocked={true}
-                  text={i.name + ' (верх)'}
-                  price={i.price}
-                  thumbnail={i.image}
-                />
-              </div>
-            )}
-        </div>
+      <section className={styles.burgerСonstructor} ref={drop}>
+        <div className={`${styles.topsWrapper} pt-25`}>{topBun}</div>
         <div className={styles.scrollDiv}>
           {selectedIngridients}
-          <div className='pt-4'></div>
+          <div className="pt-4"></div>
         </div>
-        <div className='pt-4'></div>
+        <div className="pt-4"></div>
         <div className={styles.topsWrapper}>
-          {bunsArr.filter((i, index) => index === 1)
-            .map(i =>
-              <div key="1">
-                <ConstructorElement
-                  type="bottom"
-                  isLocked={true}
-                  text={i.name + ' (низ)'}
-                  price={i.price}
-                  thumbnail={i.image}
-                />
-              </div>
-            )}
-          <div className='pt-4'></div>
+          {bottomBun}
+          <div className="pt-4"></div>
         </div>
-        <div className='pt-10'></div>
+        <div className="pt-10"></div>
         <div className={styles.constructorBottom}>
-          <p>{costState.count + 1976}</p>
-          <div className='pl-2'></div>
-          <CurrencyIcon></CurrencyIcon>
-          <div className='pl-10'></div>
-          <Button size='large' htmlType='button' onClick={handlerModalOpen} >Оформить заказ</Button>
+          <p className={styles.price}>{ingredientsPrice + bunPrice}</p>
+          <div className="pl-2"></div>
+          <img src={diamond} alt="Diamond" />
+          <div className="pl-10"></div>
+          <Button size="large" htmlType="button" onClick={handlerModalOpen}>
+            Оформить заказ
+          </Button>
         </div>
       </section>
-      {modalOpen && (   //Если true отобрази модальное окно
-        <Modal onModalClose={handlerModalClose}><OrderDetails orderId={orderId} /></Modal>
+      {modalOpen && ( //Если true отобрази модальное окно
+        <Modal onModalClose={handlerModalClose}>
+          <OrderDetails orderId={orderNumber} />
+        </Modal>
       )}
     </>
-  )
+  );
 }
