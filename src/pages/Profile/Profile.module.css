@@ -1,0 +1,65 @@
+.content{
+  display: flex;
+  flex-direction: column;
+  padding-top: 180px;
+}
+
+.commonContainer{
+  display: flex;
+  position: relative;
+  width: 1250px;
+}
+
+.title{
+  text-align: center;
+}
+
+.enterButton{
+  margin: auto;
+}
+
+.loginText{
+  text-align: center;
+  color:  #8585AD;
+}
+
+.link{
+  text-decoration: none;
+  color:  #4C4CFF;
+  margin-left: 8px;
+}
+
+.navigation{
+  display: flex;
+  flex-direction: column;
+  padding-top: 180px;
+}
+
+.navigationButton{
+  color: #8585AD;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  margin-right: 60px;
+  width: 320px;
+  text-align: left;
+  height: 64px;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+
+.navigationButton:hover{
+  color: white;
+}
+
+
+.navigationButton_active{
+  color: #ffffff;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  margin-right: 60px;
+  width: 320px;
+  text-align: left;
+  height: 64px;
+}
