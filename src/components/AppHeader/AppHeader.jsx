@@ -2,35 +2,28 @@ import styles from "./AppHeader.module.css";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   BurgerIcon,
-  CloseIcon,
-  CheckMarkIcon,
-  CurrencyIcon,
-  DragIcon,
-  EditIcon,
-  HideIcon,
-  InfoIcon,
   ListIcon,
-  LockIcon,
-  LogoutIcon,
   ProfileIcon,
-  ShowIcon,
-  DeleteIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  MenuIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link, useHistory, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 
 export default function AppHeader() {
+  const dispatch = useDispatch();
+  const pageState = useSelector((state) => state.page);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-
+  const order = useSelector((state) => state.order);
+  const history = useHistory();
+  const location = useLocation();
   function getCookie() {
     const matches = document.cookie.match(
       new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
     );
-    console.log(matches ? decodeURIComponent(matches[1]) : undefined);
+    // console.log(matches ? decodeURIComponent(matches[1]) : undefined);
+    // console.log(location.pathname);
+    console.log(pageState.currentPage);
+    console.log(order);
   }
 
   useEffect(() => {
@@ -41,7 +34,17 @@ export default function AppHeader() {
     console.log(document.cookie);
   }
 
-  const curUser = getCookie("user");
+  const cookieUser = document.cookie.match(
+    new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
+  );
+  const cookieUserDecode = cookieUser ? decodeURIComponent(cookieUser[1]) : undefined;
+
+  const curUser = getCookie();
+  console.log(cookieUserDecode);
+
+  function setCurrentPage() {
+    dispatch({ type: "SET_CURRENT_PAGE", payload: "/profile" });
+  }
 
   return (
     <header className={styles.header}>
@@ -64,14 +67,14 @@ export default function AppHeader() {
         </Link>
         <button onClick={watchCookie}></button>
         <button onClick={getCookie}></button>
-        {curUser && (
+        {cookieUserDecode && (
           <Link className={styles.profile} to="/profile">
             <ProfileIcon type="secondary" />
             <p className={`${styles.profileText} ${styles.text_color_inactive}`}>Личный кабинет</p>
           </Link>
         )}
-        {!curUser && (
-          <Link className={styles.profile} to="/login">
+        {!cookieUserDecode && (
+          <Link onClick={setCurrentPage} className={styles.profile} to="/login">
             <ProfileIcon type="secondary" />
             <p className={`${styles.profileText} ${styles.text_color_inactive}`}>Личный кабинет</p>
           </Link>

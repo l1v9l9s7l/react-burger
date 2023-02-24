@@ -8,9 +8,11 @@ import BurgerConstructorElement from "../BurgerConstructorElement/BurgerConstruc
 import Modal from "../Modal/Modal";
 import { postOrder } from "../../utils/api";
 import { setDraggedIngredients } from "../../services/actions/orderAction";
+import { setDraggedBuns } from "../../services/actions/orderAction";
 import { setOrderIdsArr } from "../../services/actions/orderDetailsAction";
 import { uuidv4 } from "../../utils/utils";
 import diamond from "../../images/diamond.svg";
+import { useHistory, useLocation } from "react-router-dom";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
@@ -20,13 +22,15 @@ export default function BurgerConstructor() {
   const modalOpen = useSelector((state) => state.orderDetails.openOrderModal);
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
   //Массив с данными пернесенных элементов
-  const [draggedElements, setDraggedElements] = useState([]);
+  const [draggedElements, setDraggedElements] = useState(storeDraggedIngredients);
   //Массив с разметкой перенесенных ингредиентов
   const [selectedIngridients, setSelectedIngridients] = useState([]);
   //Массив с данными пернесенных булок
   const [draggedBun, setDraggedBun] = useState([]);
   const [ingredientsPrice, setIngredientsPrice] = useState(0);
   const [bunPrice, setBunPrice] = useState(0);
+  let history = useHistory();
+  const location = useLocation();
 
   //Связали локальное состояние с глобальным
   useEffect(() => {
@@ -142,8 +146,21 @@ export default function BurgerConstructor() {
     }
   }, [draggedBun]);
 
+  const cookieUser = document.cookie.match(
+    new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
+  );
+  const cookieUserDecode = cookieUser ? decodeURIComponent(cookieUser[1]) : undefined;
+
   const handlerModalOpen = () => {
     //Создали обработчик открытия модального окна
+
+    if (!cookieUserDecode) {
+      dispatch({ type: "SET_CURRENT_PAGE", payload: location.pathname });
+      history.push({
+        pathname: "/login",
+      });
+    }
+
     getOrderNumber();
     dispatch({ type: "OPEN_ORDER_MODAL" }); //Меняем состояние модального окна
   };

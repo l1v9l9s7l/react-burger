@@ -12,13 +12,19 @@ import { getCookie } from "../../utils/utils";
 import { useSelector } from "react-redux";
 import { setUser } from "../../services/actions/userAction";
 import { useDispatch } from "react-redux";
+import { ProfileForm } from "../../components/ProfileForm/ProfileForm";
+import { produceWithPatches } from "immer";
 
-export function Profile() {
+export function Profile(props) {
   // const { form, setForm } = { name: "", email: "", password: "", isChanged: false };
   let user = useSelector((state) => state.user);
   const [buttonActive, setButtonActive] = useState(false);
+  const [menuProfile, setMenuProfile] = useState(false);
+  const [menuOrder, setMenuOrder] = useState(false);
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    setMenuProfile(true);
+  }, []);
 
   let history = useHistory();
   function logOut() {
@@ -33,10 +39,20 @@ export function Profile() {
 
   console.log(history.location.pathname);
 
-  function activateButton() {
+  function profileButton() {
     const profileButton = document.getElementById("buttonOne");
     profileButton.classList.add("navigationButton_active");
+    console.log(menuProfile);
+    setMenuProfile(true);
+    setMenuOrder(false);
   }
+
+  function orderButton() {
+    setMenuProfile(false);
+    setMenuOrder(true);
+  }
+
+  const location = history.location.pathname;
 
   useEffect(() => {
     //Переадресация на главную страницу в случае отстутствия данных о пользователе
@@ -60,35 +76,57 @@ export function Profile() {
   );
   const cookieLoginDecode = cookieLogin ? decodeURIComponent(cookieLogin[1]) : undefined;
 
-  if (cookieUserDecode.length == 0) {
-    history.push({
-      pathname: "/",
-    });
-  }
+  // if (cookieUserDecode.length == undefined) {
+  //   history.push({
+  //     pathname: "/",
+  //   });
+  // }
+  console.log(document.cookie);
 
   return (
     <>
       <div className={styles.commonContainer}>
         <div className={styles.navigation}>
-          <button
-            onClick={activateButton}
-            id="buttonOne"
-            className={buttonActive ? styles.navigationButton : styles.navigationButton_active}
-          >
-            Профиль
-          </button>
-          <button className={styles.navigationButton}>История заказов</button>
+          <Link to="/profile">
+            {menuProfile ? (
+              <button
+                onClick={profileButton}
+                id="buttonOne"
+                className={styles.navigationButton_active}
+              >
+                Профиль
+              </button>
+            ) : (
+              <button onClick={profileButton} id="buttonOne" className={styles.navigationButton}>
+                Профиль
+              </button>
+            )}
+          </Link>
+          <Link to="/profile/orders">
+            {menuOrder ? (
+              <button onClick={orderButton} className={styles.navigationButton_active}>
+                История заказов
+              </button>
+            ) : (
+              <button onClick={orderButton} className={styles.navigationButton}>
+                История заказов
+              </button>
+            )}
+          </Link>
           <button onClick={logOut} className={styles.navigationButton}>
             Выход
           </button>
+          {menuProfile ? (
+            <p className={styles.navigationText}>
+              В этом разделе вы можете изменить свои персональные данные
+            </p>
+          ) : (
+            <p className={styles.navigationText}>
+              В этом разделе вы можете просмотреть свою историю заказов
+            </p>
+          )}
         </div>
-        <div className={styles.content}>
-          <Input icon="EditIcon" defaultValue={cookieUserDecode} placeholder="Имя"></Input>
-          <div className="pt-6"></div>
-          <Input icon="EditIcon" defaultValue={cookieLoginDecode} placeholder="Логин"></Input>
-          <div className="pt-6"></div>
-          <Input type="password" icon="EditIcon" placeholder="Пароль"></Input>
-        </div>
+        {props.children}
       </div>
     </>
   );

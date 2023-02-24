@@ -9,26 +9,43 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Login } from "../../pages/Login/Login";
 import { Register } from "../../pages/Register/Register";
-import { Link } from "react-router-dom";
-import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom";
 import { ForgotPassword } from "../../pages/ForgotPassword/ForgotPassword";
 import { ResetPassword } from "../../pages/ResetPassword/ResetPassword";
 import { Profile } from "../../pages/Profile/Profile";
+import IngridientPage from "../IngredientPage/IngredientPage";
+import Modal from "../Modal/Modal";
+import IngridientDetails from "../IngridientDetails/IngridientDetails";
+import { ProfileForm } from "../ProfileForm/ProfileForm";
 
 function App() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  console.log(location.state);
+  const history = useHistory();
+
+  const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
+
+  const ingredientsList = useSelector((state) => state.ingridients.ingridients);
+  useEffect(() => {
+    console.log(ingredientsList);
+  }, [ingredientsList]);
 
   useEffect(() => {
     dispatch(getIngridients());
   }, [dispatch]);
+
+  const handlerModalClose = () => {
+    //Создали обработчик открытия модального окна
+    dispatch({ type: "CLOSE_ORDER_MODAL" }); //Меняем состояние модального окна
+    dispatch({ type: "CLOSE_INGREDIENT_MODAL" }); //Меняем состояние модального окна
+    history.goBack();
+  };
 
   return (
     <>
       <AppHeader />
       <main className={styles.main}>
         <Switch>
+          {/* <Switch location={isFromModal || location}> */}
           <Route path="/" exact>
             <DndProvider backend={HTML5Backend}>
               <BurgerIngridients />
@@ -47,9 +64,32 @@ function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <Route path="/profile">
-            <Profile />
+          <Route exact path="/profile">
+            <Profile>
+              <ProfileForm></ProfileForm>
+            </Profile>
           </Route>
+          <Route path="/profile/orders">
+            <Profile>
+              <p>Orders</p>
+            </Profile>
+          </Route>
+          {modalState && ( //Если true отобрази модальное окно
+            <Route path="/ingredients/:id">
+              <DndProvider backend={HTML5Backend}>
+                <BurgerIngridients />
+                <BurgerConstructor />
+              </DndProvider>
+              <Modal onModalClose={handlerModalClose}>
+                <IngridientDetails />
+              </Modal>
+            </Route>
+          )}
+          {!modalState && (
+            <Route path="/ingredients/:id">
+              <IngridientPage />
+            </Route>
+          )}
         </Switch>
       </main>
     </>

@@ -10,22 +10,10 @@ export default function BurgerIngridients() {
   const [sauces, setSauces] = React.useState([]);
   const [mains, setMains] = React.useState([]);
   const [buns, setBuns] = React.useState([]);
-  const dispatch = useDispatch();
   const ingridients = useSelector((state) => state.ingridients.ingridients);
-  const modalOpen = useSelector((state) => state.ingredientDetails.openIngridientModal);
-  const modalDetail = useSelector((state) => state.ingredientDetails.modalDetails);
   const [bunsCategoryActive, setBunsCategoryActive] = useState(true);
   const [mainsCategoryActive, setMainsCategoryActive] = useState(false);
   const [saucesCategoryActive, setSaucesCategoryActive] = useState(false);
-
-  //Изменения состояния активности модального окна через dispatch
-  const handlerModalOpen = (value) => {
-    dispatch({ type: "OPEN_INGREDIENT_MODAL", payload: value });
-  };
-
-  const handlerModalClose = () => {
-    dispatch({ type: "CLOSE_INGREDIENT_MODAL" });
-  };
 
   //Формирование массивов по категориям и передача их в состояние
   React.useEffect(() => {
@@ -34,9 +22,7 @@ export default function BurgerIngridients() {
         return ingridient;
       }
     });
-    const sauces = saucesArr.map((i) => (
-      <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />
-    ));
+    const sauces = saucesArr.map((i) => <Ingridient ingridient={i} id={i._id} key={i._id} />);
     setSauces(sauces);
   }, [ingridients]);
 
@@ -46,9 +32,7 @@ export default function BurgerIngridients() {
         return ingridient;
       }
     });
-    const mains = mainsArr.map((i) => (
-      <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />
-    ));
+    const mains = mainsArr.map((i) => <Ingridient ingridient={i} id={i._id} key={i._id} />);
     setMains(mains);
   }, [ingridients]);
 
@@ -58,9 +42,7 @@ export default function BurgerIngridients() {
         return ingridient;
       }
     });
-    const buns = bunsArr.map((i) => (
-      <Ingridient ingridient={i} id={i._id} onModalOpen={handlerModalOpen} key={i._id} />
-    ));
+    const buns = bunsArr.map((i) => <Ingridient ingridient={i} id={i._id} key={i._id} />);
     setBuns(buns);
   }, [ingridients]);
 
@@ -124,18 +106,6 @@ export default function BurgerIngridients() {
         <h3 className={styles.categories}>Начинки</h3>
         <div className={`${styles.ingridientsGrid} pt-6`}>{mains}</div>
       </div>
-      {modalOpen && ( //Если true отобрази модальное окно
-        <Modal onModalClose={handlerModalClose}>
-          <IngridientDetails
-            name={modalDetail.name}
-            image={modalDetail.image}
-            proteins={modalDetail.proteins}
-            fat={modalDetail.fat}
-            carbohydrates={modalDetail.carbohydrates}
-            calories={modalDetail.calories}
-          />
-        </Modal>
-      )}
     </section>
   );
 }

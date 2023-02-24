@@ -81,6 +81,21 @@ const authorization = (email, password) => {
   }).then(checkRes);
 };
 
+const updateUserData = (name, email, password, token) => {
+  return fetch(`${config.baseURL}auth/user`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: token,
+    },
+    body: JSON.stringify({
+      name: name,
+      email: email,
+      password: password,
+    }),
+  }).then(checkRes);
+};
+
 export {
   fetchIngredients,
   postOrder,
@@ -88,4 +103,5 @@ export {
   resetPasswordPost,
   sendRegistrationForm,
   authorization,
+  updateUserData,
 };

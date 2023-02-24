@@ -11,6 +11,7 @@ export const ingredientDetailsReducer = (state = defaultState, action) => {
   //Создали редьюсер и задали начальное состояние
   switch (action.type) {
     case OPEN_INGREDIENT_MODAL: {
+      console.log(2222);
       return {
         ...state,
         openIngridientModal: true,
