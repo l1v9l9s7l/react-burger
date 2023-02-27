@@ -5,37 +5,15 @@ import {
   ListIcon,
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 export default function AppHeader() {
   const dispatch = useDispatch();
-  const pageState = useSelector((state) => state.page);
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-  const order = useSelector((state) => state.order);
-  const history = useHistory();
-  const location = useLocation();
-  function getCookie() {
-    const matches = document.cookie.match(
-      new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
-    );
-    // console.log(matches ? decodeURIComponent(matches[1]) : undefined);
-    // console.log(location.pathname);
-    console.log(pageState.currentPage);
-    console.log(order);
-  }
-
-  function watchCookie() {
-    console.log(document.cookie);
-  }
-
   const cookieUser = document.cookie.match(
     new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
   );
   const cookieUserDecode = cookieUser ? decodeURIComponent(cookieUser[1]) : undefined;
-
-  const curUser = getCookie();
 
   function setCurrentPage() {
     dispatch({ type: "SET_CURRENT_PAGE", payload: "/profile" });
@@ -60,8 +38,6 @@ export default function AppHeader() {
         <Link to="/" className={styles.logo}>
           <Logo />
         </Link>
-        <button onClick={watchCookie}></button>
-        <button onClick={getCookie}></button>
         {cookieUserDecode && (
           <Link className={styles.profile} to="/profile">
             <ProfileIcon type="secondary" />

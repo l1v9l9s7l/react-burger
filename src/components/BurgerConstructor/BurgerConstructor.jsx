@@ -53,10 +53,6 @@ export default function BurgerConstructor() {
     setDraggedBun(storeDraggedBuns);
   }, [storeDraggedBuns]);
 
-  // useEffect(() => {
-  //   console.log(draggedBun);
-  // }, [draggedBun]);
-
   const handleDrop = (data) => {
     //data приходит из item у Drop
 
@@ -190,10 +186,6 @@ export default function BurgerConstructor() {
   useEffect(() => {
     dispatch(setOrderIdsArr(ingridientsIdArr));
   }, [ingridientsIdArr]);
-
-  // useEffect(() => {
-  //   console.log(selectedIngridients);
-  // }, [selectedIngridients]);
 
   return (
     <>

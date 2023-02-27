@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import styles from "./App.module.css";
 import AppHeader from "../AppHeader/AppHeader.jsx";
@@ -21,13 +21,7 @@ import { ProfileForm } from "../ProfileForm/ProfileForm";
 function App() {
   const dispatch = useDispatch();
   const history = useHistory();
-
   const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
-
-  const ingredientsList = useSelector((state) => state.ingridients.ingridients);
-  useEffect(() => {
-    console.log(ingredientsList);
-  }, [ingredientsList]);
 
   useEffect(() => {
     dispatch(getIngridients());
@@ -45,7 +39,6 @@ function App() {
       <AppHeader />
       <main className={styles.main}>
         <Switch>
-          {/* <Switch location={isFromModal || location}> */}
           <Route path="/" exact>
             <DndProvider backend={HTML5Backend}>
               <BurgerIngridients />
