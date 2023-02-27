@@ -21,24 +21,41 @@ export default function BurgerConstructor() {
   const ingridients = useSelector((state) => state.ingridients.ingridients);
   const modalOpen = useSelector((state) => state.orderDetails.openOrderModal);
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
+  const storeDraggedBuns = useSelector((state) => state.order.dragBuns);
   //Массив с данными пернесенных элементов
   const [draggedElements, setDraggedElements] = useState(storeDraggedIngredients);
   //Массив с разметкой перенесенных ингредиентов
   const [selectedIngridients, setSelectedIngridients] = useState([]);
   //Массив с данными пернесенных булок
-  const [draggedBun, setDraggedBun] = useState([]);
+  const [draggedBun, setDraggedBun] = useState(storeDraggedBuns);
   const [ingredientsPrice, setIngredientsPrice] = useState(0);
   const [bunPrice, setBunPrice] = useState(0);
   let history = useHistory();
   const location = useLocation();
 
   //Связали локальное состояние с глобальным
+
+  //Передаем в глобальное хранилище перенесенные игридиенты из стейта при изменении стейта
   useEffect(() => {
     dispatch(setDraggedIngredients(draggedElements));
   }, [draggedElements]);
+  //Изменяем стейт при изменении глобального хранилища
   useEffect(() => {
     setDraggedElements(storeDraggedIngredients);
   }, [storeDraggedIngredients]);
+
+  //Передаем в глобальное хранилище перенесенные булки из стейта
+  useEffect(() => {
+    dispatch(setDraggedBuns(draggedBun));
+  }, [draggedBun]);
+  //Изменяем стейт при изменении глобального хранилища
+  useEffect(() => {
+    setDraggedBun(storeDraggedBuns);
+  }, [storeDraggedBuns]);
+
+  // useEffect(() => {
+  //   console.log(draggedBun);
+  // }, [draggedBun]);
 
   const handleDrop = (data) => {
     //data приходит из item у Drop
@@ -173,6 +190,10 @@ export default function BurgerConstructor() {
   useEffect(() => {
     dispatch(setOrderIdsArr(ingridientsIdArr));
   }, [ingridientsIdArr]);
+
+  // useEffect(() => {
+  //   console.log(selectedIngridients);
+  // }, [selectedIngridients]);
 
   return (
     <>

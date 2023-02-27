@@ -19,7 +19,7 @@ export const orderReducer = (state = defaultState, action) => {
     case SET_DRAGGED_BUNS: {
       return {
         ...state,
-        dragIngredients: action.payload,
+        dragBuns: action.payload,
       };
     }
     default: {

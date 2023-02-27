@@ -26,10 +26,6 @@ export default function AppHeader() {
     console.log(order);
   }
 
-  useEffect(() => {
-    console.log(isAuthenticated);
-  }, [isAuthenticated]);
-
   function watchCookie() {
     console.log(document.cookie);
   }
@@ -40,7 +36,6 @@ export default function AppHeader() {
   const cookieUserDecode = cookieUser ? decodeURIComponent(cookieUser[1]) : undefined;
 
   const curUser = getCookie();
-  console.log(cookieUserDecode);
 
   function setCurrentPage() {
     dispatch({ type: "SET_CURRENT_PAGE", payload: "/profile" });
