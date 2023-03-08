@@ -16,6 +16,7 @@ import { Profile } from "../../pages/Profile/Profile";
 import IngridientPage from "../IngredientPage/IngredientPage";
 import Modal from "../Modal/Modal";
 import IngridientDetails from "../IngridientDetails/IngridientDetails";
+import ProtectedRouteElement from "../ProtectedRouteElement/ProtectedRouteElement";
 import { ProfileForm } from "../ProfileForm/ProfileForm";
 
 function App() {
@@ -57,11 +58,13 @@ function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <Route exact path="/profile">
+          {/* <Route exact path="/profile"> */}
+          <ProtectedRouteElement>
             <Profile>
               <ProfileForm></ProfileForm>
             </Profile>
-          </Route>
+          </ProtectedRouteElement>
+          {/* </Route> */}
           <Route path="/profile/orders">
             <Profile>
               <p>Orders</p>

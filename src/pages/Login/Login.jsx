@@ -22,6 +22,8 @@ export function Login() {
   const dispatch = useDispatch();
   const pageState = useSelector((state) => state.page);
 
+  console.log(pageState);
+
   function loginChangeHandler(event) {
     setLoginInputState(event.target.value);
   }
@@ -50,7 +52,6 @@ export function Login() {
       document.cookie = `accessToken=${res.accessToken} ; path=/; max-age=1200`;
       if (res.success) {
         dispatch(setUser({ email: res.user.email, user: res.user.name, isAuthenticated: true }));
-        console.log(res);
         if (pageState.currentPage == "/") {
           history.push({
             pathname: "/",
@@ -60,10 +61,6 @@ export function Login() {
             pathname: "/profile",
           });
         }
-        // history.push({
-        //   pathname: "/profile",
-        // });
-        // history.goBack();
       }
     });
   };

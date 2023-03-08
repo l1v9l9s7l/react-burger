@@ -34,14 +34,13 @@ export function ProfileForm() {
     });
   }
 
-  console.log(cookieUserDecode);
+  // console.log(cookieUserDecode);
 
   const [dataName, setDataName] = useState(cookieUserDecode);
   const [dataLogin, setDataLogin] = useState(cookieLoginDecode);
   const [dataPassword, setDataPassword] = useState("");
 
   function saveData() {
-    console.log(123);
     updateUserData(dataName, dataLogin, dataPassword, cookieAccessTokenDecode).then((res) => {
       console.log(res);
       document.cookie = `user=${res.user.name}; path=/; max-age=1200`;
@@ -60,10 +59,6 @@ export function ProfileForm() {
   function changeDataPassword(event) {
     setDataPassword(event.target.value);
   }
-
-  useEffect(() => {
-    console.log(dataName);
-  }, [dataName]);
 
   return (
     <>

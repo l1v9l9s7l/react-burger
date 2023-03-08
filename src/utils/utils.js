@@ -11,3 +11,12 @@ export function getCookie(name) {
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
+
+export function deleteCookie() {
+  document.cookie = `login=; path=/; max-age=1200`;
+  document.cookie = `user=; path=/; max-age=1200`;
+  document.cookie = `refreshToken= ; path=/; max-age=1200`;
+  document.cookie = `accessToken= ; path=/; max-age=1200`;
+}
+
+export function getAccessToken() {}
