@@ -1,22 +1,31 @@
 import styles from "./Profile.module.css";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { deleteCookie } from "../../utils/utils";
+import { logOutOnServer } from "../../utils/api";
 
 export function Profile(props) {
   const [menuProfile, setMenuProfile] = useState(false);
   const [menuOrder, setMenuOrder] = useState(false);
 
-  useEffect(() => {
-    setMenuProfile(true);
-  }, []);
+  const cookieRefreshToken = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+    )
+  );
+  const cookieRefreshTokenDecode = cookieRefreshToken
+    ? decodeURIComponent(cookieRefreshToken[1])
+    : undefined;
 
   let history = useHistory();
   function logOut() {
     deleteCookie();
     history.push({
       pathname: "/",
+    });
+    logOutOnServer(cookieRefreshTokenDecode).then((res) => {
+      console.log(res);
     });
   }
 

@@ -6,29 +6,22 @@ import {
   ProfileIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 export default function AppHeader() {
   const history = useHistory();
-  const dispatch = useDispatch();
   const currentPath = history.location.pathname;
   const [menuConstructorActive, setMenuConstructorActive] = useState(false);
   const [menuAccountActive, setMenuAccountActive] = useState(false);
-  const cookieUser = document.cookie.match(
-    new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
+  const cookieRefreshToken = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+    )
   );
-  const cookieUserDecode = cookieUser ? decodeURIComponent(cookieUser[1]) : undefined;
-
-  function setCurrentPage() {
-    dispatch({ type: "SET_CURRENT_PAGE", payload: "/profile" });
-  }
-
-  function watchCookie() {
-    console.log(document.cookie);
-  }
+  const cookieRefreshTokenDecode = cookieRefreshToken
+    ? decodeURIComponent(cookieRefreshToken[1])
+    : undefined;
 
   useEffect(() => {
     if (currentPath == "/profile") {
@@ -43,18 +36,14 @@ export default function AppHeader() {
   }, []);
 
   function setConstructorActive() {
-    console.log("com1");
     setMenuConstructorActive(true);
     setMenuAccountActive(false);
   }
 
   function setAccountActive() {
-    console.log("com2");
     setMenuAccountActive(true);
     setMenuConstructorActive(false);
   }
-
-  console.log(menuAccountActive);
 
   return (
     <header className={styles.header}>
@@ -83,13 +72,10 @@ export default function AppHeader() {
         <Link onClick={setConstructorActive} to="/" className={styles.logo}>
           <Logo />
         </Link>
-        <button onClick={watchCookie}>
-          <p>Cookie</p>
-        </button>
         <Link
           onClick={setAccountActive}
           className={styles.profile}
-          to={cookieUserDecode ? "/profile" : "/login"}
+          to={cookieRefreshTokenDecode ? "/profile" : "/login"}
         >
           <ProfileIcon type={menuAccountActive ? "primary" : "secondary"} />
           <p

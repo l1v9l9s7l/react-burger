@@ -22,8 +22,6 @@ export function Login() {
   const dispatch = useDispatch();
   const pageState = useSelector((state) => state.page);
 
-  console.log(pageState);
-
   function loginChangeHandler(event) {
     setLoginInputState(event.target.value);
   }
@@ -32,26 +30,12 @@ export function Login() {
     setPasswordInputState(event.target.value);
   }
 
-  //TODO
-  const curUser = getCookie("user");
-  if (curUser) {
-    if (curUser.length > 0) {
-      // dispatch(setUserAuth(true));
-      // history.push({
-      //   pathname: "/profile",
-      // });
-    }
-  }
-
   const logUser = () => {
     authorization(loginInputState, passwordInputState).then((res) => {
-      console.log(res);
-      document.cookie = `user=${res.user.name}; path=/; max-age=1200`;
-      document.cookie = `login=${res.user.email}; path=/; max-age=1200`;
       document.cookie = `refreshToken=${res.refreshToken} ; path=/; max-age=1200`;
       document.cookie = `accessToken=${res.accessToken} ; path=/; max-age=1200`;
       if (res.success) {
-        dispatch(setUser({ email: res.user.email, user: res.user.name, isAuthenticated: true }));
+        dispatch(setUser({ email: res.user.email, name: res.user.name, isAuthenticated: true }));
         if (pageState.currentPage == "/") {
           history.push({
             pathname: "/",
@@ -64,10 +48,6 @@ export function Login() {
       }
     });
   };
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
 
   return (
     <>

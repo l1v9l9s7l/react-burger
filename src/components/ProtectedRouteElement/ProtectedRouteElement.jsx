@@ -1,15 +1,21 @@
 import { Route, Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ProtectedRouteElement = ({ children, ...rest }) => {
-  const cookieUser = document.cookie.match(
-    new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
+  const cookieRefreshToken = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+    )
   );
+  const cookieRefreshTokenDecode = cookieRefreshToken
+    ? decodeURIComponent(cookieRefreshToken[1])
+    : undefined;
 
   return (
     <Route
       {...rest}
       render={({ location }) =>
-        cookieUser ? (
+        cookieRefreshTokenDecode ? (
           children
         ) : (
           <Redirect

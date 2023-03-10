@@ -13,10 +13,10 @@ export function getCookie(name) {
 }
 
 export function deleteCookie() {
-  document.cookie = `login=; path=/; max-age=1200`;
-  document.cookie = `user=; path=/; max-age=1200`;
-  document.cookie = `refreshToken= ; path=/; max-age=1200`;
-  document.cookie = `accessToken= ; path=/; max-age=1200`;
+  // document.cookie = `login=; path=/; max-age=1200`;
+  // document.cookie = `user=; path=/; max-age=1200`;
+  document.cookie = `refreshToken=; path=/; max-age=1200`;
+  document.cookie = `accessToken=; path=/; max-age=1200`;
 }
 
 export function getAccessToken() {}

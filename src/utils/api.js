@@ -96,6 +96,40 @@ const updateUserData = (name, email, password, token) => {
   }).then(checkRes);
 };
 
+const uploadUserData = (accessToken) => {
+  return fetch(`${config.baseURL}auth/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: accessToken,
+    },
+  }).then(checkRes);
+};
+
+const updateAccessToken = (refreshToken) => {
+  return fetch(`${config.baseURL}auth/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: refreshToken,
+    }),
+  }).then(checkRes);
+};
+
+const logOutOnServer = (refreshToken) => {
+  return fetch(`${config.baseURL}auth/logout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: refreshToken,
+    }),
+  }).then(checkRes);
+};
+
 export {
   fetchIngredients,
   postOrder,
@@ -104,4 +138,7 @@ export {
   sendRegistrationForm,
   authorization,
   updateUserData,
+  uploadUserData,
+  updateAccessToken,
+  logOutOnServer,
 };
