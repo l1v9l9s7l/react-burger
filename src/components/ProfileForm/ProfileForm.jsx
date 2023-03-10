@@ -14,16 +14,6 @@ export function ProfileForm() {
   const userStoreData = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const cookieUser = document.cookie.match(
-    new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
-  );
-  const cookieUserDecode = cookieUser ? decodeURIComponent(cookieUser[1]) : undefined;
-
-  const cookieLogin = document.cookie.match(
-    new RegExp("(?:^|; )" + "login".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
-  );
-  const cookieLoginDecode = cookieLogin ? decodeURIComponent(cookieLogin[1]) : undefined;
-
   const cookieAccessToken = document.cookie.match(
     new RegExp(
       "(?:^|; )" + "accessToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
@@ -42,21 +32,15 @@ export function ProfileForm() {
     ? decodeURIComponent(cookieRefreshToken[1])
     : undefined;
 
-  //Переадресация на главную страницу в случае отстутствия данных о пользователе
-  // if (!cookieUserDecode) {
-  //   history.push({
-  //     pathname: "/login",
-  //   });
-  // }
-
-  // console.log(cookieUserDecode);
-
-  const [dataName, setDataName] = useState(cookieUserDecode);
-  const [dataLogin, setDataLogin] = useState(cookieLoginDecode);
+  const [dataName, setDataName] = useState(userStoreData.name);
+  const [dataLogin, setDataLogin] = useState(userStoreData.email);
   const [dataPassword, setDataPassword] = useState("");
-
-  const userDataStore = useSelector((state) => state.user);
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+
+  useEffect(() => {
+    setDataName(userStoreData.name);
+    setDataLogin(userStoreData.email);
+  }, [userStoreData]);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -65,14 +49,10 @@ export function ProfileForm() {
           dispatch(uploadUser(res));
         })
         .catch(() => {
-          console.log("Not Valid Token");
-          console.log(cookieRefreshTokenDecode);
           updateAccessToken(cookieRefreshTokenDecode)
             .then((res) => {
-              console.log(res);
               uploadUserData(res.accessToken).then((res) => {
                 dispatch(uploadUser(res));
-                console.log(res);
               });
             })
             .catch(() => {
@@ -81,16 +61,12 @@ export function ProfileForm() {
               });
             });
         });
-      // console.log(cookieAccessTokenDecode);
     }
   }, []);
 
-  // TODO
   function saveData() {
     updateUserData(dataName, dataLogin, dataPassword, cookieAccessTokenDecode).then((res) => {
       console.log(res);
-      // document.cookie = `user=${res.user.name}; path=/; max-age=1200`;
-      // document.cookie = `login=${res.user.email}; path=/; max-age=1200`;
     });
   }
 
@@ -112,20 +88,20 @@ export function ProfileForm() {
         <Input
           onChange={changeDataName}
           icon="EditIcon"
-          value={userStoreData.name}
+          value={dataName}
           placeholder="Имя"
           extraClass="mb-6"
         ></Input>
         <Input
           onChange={changeDataLogin}
           icon="EditIcon"
-          value={userStoreData.email}
+          value={dataLogin}
           placeholder="Логин"
           extraClass="mb-6"
         ></Input>
         <Input
           onChange={changeDataPassword}
-          value={""}
+          value={dataPassword}
           type="password"
           icon="EditIcon"
           placeholder="Пароль"

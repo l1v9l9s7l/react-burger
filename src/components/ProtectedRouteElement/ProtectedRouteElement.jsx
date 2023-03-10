@@ -1,5 +1,4 @@
 import { Route, Redirect } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 const ProtectedRouteElement = ({ children, ...rest }) => {
   const cookieRefreshToken = document.cookie.match(

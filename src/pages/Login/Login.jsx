@@ -1,5 +1,4 @@
 import styles from "./Login.module.css";
-// import { Input } from "../../components/Input/Input";
 import {
   Button,
   PasswordInput,
@@ -7,12 +6,11 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { setUser, setUserAuth } from "../../services/actions/userAction";
+import { useState } from "react";
+import { setUser } from "../../services/actions/userAction";
 import { useDispatch } from "react-redux";
-import { Redirect, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { authorization } from "../../utils/api";
-import { getCookie } from "../../utils/utils";
 
 export function Login() {
   const [loginInputState, setLoginInputState] = useState("");

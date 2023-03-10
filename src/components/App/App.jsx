@@ -58,18 +58,16 @@ function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          {/* <Route exact path="/profile"> */}
-          <ProtectedRouteElement>
+          <ProtectedRouteElement path="/profile" exact>
             <Profile>
               <ProfileForm></ProfileForm>
             </Profile>
           </ProtectedRouteElement>
-          {/* </Route> */}
-          <Route path="/profile/orders">
+          <ProtectedRouteElement path="/profile/orders" exact>
             <Profile>
               <p>Orders</p>
             </Profile>
-          </Route>
+          </ProtectedRouteElement>
           {modalState && ( //Если true отобрази модальное окно
             <Route path="/ingredients/:id">
               <DndProvider backend={HTML5Backend}>
