@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserAuth } from "../../services/actions/userAction";
 import { getCookie } from "../../utils/utils";
+import { useLocation, Redirect } from "react-router-dom";
 
 export function Register() {
   const [nameInputState, setNameInputState] = useState("");
@@ -22,6 +23,7 @@ export function Register() {
   let history = useHistory();
   const dispatch = useDispatch();
   const auth = useSelector((state) => state.user.isAuthenticated);
+  const location = useLocation();
 
   function handleChangeName(event) {
     setNameInputState(event.target.value);
@@ -64,6 +66,19 @@ export function Register() {
       }
     }
   }, [requestSuccess]);
+
+  const cookieRefreshToken = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+    )
+  );
+  const cookieRefreshTokenDecode = cookieRefreshToken
+    ? decodeURIComponent(cookieRefreshToken[1])
+    : undefined;
+
+  if (cookieRefreshTokenDecode) {
+    return <Redirect to={location?.state?.from || "/"} />;
+  }
 
   return (
     <>

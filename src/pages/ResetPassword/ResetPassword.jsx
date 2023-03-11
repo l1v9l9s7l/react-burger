@@ -8,10 +8,14 @@ import {
   Input,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
+import { useLocation, Redirect } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export function ResetPassword() {
+  const location = useLocation();
   const [passwordInputState, setPasswordInputState] = useState("");
   const [codeInputState, setCodeInputState] = useState("");
+  const resetPassRequest = useSelector((state) => state.page.sendPasswordResetRequest);
 
   function handleChangePassword(event) {
     setPasswordInputState(event.target.value);
@@ -33,6 +37,23 @@ export function ResetPassword() {
   useEffect(() => {
     console.log(passwordInputState);
   }, [passwordInputState]);
+
+  const cookieRefreshToken = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+    )
+  );
+  const cookieRefreshTokenDecode = cookieRefreshToken
+    ? decodeURIComponent(cookieRefreshToken[1])
+    : undefined;
+
+  if (cookieRefreshTokenDecode) {
+    return <Redirect to={location?.state?.from || "/"} />;
+  }
+
+  if (!resetPassRequest) {
+    return <Redirect to={location?.state?.from || "/forgot-password"} />;
+  }
 
   return (
     <>

@@ -8,10 +8,14 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useLocation, Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setPassRequest } from "../../services/actions/pageAction";
 
 export function ForgotPassword() {
+  const dispatch = useDispatch();
+  const location = useLocation();
   const [inputState, setInputState] = useState("");
-  const [requestSuccess, setRequestSuccess] = useState(false);
   let history = useHistory();
 
   function handleChange(event) {
@@ -22,12 +26,26 @@ export function ForgotPassword() {
     forgotPasswordPost(inputState).then((res) => {
       console.log(res.success);
       if (res.success) {
+        dispatch(setPassRequest(true));
         history.push({
           pathname: "/reset-password",
         });
       }
     });
   };
+
+  const cookieRefreshToken = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+    )
+  );
+  const cookieRefreshTokenDecode = cookieRefreshToken
+    ? decodeURIComponent(cookieRefreshToken[1])
+    : undefined;
+
+  if (cookieRefreshTokenDecode) {
+    return <Redirect to={location?.state?.from || "/"} />;
+  }
 
   return (
     <>
