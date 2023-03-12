@@ -4,8 +4,11 @@ import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { deleteCookie } from "../../utils/utils";
 import { logOutOnServer } from "../../utils/api";
+import { useDispatch } from "react-redux";
+import { AUTH_CHECK } from "../../services/actions/userAction";
 
 export function Profile(props) {
+  const dispatch = useDispatch();
   const [menuProfile, setMenuProfile] = useState(false);
   const [menuOrder, setMenuOrder] = useState(false);
 
@@ -26,6 +29,7 @@ export function Profile(props) {
     });
     logOutOnServer(cookieRefreshTokenDecode).then((res) => {
       console.log(res);
+      dispatch({ type: AUTH_CHECK, payload: false });
     });
   }
 

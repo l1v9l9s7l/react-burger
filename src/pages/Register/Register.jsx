@@ -10,7 +10,6 @@ import { sendRegistrationForm } from "../../utils/api";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserAuth } from "../../services/actions/userAction";
 import { getCookie } from "../../utils/utils";
 import { useLocation, Redirect } from "react-router-dom";
 
@@ -59,7 +58,6 @@ export function Register() {
     const curUser = getCookie("user");
     if (curUser) {
       if (curUser.length > 0) {
-        // dispatch(setUserAuth(true));
         history.push({
           pathname: "/",
         });

@@ -58,12 +58,12 @@ function App() {
           <Route path="/reset-password">
             <ResetPassword />
           </Route>
-          <ProtectedRouteElement path="/profile" exact>
+          <ProtectedRouteElement authNeed={true} path="/profile" exact>
             <Profile>
               <ProfileForm></ProfileForm>
             </Profile>
           </ProtectedRouteElement>
-          <ProtectedRouteElement path="/profile/orders" exact>
+          <ProtectedRouteElement authNeed={true} path="/profile/orders" exact>
             <Profile>
               <p>Orders</p>
             </Profile>

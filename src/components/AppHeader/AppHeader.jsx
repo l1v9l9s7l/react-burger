@@ -8,12 +8,14 @@ import {
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function AppHeader() {
   const history = useHistory();
   const currentPath = history.location.pathname;
   const [menuConstructorActive, setMenuConstructorActive] = useState(false);
   const [menuAccountActive, setMenuAccountActive] = useState(false);
+  const authChecked = useSelector((state) => state.user.isAuthenticated);
   const cookieRefreshToken = document.cookie.match(
     new RegExp(
       "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
@@ -75,7 +77,7 @@ export default function AppHeader() {
         <Link
           onClick={setAccountActive}
           className={styles.profile}
-          to={cookieRefreshTokenDecode ? "/profile" : "/login"}
+          to={authChecked ? "/profile" : "/login"}
         >
           <ProfileIcon type={menuAccountActive ? "primary" : "secondary"} />
           <p
