@@ -46,18 +46,18 @@ function App() {
               <BurgerConstructor />
             </DndProvider>
           </Route>
-          <Route path="/login">
+          <ProtectedRouteElement authNeed={false} path="/login">
             <Login />
-          </Route>
-          <Route path="/register">
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={false} path="/register">
             <Register />
-          </Route>
-          <Route path="/forgot-password">
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={false} path="/forgot-password">
             <ForgotPassword />
-          </Route>
-          <Route path="/reset-password">
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={false} path="/reset-password">
             <ResetPassword />
-          </Route>
+          </ProtectedRouteElement>
           <ProtectedRouteElement authNeed={true} path="/profile" exact>
             <Profile>
               <ProfileForm></ProfileForm>

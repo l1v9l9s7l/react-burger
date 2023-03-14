@@ -43,7 +43,7 @@ export function ProfileForm() {
   }, [userStoreData]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
       uploadUserData(cookieAccessTokenDecode)
         .then((res) => {
           dispatch(uploadUser(res));

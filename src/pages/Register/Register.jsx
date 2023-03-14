@@ -40,9 +40,6 @@ export function Register() {
     sendRegistrationForm(emailInputState, passwordInputState, nameInputState).then((res) => {
       setUser(res);
       setRequestSuccess(res);
-      console.log(res);
-      document.cookie = `user=${nameInputState}; path=/; max-age=1200`;
-      document.cookie = `login=${res.user.email}; path=/; max-age=1200`;
       document.cookie = `refreshToken=${res.refreshToken} ; path=/; max-age=1200`;
       document.cookie = `accessToken=${res.accessToken} ; path=/; max-age=1200`;
     });

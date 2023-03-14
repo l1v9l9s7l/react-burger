@@ -15,29 +15,21 @@ const ProtectedRouteElement = ({ authNeed, children, ...rest }) => {
   const refreshToken = getCookie("refreshToken");
 
   console.log(authNeed);
+  console.log(authChecked);
 
   useEffect(() => {
+    // dispatch({ type: AUTH_CHECK, payload: true });
     uploadUserData(accessToken).then((res) => {
       dispatch({ type: AUTH_CHECK, payload: res.success });
     });
   }, []);
-  if (authChecked) {
-    return (
-      <Route
-        {...rest}
-        render={({ location }) =>
-          authNeed ? (
-            authChecked ? (
-              children
-            ) : (
-              <Redirect
-                to={{
-                  pathname: "/login",
-                  state: { from: location },
-                }}
-              />
-            )
-          ) : !authChecked ? (
+
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        authNeed ? (
+          authChecked ? (
             children
           ) : (
             <Redirect
@@ -47,10 +39,19 @@ const ProtectedRouteElement = ({ authNeed, children, ...rest }) => {
               }}
             />
           )
-        }
-      />
-    );
-  }
+        ) : !authChecked ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  );
 };
 
 export default ProtectedRouteElement;

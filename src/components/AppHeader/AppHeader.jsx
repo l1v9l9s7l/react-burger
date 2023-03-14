@@ -9,8 +9,14 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { AUTH_CHECK } from "../../services/actions/userAction";
+import { uploadUserData } from "../../utils/api";
+import { useDispatch } from "react-redux";
+import { getCookie } from "../../utils/utils";
 
 export default function AppHeader() {
+  const dispatch = useDispatch();
+  const accessToken = getCookie("accessToken");
   const history = useHistory();
   const currentPath = history.location.pathname;
   const [menuConstructorActive, setMenuConstructorActive] = useState(false);
@@ -24,6 +30,14 @@ export default function AppHeader() {
   const cookieRefreshTokenDecode = cookieRefreshToken
     ? decodeURIComponent(cookieRefreshToken[1])
     : undefined;
+
+  console.log(authChecked);
+
+  useEffect(() => {
+    uploadUserData(accessToken).then((res) => {
+      dispatch({ type: AUTH_CHECK, payload: res.success });
+    });
+  }, []);
 
   useEffect(() => {
     if (currentPath == "/profile") {
