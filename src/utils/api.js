@@ -1,3 +1,5 @@
+import { getCookie } from "./utils";
+
 const config = {
   baseURL: "https://norma.nomoreparties.space/api/",
   headers: {
@@ -22,6 +24,7 @@ const postOrder = (ingredientsId) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      authorization: getCookie("accessToken"),
     },
     body: JSON.stringify({
       ingredients: ingredientsId,
@@ -34,6 +37,7 @@ const forgotPasswordPost = (email) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      authorization: getCookie("token"),
     },
     body: JSON.stringify({
       email: email,

@@ -22,14 +22,14 @@ export function Login() {
   const dispatch = useDispatch();
   const pageState = useSelector((state) => state.page);
 
-  const cookieRefreshToken = document.cookie.match(
-    new RegExp(
-      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
-    )
-  );
-  const cookieRefreshTokenDecode = cookieRefreshToken
-    ? decodeURIComponent(cookieRefreshToken[1])
-    : undefined;
+  // const cookieRefreshToken = document.cookie.match(
+  //   new RegExp(
+  //     "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+  //   )
+  // );
+  // const cookieRefreshTokenDecode = cookieRefreshToken
+  //   ? decodeURIComponent(cookieRefreshToken[1])
+  //   : undefined;
 
   function loginChangeHandler(event) {
     setLoginInputState(event.target.value);
@@ -58,9 +58,9 @@ export function Login() {
     });
   };
 
-  if (cookieRefreshTokenDecode) {
-    return <Redirect to={location?.state?.from || "/"} />;
-  }
+  // if (cookieRefreshTokenDecode) {
+  //   return <Redirect to={location?.state?.from || "/"} />;
+  // }
 
   return (
     <>

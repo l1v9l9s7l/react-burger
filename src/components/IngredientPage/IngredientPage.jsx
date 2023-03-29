@@ -10,7 +10,6 @@ export default function IngridientPage() {
 
   const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
   console.log(modalState);
-  console.log(ingredient);
 
   return (
     <div className={styles.details}>

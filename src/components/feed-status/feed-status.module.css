@@ -1,0 +1,27 @@
+.FeedStatus {
+    display: flex;
+    flex-direction: column;
+    padding-left: 60px;
+    width: 100%;
+}
+
+.Dashboard {
+    display: flex;
+}
+.StatusDashboard {
+    padding-right: 36px;
+}
+
+.FeedTitle {
+display: block;
+}
+
+.ColumnOrderNumbers {
+    display: inline-block;
+    padding: 0 8px 60px 0;
+}
+
+.OrderNumber {
+    display: block;
+    padding: 0 0 8px 0;
+}

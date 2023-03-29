@@ -19,24 +19,17 @@ export function ResetPassword() {
 
   function handleChangePassword(event) {
     setPasswordInputState(event.target.value);
-    console.log();
   }
 
   function handleChangeCode(event) {
     setCodeInputState(event.target.value);
-    console.log(codeInputState);
   }
 
   const sendPassword = () => {
     resetPasswordPost(passwordInputState, codeInputState).then((res) => {
       console.log(res);
     });
-    console.log(codeInputState);
   };
-
-  useEffect(() => {
-    console.log(passwordInputState);
-  }, [passwordInputState]);
 
   const cookieRefreshToken = document.cookie.match(
     new RegExp(

@@ -1,0 +1,54 @@
+.OrderDetailedStatus {
+    display: flex;
+    flex-direction: column;
+    padding: 60px 40px;
+    width: 640px;
+}
+
+.Number {
+    text-align: center;
+}
+
+.IngrdientList {
+    display: flex;
+    flex-direction: column;
+    height: 312px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-bottom: 40px;
+}
+
+.IngredientListItem {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 16px;
+}
+
+.Name {
+    flex-grow: 1;
+    padding: 0 16px;
+}
+
+.Footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+
+.IngrdientList::-webkit-scrollbar {
+    width: 8px;
+    
+}
+
+.IngrdientList::-webkit-scrollbar-track {
+    background: #2F2F37;
+    max-height: 30px;
+}
+
+.IngrdientList::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+}

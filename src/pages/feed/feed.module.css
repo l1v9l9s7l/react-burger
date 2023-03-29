@@ -1,0 +1,42 @@
+.FeedPage {
+    display: flex;
+    flex-direction: column;
+    width: 1280px;
+    margin: 0 auto;
+}
+
+.Feed {
+    display: flex;
+    flex-direction: row;
+    max-height: calc(100vh - 148px);
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.Orders {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    min-width: 608px;
+}
+.Title {
+    display: inline;
+    width: 1280px;
+    padding-bottom: 20px;
+}
+
+
+.Orders::-webkit-scrollbar {
+    width: 8px;
+    
+}
+
+.Orders::-webkit-scrollbar-track {
+    background: #2F2F37;
+    max-height: 30px;
+    margin-bottom: 52px;
+}
+
+.Orders::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+}

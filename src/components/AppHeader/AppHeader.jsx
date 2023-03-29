@@ -13,6 +13,9 @@ import { AUTH_CHECK } from "../../services/actions/userAction";
 import { uploadUserData } from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { getCookie } from "../../utils/utils";
+// TODO
+import { WS_CREATED_ORDERS_CONNECTION_START } from "../../services/actions/createdOrders";
+import { WS_CREATED_ORDERS_CONNECTION_CLOSED } from "../../services/actions/createdOrders";
 
 export default function AppHeader() {
   const dispatch = useDispatch();
@@ -21,17 +24,17 @@ export default function AppHeader() {
   const currentPath = history.location.pathname;
   const [menuConstructorActive, setMenuConstructorActive] = useState(false);
   const [menuAccountActive, setMenuAccountActive] = useState(false);
+  const [menuOrderListActive, setMenuOrderListActive] = useState(false);
   const authChecked = useSelector((state) => state.user.isAuthenticated);
-  const cookieRefreshToken = document.cookie.match(
-    new RegExp(
-      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
-    )
-  );
-  const cookieRefreshTokenDecode = cookieRefreshToken
-    ? decodeURIComponent(cookieRefreshToken[1])
-    : undefined;
 
-  console.log(authChecked);
+  console.log(useSelector((state) => state.createdOrders.orders));
+
+  useEffect(() => {
+    dispatch({ type: WS_CREATED_ORDERS_CONNECTION_START });
+    return () => {
+      dispatch({ type: WS_CREATED_ORDERS_CONNECTION_CLOSED });
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     uploadUserData(accessToken).then((res) => {
@@ -54,10 +57,18 @@ export default function AppHeader() {
   function setConstructorActive() {
     setMenuConstructorActive(true);
     setMenuAccountActive(false);
+    setMenuOrderListActive(false);
   }
 
   function setAccountActive() {
     setMenuAccountActive(true);
+    setMenuConstructorActive(false);
+    setMenuOrderListActive(false);
+  }
+
+  function setOrderListActive() {
+    setMenuOrderListActive(true);
+    setMenuAccountActive(false);
     setMenuConstructorActive(false);
   }
 
@@ -78,12 +89,22 @@ export default function AppHeader() {
               Конструктор
             </p>
           </Link>
-          <a className={`${styles.headerOrderList} pl-2`}>
+          <Link
+            onClick={setOrderListActive}
+            to="/feed"
+            className={`${styles.headerOrderList} pl-2`}
+          >
             <div className={`${styles.navigationIcon} pl-5`}>
-              <ListIcon type="secondary" />
+              <ListIcon type={menuOrderListActive ? "primary" : "secondary"} />
             </div>
-            <p className="text_color_inactive pl-2 pr-5">Лента заказов</p>
-          </a>
+            <p
+              className={`${styles.profileText} ${
+                menuOrderListActive ? styles.text_color_active : styles.text_color_inactive
+              }`}
+            >
+              Лента заказов
+            </p>
+          </Link>
         </div>
         <Link onClick={setConstructorActive} to="/" className={styles.logo}>
           <Logo />

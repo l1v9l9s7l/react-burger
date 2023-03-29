@@ -31,7 +31,6 @@ export default function Ingridient(props) {
 
   const handlerModalOpen = () => {
     dispatch({ type: "OPEN_INGREDIENT_MODAL" });
-    console.log(ingridient);
     history.push(`ingredients/${ingridient._id}`);
   };
 

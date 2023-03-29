@@ -6,7 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { store } from './services/store';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Login } from './pages/Login/Login';
+
+
+
+
+
+
+
+
+
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
