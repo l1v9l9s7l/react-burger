@@ -3,7 +3,12 @@ import {
   GET_MENU_REQUEST_FAILED,
   GET_MENU_REQUEST_FINISH,
   GET_MENU_REQUEST_SUCCESS,
+  UPDATE_KEYS,
 } from "../actions/ingridientsAction";
+
+import { uuidv4 } from "../../utils/utils";
+
+import React, { useEffect } from "react";
 
 const defaultState = {
   //Список всех полученных ингредиентов
@@ -21,6 +26,11 @@ export const ingredientsReducer = (state = defaultState, action) => {
         ...state,
         ingridients: action.items,
       };
+    // case UPDATE_KEYS:
+    //   return {
+    //     ...state,
+    //     ingridients: state.ingridients.map((element) => element),
+    //   };
     case GET_MENU_REQUEST_FAILED: {
       return {
         ...state,

@@ -9,7 +9,6 @@ export default function BurgerConstructorElement({ data, index }) {
   const dispatch = useDispatch();
   const hoverIndex = index;
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
-  console.log(data);
 
   const onSortHandler = (arr, dragIndex) => {
     const element = arr[dragIndex];

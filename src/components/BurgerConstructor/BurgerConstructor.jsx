@@ -17,12 +17,14 @@ import { GET_ORDER_NUMBER } from "../../services/actions/orderDetailsAction";
 import { SET_CURRENT_PAGE } from "../../services/actions/pageAction";
 import { OPEN_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
 import { CLOSE_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
+import { UPDATE_KEYS } from "../../services/actions/ingridientsAction";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
   const [ingridientsIdArr, setIngridientsIdArr] = useState([]);
   const orderNumber = useSelector((state) => state.orderDetails.orderNumber);
   const ingridients = useSelector((state) => state.ingridients.ingridients);
+  const ingridientsWithKey = ingridients.map((element) => (element.key = uuidv4()));
   const modalOpen = useSelector((state) => state.orderDetails.openOrderModal);
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
   const storeDraggedBuns = useSelector((state) => state.order.dragBuns);
@@ -36,19 +38,6 @@ export default function BurgerConstructor() {
   const [bunPrice, setBunPrice] = useState(0);
   let history = useHistory();
   const location = useLocation();
-
-  useEffect(() => {
-    if (draggedElements.length > 0) {
-      setDraggedElements(
-        ...draggedElements,
-        (draggedElements[draggedElements.length - 1].key = uuidv4())
-      );
-    }
-  }, [draggedElements]);
-
-  useEffect(() => {
-    console.log(draggedElements);
-  }, [draggedElements]);
 
   //Связали локальное состояние с глобальным
 
@@ -91,6 +80,8 @@ export default function BurgerConstructor() {
     //data - приходит из Ingredient, содержит id и type ингредиента
     //При сбрасывании элемента происходит drop - handleDrop, в data попадает data Дропа
     drop(data) {
+      dispatch({ type: UPDATE_KEYS });
+      console.log(data);
       handleDrop(data);
     },
   });
