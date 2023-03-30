@@ -8,6 +8,7 @@ import { useDrag } from "react-dnd/dist/hooks";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { OPEN_INGREDIENT_MODAL } from "../../services/actions/ingredientDetailsAction";
 
 export default function Ingridient(props) {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ export default function Ingridient(props) {
   }, [props.ingridient]);
 
   const handlerModalOpen = () => {
-    dispatch({ type: "OPEN_INGREDIENT_MODAL" });
+    dispatch({ type: OPEN_INGREDIENT_MODAL });
     history.push(`ingredients/${ingridient._id}`);
   };
 

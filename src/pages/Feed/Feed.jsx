@@ -4,6 +4,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import FeedStatus from "../../components/FeedStatus/FeedStatus";
 import OrderCard from "../../components/OrderCard/OrderCard";
 import { WS_FEED_CONNECTION_CLOSED, WS_FEED_CONNECTION_START } from "../../services/actions/feed";
+import { OPEN_INGREDIENT_MODAL } from "../../services/actions/ingredientDetailsAction";
 
 import styles from "./Feed.module.css";
 
@@ -28,7 +29,7 @@ const Feed = () => {
   );
 
   const handleClick = (id) => {
-    dispatch({ type: "OPEN_INGREDIENT_MODAL" });
+    dispatch({ type: OPEN_INGREDIENT_MODAL });
     redirectModalUrl(id);
   };
 

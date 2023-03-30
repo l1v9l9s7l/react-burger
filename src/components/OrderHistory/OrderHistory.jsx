@@ -6,6 +6,7 @@ import {
   WS_CREATED_ORDERS_CONNECTION_START,
 } from "../../services/actions/createdOrders";
 import OrderCard from "../OrderCard/OrderCard";
+import { OPEN_INGREDIENT_MODAL } from "../../services/actions/ingredientDetailsAction";
 
 import styles from "./OrderHistory.module.css";
 
@@ -31,7 +32,7 @@ const OrderHistory = () => {
   );
 
   const handleOpenModal = (id) => {
-    dispatch({ type: "OPEN_INGREDIENT_MODAL" });
+    dispatch({ type: OPEN_INGREDIENT_MODAL });
     redirectModalUrl(id);
   };
 
