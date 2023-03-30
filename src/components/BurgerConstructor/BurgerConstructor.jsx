@@ -24,7 +24,6 @@ export default function BurgerConstructor() {
   const [ingridientsIdArr, setIngridientsIdArr] = useState([]);
   const orderNumber = useSelector((state) => state.orderDetails.orderNumber);
   const ingridients = useSelector((state) => state.ingridients.ingridients);
-  const ingridientsWithKey = ingridients.map((element) => (element.key = uuidv4()));
   const modalOpen = useSelector((state) => state.orderDetails.openOrderModal);
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
   const storeDraggedBuns = useSelector((state) => state.order.dragBuns);
@@ -59,13 +58,22 @@ export default function BurgerConstructor() {
     setDraggedBun(storeDraggedBuns);
   }, [storeDraggedBuns]);
 
+  // let newIngridients = ingridients;
+  // newIngridients.forEach(function (element) {
+  //   element.key = uuidv4();
+  // });
+
   const handleDrop = (data, key) => {
     //data приходит из item у Drop
 
     if (data.type === "sauce" || data.type === "main") {
+      console.log(draggedElements);
+      const newElement = ingridients.filter((element) => element._id === data.id);
+      newElement.map((element) => (element.key = uuidv4()));
+      console.log(newElement[0].key);
       setDraggedElements([
         ...draggedElements,
-        ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedElements
+        ...newElement, //При броске элемента добавляем его в draggedElements
       ]);
     } else if (data.type === "bun") {
       setDraggedBun([
