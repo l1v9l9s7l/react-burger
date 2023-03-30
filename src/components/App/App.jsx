@@ -77,13 +77,6 @@ function App() {
               <OrderHistory />
             </Profile>
           </ProtectedRouteElement>
-          {/* <ProtectedRouteElement authNeed={true} path="/profile/orders/:id" exact>
-            <Profile>
-              <Modal onModalClose={handlerModalClose}>
-                <Order />
-              </Modal>
-            </Profile>
-          </ProtectedRouteElement> */}
           {modalState && ( //Если true отобрази модальное окно
             <>
               <Route path="/ingredients/:id">
