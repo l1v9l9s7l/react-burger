@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useHistory } from "react-router-dom";
-import FeedStatus from "../../components/feed-status/feed-status";
-import OrderCard from "../../components/order-card/order-card";
+import FeedStatus from "../../components/FeedStatus/FeedStatus";
+import OrderCard from "../../components/OrderCard/OrderCard";
 import { WS_FEED_CONNECTION_CLOSED, WS_FEED_CONNECTION_START } from "../../services/actions/feed";
 
-import styles from "./feed.module.css";
+import styles from "./Feed.module.css";
 
 const Feed = () => {
   const dispatch = useDispatch();

@@ -18,9 +18,9 @@ import Modal from "../Modal/Modal";
 import IngridientDetails from "../IngridientDetails/IngridientDetails";
 import ProtectedRouteElement from "../ProtectedRouteElement/ProtectedRouteElement";
 import { ProfileForm } from "../ProfileForm/ProfileForm";
-import Feed from "../../pages/feed/feed";
-import Order from "../../pages/order/order";
-import OrderHistory from "../order-history/order-history";
+import Feed from "../../pages/Feed/Feed";
+import Order from "../../pages/Order/Order";
+import OrderHistory from "../OrderHistory/OrderHistory";
 
 function App() {
   const dispatch = useDispatch();
@@ -103,8 +103,8 @@ function App() {
                 </Profile>
               </ProtectedRouteElement>
               <Route path="/feed/:id" exact>
+                <Feed />
                 <Modal onModalClose={handlerModalClose}>
-                  <Feed />
                   <Order />
                 </Modal>
               </Route>

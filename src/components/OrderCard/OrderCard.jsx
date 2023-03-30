@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import DateCounter from "../DateCounter/DateCounter";
 
-import styles from "./order-card.module.css";
-import OrderStatus from "../order-status/order-status";
+import styles from "./OrderCard.module.css";
+import OrderStatus from "../OrderStatus/OrderStatus";
 import { useSelector } from "react-redux";
 
 import { fillDetailedInformationOrder } from "../../utils/utils";
-import IngredientImage from "../ingredient-image/ingredient-image";
+import IngredientImage from "../IngredientImage/IngredientImage";
 
 const OrderCard = ({ order, onClick, showStatus = false }) => {
   const descriptionIngr = useSelector((state) => state.ingridients.ingridients);

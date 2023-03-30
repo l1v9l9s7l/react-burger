@@ -3,6 +3,7 @@
     flex-direction: column;
     padding: 60px 40px;
     width: 640px;
+    position: relative;
 }
 
 .Number {

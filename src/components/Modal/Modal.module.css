@@ -10,7 +10,6 @@
 .modalContent{
   display: flex;
   flex-direction: column;
-  z-index: 3
 }
 
 .modalWrapper{
@@ -29,6 +28,7 @@
 }
 
 .modalCloseIcon{
+  z-index: 2;
   position: absolute;
   right: 0;
   top: 0;

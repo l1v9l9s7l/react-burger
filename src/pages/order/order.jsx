@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import OrderDetailedStatus from "../../components/order-detailed-status/order-detailed-status";
+import OrderDetailedStatus from "../../components/OrderDetailedStatus/OrderDetailedStatus";
 import {
   WS_CREATED_ORDERS_CONNECTION_CLOSED,
   WS_CREATED_ORDERS_CONNECTION_START,
 } from "../../services/actions/createdOrders";
 import { WS_FEED_CONNECTION_CLOSED, WS_FEED_CONNECTION_START } from "../../services/actions/feed";
 
-import styles from "./order.module.css";
+import styles from "./Order.module.css";
 
 const Order = () => {
   const dispatch = useDispatch();

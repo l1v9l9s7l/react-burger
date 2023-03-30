@@ -8,9 +8,6 @@ export default function IngridientPage() {
     state.ingridients.ingridients.find((item) => item._id === id)
   );
 
-  const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
-  console.log(modalState);
-
   return (
     <div className={styles.details}>
       <p className={styles.title}>Детали ингридиента</p>

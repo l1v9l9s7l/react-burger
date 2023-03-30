@@ -13,9 +13,6 @@ import { AUTH_CHECK } from "../../services/actions/userAction";
 import { uploadUserData } from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { getCookie } from "../../utils/utils";
-// TODO
-import { WS_CREATED_ORDERS_CONNECTION_START } from "../../services/actions/createdOrders";
-import { WS_CREATED_ORDERS_CONNECTION_CLOSED } from "../../services/actions/createdOrders";
 
 export default function AppHeader() {
   const dispatch = useDispatch();
@@ -26,15 +23,6 @@ export default function AppHeader() {
   const [menuAccountActive, setMenuAccountActive] = useState(false);
   const [menuOrderListActive, setMenuOrderListActive] = useState(false);
   const authChecked = useSelector((state) => state.user.isAuthenticated);
-
-  console.log(useSelector((state) => state.createdOrders.orders));
-
-  useEffect(() => {
-    dispatch({ type: WS_CREATED_ORDERS_CONNECTION_START });
-    return () => {
-      dispatch({ type: WS_CREATED_ORDERS_CONNECTION_CLOSED });
-    };
-  }, [dispatch]);
 
   useEffect(() => {
     uploadUserData(accessToken).then((res) => {
