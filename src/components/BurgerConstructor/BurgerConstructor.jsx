@@ -18,6 +18,7 @@ import { SET_CURRENT_PAGE } from "../../services/actions/pageAction";
 import { OPEN_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
 import { CLOSE_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
 import { UPDATE_KEYS } from "../../services/actions/ingridientsAction";
+import { fetchIngredients } from "../../utils/api";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
@@ -58,23 +59,20 @@ export default function BurgerConstructor() {
     setDraggedBun(storeDraggedBuns);
   }, [storeDraggedBuns]);
 
-  // let newIngridients = ingridients;
-  // newIngridients.forEach(function (element) {
-  //   element.key = uuidv4();
-  // });
-
   const handleDrop = (data, key) => {
     //data приходит из item у Drop
 
     if (data.type === "sauce" || data.type === "main") {
-      console.log(draggedElements);
-      const newElement = ingridients.filter((element) => element._id === data.id);
-      newElement.map((element) => (element.key = uuidv4()));
-      console.log(newElement[0].key);
-      setDraggedElements([
-        ...draggedElements,
-        ...newElement, //При броске элемента добавляем его в draggedElements
-      ]);
+      fetchIngredients().then((res) => {
+        console.log(res.data);
+        const newElement = res.data.find((element) => element._id === data.id);
+        newElement.key = uuidv4();
+        console.log(draggedElements);
+        setDraggedElements([
+          ...draggedElements,
+          newElement, //При броске элемента добавляем его в draggedElements
+        ]);
+      });
     } else if (data.type === "bun") {
       setDraggedBun([
         ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedBuns
