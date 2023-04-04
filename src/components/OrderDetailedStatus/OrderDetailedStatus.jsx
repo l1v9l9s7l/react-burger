@@ -7,6 +7,7 @@ import DateCounter from "../DateCounter/DateCounter";
 import OrderStatus from "../OrderStatus/OrderStatus";
 
 import styles from "./OrderDetailedStatus.module.css";
+import { useEffect } from "react";
 
 const OrderDetailedStatus = () => {
   const { id } = useParams();
@@ -15,6 +16,10 @@ const OrderDetailedStatus = () => {
   let order = {};
 
   const feeds = useSelector((state) => state.feed.orders);
+
+  // useEffect(() => {
+  //   console.log(feeds);
+  // });
 
   const feedOrder = useSelector(
     (state) => state.feed.orders.find((order) => order._id === id) || {}

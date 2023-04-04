@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { authorization } from "../../utils/api";
 import { useLocation, Redirect } from "react-router-dom";
+import { logUser } from "../../services/actions/userAction";
 
 export function Login() {
   const location = useLocation();
@@ -22,15 +23,6 @@ export function Login() {
   const dispatch = useDispatch();
   const pageState = useSelector((state) => state.page);
 
-  // const cookieRefreshToken = document.cookie.match(
-  //   new RegExp(
-  //     "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
-  //   )
-  // );
-  // const cookieRefreshTokenDecode = cookieRefreshToken
-  //   ? decodeURIComponent(cookieRefreshToken[1])
-  //   : undefined;
-
   function loginChangeHandler(event) {
     setLoginInputState(event.target.value);
   }
@@ -39,38 +31,24 @@ export function Login() {
     setPasswordInputState(event.target.value);
   }
 
-  const logUser = () => {
-    authorization(loginInputState, passwordInputState).then((res) => {
-      document.cookie = `refreshToken=${res.refreshToken} ; path=/; max-age=1200`;
-      document.cookie = `accessToken=${res.accessToken} ; path=/; max-age=1200`;
-      if (res.success) {
-        dispatch(setUser({ email: res.user.email, name: res.user.name, isAuthenticated: true }));
-        if (pageState.currentPage == "/") {
-          history.push({
-            pathname: "/",
-          });
-        } else {
-          history.push({
-            pathname: "/profile",
-          });
-        }
-      }
-    });
+  const signIn = (event) => {
+    event.preventDefault();
+    dispatch(logUser(loginInputState, passwordInputState));
   };
 
-  // if (cookieRefreshTokenDecode) {
-  //   return <Redirect to={location?.state?.from || "/"} />;
-  // }
-
   return (
-    <>
+    <form onSubmit={signIn}>
       <div className={styles.content}>
         <h2 className={styles.title}>Вход</h2>
-        <EmailInput onChange={loginChangeHandler} placeholder="E-mail"></EmailInput>
+        <EmailInput
+          value={loginInputState}
+          onChange={loginChangeHandler}
+          placeholder="E-mail"
+        ></EmailInput>
         <div className="pt-6"></div>
-        <PasswordInput onChange={passwordChangeHandler}></PasswordInput>
+        <PasswordInput value={passwordInputState} onChange={passwordChangeHandler}></PasswordInput>
         <div className={`pt-6 pb-20 ${styles.enterButton}`}>
-          <Button size="large" onClick={logUser}>
+          <Button htmlType="submit" size="large">
             Войти
           </Button>
         </div>
@@ -87,6 +65,6 @@ export function Login() {
           </Link>
         </p>
       </div>
-    </>
+    </form>
   );
 }

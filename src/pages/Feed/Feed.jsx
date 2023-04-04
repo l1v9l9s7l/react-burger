@@ -38,9 +38,11 @@ const Feed = () => {
       <h1 className={`text text_type_main-large pb-5 ${styles.Title}`}>Лента заказов</h1>
       <div className={styles.Feed}>
         <div className={styles.Orders}>
-          {orders.map((order) => (
-            <OrderCard key={order._id} order={order} onClick={handleClick} />
-          ))}
+          {orders.length > 0 &&
+            orders.map((order) => (
+              <OrderCard key={order._id} order={order} onClick={handleClick} />
+            ))}
+          {orders.length === 0 && <p className={styles.Loader}>Загрузка, ожидайте ...</p>}
         </div>
         <FeedStatus orders={orders} total={total} totalToday={totalToday} />
       </div>

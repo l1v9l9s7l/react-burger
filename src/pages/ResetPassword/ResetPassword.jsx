@@ -10,6 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { useLocation, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getCookie } from "../../utils/utils";
 
 export function ResetPassword() {
   const location = useLocation();
@@ -25,22 +26,16 @@ export function ResetPassword() {
     setCodeInputState(event.target.value);
   }
 
-  const sendPassword = () => {
+  const sendPassword = (event) => {
+    event.preventDefault();
     resetPasswordPost(passwordInputState, codeInputState).then((res) => {
       console.log(res);
     });
   };
 
-  const cookieRefreshToken = document.cookie.match(
-    new RegExp(
-      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
-    )
-  );
-  const cookieRefreshTokenDecode = cookieRefreshToken
-    ? decodeURIComponent(cookieRefreshToken[1])
-    : undefined;
+  const refreshToken = getCookie("refreshToken");
 
-  if (cookieRefreshTokenDecode) {
+  if (refreshToken) {
     return <Redirect to={location?.state?.from || "/"} />;
   }
 
@@ -49,17 +44,22 @@ export function ResetPassword() {
   }
 
   return (
-    <>
+    <form onSubmit={sendPassword}>
       <div className={styles.content}>
         <h2 className={styles.title}>Восстановление пароля</h2>
         <PasswordInput
+          value={passwordInputState}
           onChange={handleChangePassword}
           placeholder="Введите новый пароль"
         ></PasswordInput>
         <div className="pt-6"></div>
-        <Input onChange={handleChangeCode} placeholder="Введите код из письма"></Input>
+        <Input
+          value={codeInputState}
+          onChange={handleChangeCode}
+          placeholder="Введите код из письма"
+        ></Input>
         <div className={`pt-6 pb-20 ${styles.enterButton}`}>
-          <Button onClick={sendPassword} size="large">
+          <Button htmlType="submit" size="large">
             Сохранить
           </Button>
         </div>
@@ -70,6 +70,6 @@ export function ResetPassword() {
           </Link>
         </p>
       </div>
-    </>
+    </form>
   );
 }

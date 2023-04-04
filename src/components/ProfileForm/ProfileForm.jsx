@@ -42,6 +42,7 @@ export function ProfileForm() {
     setDataLogin(userStoreData.email);
   }, [userStoreData]);
 
+  // TODO
   useEffect(() => {
     if (isAuthenticated) {
       uploadUserData(cookieAccessTokenDecode)
@@ -64,11 +65,12 @@ export function ProfileForm() {
     }
   }, []);
 
-  function saveData() {
+  const saveData = (event) => {
+    event.preventDefault();
     updateUserData(dataName, dataLogin, dataPassword, cookieAccessTokenDecode).then((res) => {
       console.log(res);
     });
-  }
+  };
 
   function changeDataName(event) {
     setDataName(event.target.value);
@@ -83,7 +85,7 @@ export function ProfileForm() {
   }
 
   return (
-    <>
+    <form onSubmit={saveData}>
       <div className={styles.content}>
         <Input
           onChange={changeDataName}
@@ -109,9 +111,9 @@ export function ProfileForm() {
         ></Input>
         <div className={styles.buttonContainer}>
           <button className={styles.cancelButton}>Отмена</button>
-          <Button onClick={saveData}>Сохранить</Button>
+          <Button htmlType="submit">Сохранить</Button>
         </div>
       </div>
-    </>
+    </form>
   );
 }

@@ -19,7 +19,6 @@ export const wsCreatedOrdersReducer = (state = initialState, action) => {
       return { ...state, wsConnected: false };
     }
     case WS_CREATED_ORDERS_GET_MESSAGE: {
-      console.log("Получение данных от веб сокета");
       const { orders = [], total = 0, totalToday = 0 } = action.payload;
       return { ...state, orders, total, totalToday };
     }

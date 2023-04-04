@@ -40,3 +40,8 @@
 .Orders::-webkit-scrollbar-thumb {
     background-color: #8585AD;
 }
+
+.Loader{
+    text-align: center;
+    font-size: 40px;
+}

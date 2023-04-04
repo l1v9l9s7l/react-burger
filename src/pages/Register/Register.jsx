@@ -20,8 +20,6 @@ export function Register() {
   const [user, setUser] = useState({});
   const [requestSuccess, setRequestSuccess] = useState(false);
   let history = useHistory();
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.user.isAuthenticated);
   const location = useLocation();
 
   function handleChangeName(event) {
@@ -36,7 +34,8 @@ export function Register() {
     setEmailInputState(event.target.value);
   }
 
-  const sendForm = () => {
+  const sendForm = (event) => {
+    event.preventDefault();
     sendRegistrationForm(emailInputState, passwordInputState, nameInputState).then((res) => {
       setUser(res);
       setRequestSuccess(res);
@@ -57,21 +56,14 @@ export function Register() {
     }
   }, [requestSuccess]);
 
-  const cookieRefreshToken = document.cookie.match(
-    new RegExp(
-      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
-    )
-  );
-  const cookieRefreshTokenDecode = cookieRefreshToken
-    ? decodeURIComponent(cookieRefreshToken[1])
-    : undefined;
+  const refreshToken = getCookie("refreshToken");
 
-  if (cookieRefreshTokenDecode) {
+  if (refreshToken) {
     return <Redirect to={location?.state?.from || "/"} />;
   }
 
   return (
-    <>
+    <form onSubmit={sendForm}>
       <div className={styles.content}>
         <h2 className={styles.title}>Регистрация</h2>
         <Input onChange={handleChangeName} placeholder="Имя"></Input>
@@ -80,7 +72,7 @@ export function Register() {
         <div className="pt-6"></div>
         <PasswordInput onChange={handleChangePassword}></PasswordInput>
         <div className={`pt-6 pb-20 ${styles.enterButton}`}>
-          <Button onClick={sendForm} size="large">
+          <Button htmlType="submit" size="large">
             Зарегистрироваться
           </Button>
         </div>
@@ -91,6 +83,6 @@ export function Register() {
           </Link>
         </p>
       </div>
-    </>
+    </form>
   );
 }

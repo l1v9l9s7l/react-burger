@@ -6,6 +6,7 @@ import { deleteCookie } from "../../utils/utils";
 import { logOutOnServer } from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { AUTH_CHECK } from "../../services/actions/userAction";
+import { logoutUser } from "../../services/actions/userAction";
 
 export function Profile(props) {
   const dispatch = useDispatch();
@@ -22,16 +23,24 @@ export function Profile(props) {
     : undefined;
 
   let history = useHistory();
-  function logOut() {
-    deleteCookie();
+
+  // function logOut() {
+  //   deleteCookie();
+  //   history.push({
+  //     pathname: "/",
+  //   });
+  //   logOutOnServer(cookieRefreshTokenDecode).then((res) => {
+  //     console.log(res);
+  //     dispatch({ type: AUTH_CHECK, payload: false });
+  //   });
+  // }
+
+  const logOut = () => {
+    dispatch(logoutUser());
     history.push({
       pathname: "/",
     });
-    logOutOnServer(cookieRefreshTokenDecode).then((res) => {
-      console.log(res);
-      dispatch({ type: AUTH_CHECK, payload: false });
-    });
-  }
+  };
 
   function profileButton() {
     const profileButton = document.getElementById("buttonOne");

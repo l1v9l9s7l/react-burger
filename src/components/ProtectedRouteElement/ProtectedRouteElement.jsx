@@ -9,13 +9,16 @@ import { useSelector } from "react-redux";
 const ProtectedRouteElement = ({ authNeed, children, ...rest }) => {
   const authChecked = useSelector((state) => state.user.isAuthenticated);
   const dispatch = useDispatch();
-  // const [authChecked, setAuthChecked] = useState(false);
   const accessToken = getCookie("accessToken");
 
   useEffect(() => {
-    uploadUserData(accessToken).then((res) => {
-      dispatch({ type: AUTH_CHECK, payload: res.success });
-    });
+    if (accessToken) {
+      if (accessToken.length > 5) {
+        uploadUserData(accessToken).then((res) => {
+          dispatch({ type: AUTH_CHECK, payload: res.success });
+        });
+      }
+    }
   }, []);
 
   return (

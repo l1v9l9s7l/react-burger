@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { AUTH_CHECK } from "../../services/actions/userAction";
+import { UPLOAD_USER } from "../../services/actions/userAction";
 import { uploadUserData } from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { getCookie } from "../../utils/utils";
@@ -25,9 +25,14 @@ export default function AppHeader() {
   const authChecked = useSelector((state) => state.user.isAuthenticated);
 
   useEffect(() => {
-    uploadUserData(accessToken).then((res) => {
-      dispatch({ type: AUTH_CHECK, payload: res.success });
-    });
+    if (accessToken) {
+      if (accessToken.length > 5) {
+        console.log(accessToken);
+        uploadUserData(accessToken).then((res) => {
+          dispatch({ type: UPLOAD_USER, payload: res });
+        });
+      }
+    }
   }, []);
 
   useEffect(() => {

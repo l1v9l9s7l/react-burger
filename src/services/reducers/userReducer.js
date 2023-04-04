@@ -1,4 +1,4 @@
-import { LOGIN_USER, UPLOAD_USER, AUTH_CHECK } from "../actions/userAction";
+import { LOGIN_USER, UPLOAD_USER, AUTH_CHECK, LOGOUT_USER } from "../actions/userAction";
 
 const defaultState = {
   isAuthenticated: false,
@@ -19,7 +19,7 @@ export const userReducer = (state = defaultState, action) => {
     case UPLOAD_USER: {
       return {
         ...state,
-        // isAuthenticated: action.payload.success,
+        isAuthenticated: action.payload.success,
         email: action.payload.user.email,
         name: action.payload.user.name,
       };
@@ -28,6 +28,14 @@ export const userReducer = (state = defaultState, action) => {
       return {
         ...state,
         isAuthenticated: action.payload,
+      };
+    }
+    case LOGOUT_USER: {
+      return {
+        ...state,
+        isAuthenticated: action.payload.isAuthenticated,
+        email: action.payload.user.email,
+        name: action.payload.user.name,
       };
     }
     default: {

@@ -54,9 +54,6 @@ function App() {
           <Route path="/feed" exact>
             <Feed />
           </Route>
-          {/* <Route path="/feed/:id" exact>
-            <Order />
-          </Route> */}
           <ProtectedRouteElement authNeed={false} path="/login">
             <Login />
           </ProtectedRouteElement>

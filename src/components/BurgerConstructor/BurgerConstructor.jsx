@@ -38,6 +38,8 @@ export default function BurgerConstructor() {
   const [bunPrice, setBunPrice] = useState(0);
   let history = useHistory();
   const location = useLocation();
+  const user = useSelector((state) => state.user.name);
+  console.log(user);
 
   //Связали локальное состояние с глобальным
 
@@ -174,15 +176,10 @@ export default function BurgerConstructor() {
     }
   }, [draggedBun]);
 
-  const cookieUser = document.cookie.match(
-    new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
-  );
-  const cookieUserDecode = cookieUser ? decodeURIComponent(cookieUser[1]) : undefined;
-
   const handlerModalOpen = () => {
     //Создали обработчик открытия модального окна
 
-    if (!cookieUserDecode) {
+    if (!user) {
       dispatch({ type: SET_CURRENT_PAGE, payload: location.pathname });
       history.push({
         pathname: "/login",

@@ -38,9 +38,11 @@ const OrderHistory = () => {
 
   return (
     <div className={styles.OrderHistory}>
-      {orders.map((order) => (
-        <OrderCard key={order._id} order={order} onClick={handleOpenModal} showStatus={true} />
-      ))}
+      {orders.length > 0 &&
+        orders.map((order) => (
+          <OrderCard key={order._id} order={order} onClick={handleOpenModal} showStatus={true} />
+        ))}
+      {orders.length === 0 && <p className={styles.Loader}>Загрузка, ожидайте ...</p>}
     </div>
   );
 };

@@ -5,6 +5,9 @@ import doneImagePath from "../../images/done.png";
 export default function OrderDetails(props) {
   return (
     <div className={`${styles.orderDetails} `}>
+      {!props.orderId && (
+        <p className={`${styles.orderTitle} pt-8 pb-15`}>Номер заказа загружается ...</p>
+      )}
       <p className={`${styles.orderNumber} pt-30`}>{props.orderId}</p>
       <p className={`${styles.orderTitle} pt-8 pb-15`}>идентификатор заказа</p>
       <img className={styles.orderImage} src={doneImagePath} alt="Готово" />

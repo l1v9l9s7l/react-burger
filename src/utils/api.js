@@ -101,6 +101,7 @@ const updateUserData = (name, email, password, token) => {
 };
 
 const uploadUserData = (accessToken) => {
+  console.log(accessToken);
   return fetch(`${config.baseURL}auth/user`, {
     method: "GET",
     headers: {
