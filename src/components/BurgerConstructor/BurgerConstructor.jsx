@@ -184,20 +184,17 @@ export default function BurgerConstructor() {
       history.push({
         pathname: "/login",
       });
+    } else {
+      getOrderNumber();
+      dispatch({ type: OPEN_ORDER_MODAL }); //Меняем состояние модального окна
+      dispatch(setOrderIdsArr(ingridientsIdArr));
     }
-
-    getOrderNumber();
-    dispatch({ type: OPEN_ORDER_MODAL }); //Меняем состояние модального окна
   };
 
   const handlerModalClose = () => {
     //Создали обработчик открытия модального окна
     dispatch({ type: CLOSE_ORDER_MODAL }); //Меняем состояние модального окна
   };
-
-  useEffect(() => {
-    dispatch(setOrderIdsArr(ingridientsIdArr));
-  }, [ingridientsIdArr]);
 
   return (
     <>
