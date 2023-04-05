@@ -21,8 +21,6 @@ import { ProfileForm } from "../ProfileForm/ProfileForm";
 import Feed from "../../pages/Feed/Feed";
 import Order from "../../pages/Order/Order";
 import OrderHistory from "../OrderHistory/OrderHistory";
-import { CLOSE_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
-import { CLOSE_INGREDIENT_MODAL } from "../../services/actions/ingredientDetailsAction";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,8 +33,6 @@ function App() {
 
   const handlerModalClose = () => {
     //Создали обработчик открытия модального окна
-    dispatch({ type: CLOSE_ORDER_MODAL }); //Меняем состояние модального окна
-    dispatch({ type: CLOSE_INGREDIENT_MODAL }); //Меняем состояние модального окна
     history.goBack();
   };
 

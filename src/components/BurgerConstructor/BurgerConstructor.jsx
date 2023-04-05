@@ -39,7 +39,6 @@ export default function BurgerConstructor() {
   let history = useHistory();
   const location = useLocation();
   const user = useSelector((state) => state.user.name);
-  console.log(user);
 
   //Связали локальное состояние с глобальным
 
@@ -187,9 +186,13 @@ export default function BurgerConstructor() {
     } else {
       getOrderNumber();
       dispatch({ type: OPEN_ORDER_MODAL }); //Меняем состояние модального окна
-      dispatch(setOrderIdsArr(ingridientsIdArr));
+      // dispatch(setOrderIdsArr(ingridientsIdArr));
     }
   };
+
+  useEffect(() => {
+    dispatch(setOrderIdsArr(ingridientsIdArr));
+  }, [ingridientsIdArr]);
 
   const handlerModalClose = () => {
     //Создали обработчик открытия модального окна

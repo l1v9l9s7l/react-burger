@@ -13,6 +13,8 @@ import { UPLOAD_USER } from "../../services/actions/userAction";
 import { uploadUserData } from "../../utils/api";
 import { useDispatch } from "react-redux";
 import { getCookie } from "../../utils/utils";
+import { WS_FEED_CONNECTION_START } from "../../services/actions/feed";
+import { WS_FEED_CONNECTION_CLOSED } from "../../services/actions/feed";
 
 export default function AppHeader() {
   const dispatch = useDispatch();
@@ -23,11 +25,19 @@ export default function AppHeader() {
   const [menuAccountActive, setMenuAccountActive] = useState(false);
   const [menuOrderListActive, setMenuOrderListActive] = useState(false);
   const authChecked = useSelector((state) => state.user.isAuthenticated);
+  const feeds = useSelector((state) => state.feed.orders);
+  // console.log(feeds);
+
+  useEffect(() => {
+    dispatch({ type: WS_FEED_CONNECTION_START });
+    return () => {
+      dispatch({ type: WS_FEED_CONNECTION_CLOSED });
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (accessToken) {
       if (accessToken.length > 5) {
-        console.log(accessToken);
         uploadUserData(accessToken).then((res) => {
           dispatch({ type: UPLOAD_USER, payload: res });
         });

@@ -5,21 +5,42 @@ import IngredientImage from "../IngredientImage/IngredientImage";
 import { fillDetailedInformationOrder } from "../../utils/utils";
 import DateCounter from "../DateCounter/DateCounter";
 import OrderStatus from "../OrderStatus/OrderStatus";
+import { useEffect, useState } from "react";
+import { WS_FEED_CONNECTION_START } from "../../services/actions/feed";
+import { WS_FEED_CONNECTION_CLOSED } from "../../services/actions/feed";
+import { useDispatch } from "react-redux";
 
 import styles from "./OrderDetailedStatus.module.css";
-import { useEffect } from "react";
 
 const OrderDetailedStatus = () => {
+  const dispatch = useDispatch();
   const { id } = useParams();
   const isFeedRoute = useRouteMatch("/feed/:id");
   const isProfileRoute = useRouteMatch("/profile/orders/:id");
   let order = {};
+  const [feedsState, setFeedsState] = useState();
+  const [updatedFeedOrder, setUpdatedFeedOrder] = useState();
 
   const feeds = useSelector((state) => state.feed.orders);
 
-  // useEffect(() => {
-  //   console.log(feeds);
-  // });
+  useEffect(() => {
+    setFeedsState(feeds);
+  }, []);
+
+  useEffect(() => {
+    dispatch({ type: WS_FEED_CONNECTION_START });
+    return () => {
+      dispatch({ type: WS_FEED_CONNECTION_CLOSED });
+    };
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (feeds) {
+      if (feedsState) {
+        setUpdatedFeedOrder(feedsState.find((order) => order._id === id));
+      }
+    }
+  }, [feeds]);
 
   const feedOrder = useSelector(
     (state) => state.feed.orders.find((order) => order._id === id) || {}
