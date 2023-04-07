@@ -6,8 +6,6 @@ import { fillDetailedInformationOrder } from "../../utils/utils";
 import DateCounter from "../DateCounter/DateCounter";
 import OrderStatus from "../OrderStatus/OrderStatus";
 import { useEffect, useState } from "react";
-import { WS_FEED_CONNECTION_START } from "../../services/actions/feed";
-import { WS_FEED_CONNECTION_CLOSED } from "../../services/actions/feed";
 import { useDispatch } from "react-redux";
 
 import styles from "./OrderDetailedStatus.module.css";
@@ -26,13 +24,6 @@ const OrderDetailedStatus = () => {
   useEffect(() => {
     setFeedsState(feeds);
   }, []);
-
-  useEffect(() => {
-    dispatch({ type: WS_FEED_CONNECTION_START });
-    return () => {
-      dispatch({ type: WS_FEED_CONNECTION_CLOSED });
-    };
-  }, [dispatch]);
 
   useEffect(() => {
     if (feeds) {

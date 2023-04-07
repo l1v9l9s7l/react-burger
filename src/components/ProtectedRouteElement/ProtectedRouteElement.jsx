@@ -21,6 +21,10 @@ const ProtectedRouteElement = ({ authNeed, children, ...rest }) => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(authChecked);
+  }, []);
+
   return (
     <Route
       {...rest}

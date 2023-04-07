@@ -12,28 +12,7 @@ export function Profile(props) {
   const dispatch = useDispatch();
   const [menuProfile, setMenuProfile] = useState(false);
   const [menuOrder, setMenuOrder] = useState(false);
-
-  const cookieRefreshToken = document.cookie.match(
-    new RegExp(
-      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
-    )
-  );
-  const cookieRefreshTokenDecode = cookieRefreshToken
-    ? decodeURIComponent(cookieRefreshToken[1])
-    : undefined;
-
   let history = useHistory();
-
-  // function logOut() {
-  //   deleteCookie();
-  //   history.push({
-  //     pathname: "/",
-  //   });
-  //   logOutOnServer(cookieRefreshTokenDecode).then((res) => {
-  //     console.log(res);
-  //     dispatch({ type: AUTH_CHECK, payload: false });
-  //   });
-  // }
 
   const logOut = () => {
     dispatch(logoutUser());
