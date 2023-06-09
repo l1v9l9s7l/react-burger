@@ -6,8 +6,13 @@ import { Counter } from "@ya.praktikum/react-developer-burger-ui-components";
 import ingridientPropTypes from "../../utils/types";
 import { useDrag } from "react-dnd/dist/hooks";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { OPEN_INGREDIENT_MODAL } from "../../services/actions/ingredientDetailsAction";
 
 export default function Ingridient(props) {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [ingridient, setIngridient] = useState({});
   const idsArr = useSelector((state) => state.orderDetails.orderIds);
   const [count, setCount] = useState(false);
@@ -26,14 +31,8 @@ export default function Ingridient(props) {
   }, [props.ingridient]);
 
   const handlerModalOpen = () => {
-    props.onModalOpen({
-      name: ingridient.name,
-      image: ingridient.image,
-      fat: ingridient.fat,
-      proteins: ingridient.proteins,
-      calories: ingridient.calories,
-      carbohydrates: ingridient.carbohydrates,
-    });
+    dispatch({ type: OPEN_INGREDIENT_MODAL });
+    history.push(`ingredients/${ingridient._id}`);
   };
 
   useEffect(() => {

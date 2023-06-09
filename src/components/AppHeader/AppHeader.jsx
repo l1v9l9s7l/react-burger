@@ -2,80 +2,119 @@ import styles from "./AppHeader.module.css";
 import { Logo } from "@ya.praktikum/react-developer-burger-ui-components";
 import {
   BurgerIcon,
-  CloseIcon,
-  CheckMarkIcon,
-  CurrencyIcon,
-  DragIcon,
-  EditIcon,
-  HideIcon,
-  InfoIcon,
   ListIcon,
-  LockIcon,
-  LogoutIcon,
   ProfileIcon,
-  ShowIcon,
-  DeleteIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  MenuIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { UPLOAD_USER } from "../../services/actions/userAction";
+import { uploadUserData } from "../../utils/api";
+import { useDispatch } from "react-redux";
+import { getCookie } from "../../utils/utils";
 
 export default function AppHeader() {
-  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
-
-  function getCookie() {
-    const matches = document.cookie.match(
-      new RegExp("(?:^|; )" + "user".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)")
-    );
-    console.log(matches ? decodeURIComponent(matches[1]) : undefined);
-  }
+  const dispatch = useDispatch();
+  const accessToken = getCookie("accessToken");
+  const history = useHistory();
+  const currentPath = history.location.pathname;
+  const [menuConstructorActive, setMenuConstructorActive] = useState(false);
+  const [menuAccountActive, setMenuAccountActive] = useState(false);
+  const [menuOrderListActive, setMenuOrderListActive] = useState(false);
+  const authChecked = useSelector((state) => state.user.isAuthenticated);
 
   useEffect(() => {
-    console.log(isAuthenticated);
-  }, [isAuthenticated]);
+    if (accessToken) {
+      if (accessToken.length > 5) {
+        uploadUserData(accessToken).then((res) => {
+          dispatch({ type: UPLOAD_USER, payload: res });
+        });
+      }
+    }
+  }, []);
 
-  function watchCookie() {
-    console.log(document.cookie);
+  useEffect(() => {
+    if (currentPath == "/profile") {
+      setAccountActive();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentPath == "/") {
+      setConstructorActive();
+    }
+  }, []);
+
+  function setConstructorActive() {
+    setMenuConstructorActive(true);
+    setMenuAccountActive(false);
+    setMenuOrderListActive(false);
   }
 
-  const curUser = getCookie("user");
+  function setAccountActive() {
+    setMenuAccountActive(true);
+    setMenuConstructorActive(false);
+    setMenuOrderListActive(false);
+  }
+
+  function setOrderListActive() {
+    setMenuOrderListActive(true);
+    setMenuAccountActive(false);
+    setMenuConstructorActive(false);
+  }
 
   return (
     <header className={styles.header}>
       <div className={styles.content}>
         <div className={styles.navigation}>
-          <a className={styles.headerConstructor}>
+          <Link onClick={setConstructorActive} className={styles.headerConstructor} to="/">
             <div className="pl-5"></div>
-            <BurgerIcon />
-            <p className="pl-2 pr-5">Конструктор</p>
-          </a>
-          <a className={`${styles.headerOrderList} pl-2`}>
+            <BurgerIcon type={menuConstructorActive ? "primary" : "secondary"} />
+            <p
+              className={
+                menuConstructorActive
+                  ? `${styles.profileText} ${styles.text_color_active}`
+                  : `${styles.profileText} ${styles.text_color_inactive}`
+              }
+            >
+              Конструктор
+            </p>
+          </Link>
+          <Link
+            onClick={setOrderListActive}
+            to="/feed"
+            className={`${styles.headerOrderList} pl-2`}
+          >
             <div className={`${styles.navigationIcon} pl-5`}>
-              <ListIcon type="secondary" />
+              <ListIcon type={menuOrderListActive ? "primary" : "secondary"} />
             </div>
-            <p className="text_color_inactive pl-2 pr-5">Лента заказов</p>
-          </a>
+            <p
+              className={`${styles.profileText} ${
+                menuOrderListActive ? styles.text_color_active : styles.text_color_inactive
+              }`}
+            >
+              Лента заказов
+            </p>
+          </Link>
         </div>
-        <Link to="/" className={styles.logo}>
+        <Link onClick={setConstructorActive} to="/" className={styles.logo}>
           <Logo />
         </Link>
-        <button onClick={watchCookie}></button>
-        <button onClick={getCookie}></button>
-        {curUser && (
-          <Link className={styles.profile} to="/profile">
-            <ProfileIcon type="secondary" />
-            <p className={`${styles.profileText} ${styles.text_color_inactive}`}>Личный кабинет</p>
-          </Link>
-        )}
-        {!curUser && (
-          <Link className={styles.profile} to="/login">
-            <ProfileIcon type="secondary" />
-            <p className={`${styles.profileText} ${styles.text_color_inactive}`}>Личный кабинет</p>
-          </Link>
-        )}
+        <Link
+          onClick={setAccountActive}
+          className={styles.profile}
+          to={authChecked ? "/profile" : "/login"}
+        >
+          <ProfileIcon type={menuAccountActive ? "primary" : "secondary"} />
+          <p
+            className={`${styles.profileText} ${
+              menuAccountActive ? styles.text_color_active : styles.text_color_inactive
+            }`}
+          >
+            Личный кабинет
+          </p>
+        </Link>
       </div>
     </header>
   );

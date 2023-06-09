@@ -1,0 +1,7 @@
+.OrderPage {
+    display: flex;
+    width: 100%;
+    height: calc(90vh - 98px);
+    align-items: center;
+    justify-content: center;
+}

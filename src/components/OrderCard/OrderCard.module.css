@@ -1,0 +1,40 @@
+.OrderCard {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #1C1C21;
+    border-radius: 40px;
+    padding: 24px;
+    margin-bottom: 24px;
+    cursor: pointer;
+}
+
+.OrderCard:last-child {
+    margin-bottom: 0px;
+}
+
+.Header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 24px;
+}
+
+.Name {
+    padding-bottom: 8px;
+}
+
+.Footer {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-top: 24px;
+}
+
+.Price {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: auto;
+}

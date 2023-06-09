@@ -1,0 +1,29 @@
+.OrderHistory {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 608px;
+    max-height: calc(100vh - 208px);
+    padding-top: 150px;
+}
+
+
+.OrderHistory::-webkit-scrollbar {
+    width: 8px;
+    padding-top: 50px;
+    
+}
+
+.OrderHistory::-webkit-scrollbar-track {
+    background: #2F2F37;
+    max-height: 30px;
+    margin-top: 152px;
+}
+
+.OrderHistory::-webkit-scrollbar-thumb {
+    background-color: #8585AD;
+}
+
+.Loader{
+    font-size: 40px;
+    text-align: center;
+}

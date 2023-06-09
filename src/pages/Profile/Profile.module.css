@@ -63,3 +63,11 @@
   text-align: left;
   height: 64px;
 }
+
+.navigationText{
+  color: #8585AD;
+  width: 320px;
+  padding-left: 6px;
+  opacity: 0.4;
+}
+

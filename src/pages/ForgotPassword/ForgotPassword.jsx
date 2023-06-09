@@ -8,36 +8,58 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useLocation, Redirect } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setPassRequest } from "../../services/actions/pageAction";
+import { resetPassword } from "../../services/actions/userAction";
 
 export function ForgotPassword() {
+  const dispatch = useDispatch();
+  const location = useLocation();
   const [inputState, setInputState] = useState("");
-  const [requestSuccess, setRequestSuccess] = useState(false);
   let history = useHistory();
 
   function handleChange(event) {
     setInputState(event.target.value);
   }
 
-  const sendEmail = () => {
-    forgotPasswordPost(inputState).then((res) => {
-      console.log(res.success);
-      if (res.success) {
-        history.push({
-          pathname: "/reset-password",
-        });
+  const sendEmail = (event) => {
+    event.preventDefault();
+    if (inputState) {
+      if (inputState.length > 3) {
+        dispatch(resetPassword(inputState, history));
       }
-    });
+    } else if (inputState.length < 3) {
+      alert("Введите корректный Email");
+    }
   };
 
+  const cookieRefreshToken = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" + "refreshToken".replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") + "=([^;]*)"
+    )
+  );
+  const cookieRefreshTokenDecode = cookieRefreshToken
+    ? decodeURIComponent(cookieRefreshToken[1])
+    : undefined;
+
+  if (cookieRefreshTokenDecode) {
+    return <Redirect to={location?.state?.from || "/"} />;
+  }
+
   return (
-    <>
+    <form onSubmit={sendEmail}>
       <div className={styles.content}>
         <h2 className={styles.title}>Восстановление пароля</h2>
         <div>
-          <EmailInput onChange={handleChange} placeholder="Укажите E-mail"></EmailInput>
+          <EmailInput
+            value={inputState}
+            onChange={handleChange}
+            placeholder="Укажите E-mail"
+          ></EmailInput>
         </div>
         <div className={`pt-6 pb-20 ${styles.enterButton}`}>
-          <Button onClick={sendEmail} size="large">
+          <Button htmlType="submit" size="large">
             Восстановить
           </Button>
         </div>
@@ -48,6 +70,6 @@ export function ForgotPassword() {
           </Link>
         </p>
       </div>
-    </>
+    </form>
   );
 }

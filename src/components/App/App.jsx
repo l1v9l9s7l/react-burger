@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux/es/exports";
 import styles from "./App.module.css";
 import AppHeader from "../AppHeader/AppHeader.jsx";
@@ -9,20 +9,32 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Login } from "../../pages/Login/Login";
 import { Register } from "../../pages/Register/Register";
-import { Link } from "react-router-dom";
-import { BrowserRouter as Router, Route, Switch, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom";
 import { ForgotPassword } from "../../pages/ForgotPassword/ForgotPassword";
 import { ResetPassword } from "../../pages/ResetPassword/ResetPassword";
 import { Profile } from "../../pages/Profile/Profile";
+import IngridientPage from "../IngredientPage/IngredientPage";
+import Modal from "../Modal/Modal";
+import IngridientDetails from "../IngridientDetails/IngridientDetails";
+import ProtectedRouteElement from "../ProtectedRouteElement/ProtectedRouteElement";
+import { ProfileForm } from "../ProfileForm/ProfileForm";
+import Feed from "../../pages/Feed/Feed";
+import Order from "../../pages/Order/Order";
+import OrderHistory from "../OrderHistory/OrderHistory";
 
 function App() {
   const dispatch = useDispatch();
-  const location = useLocation();
-  console.log(location.state);
+  const history = useHistory();
+  const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
 
   useEffect(() => {
     dispatch(getIngridients());
   }, [dispatch]);
+
+  const handlerModalClose = () => {
+    //Создали обработчик открытия модального окна
+    history.goBack();
+  };
 
   return (
     <>
@@ -35,21 +47,70 @@ function App() {
               <BurgerConstructor />
             </DndProvider>
           </Route>
-          <Route path="/login">
+          <Route path="/feed" exact>
+            <Feed />
+          </Route>
+          <ProtectedRouteElement authNeed={false} path="/login">
             <Login />
-          </Route>
-          <Route path="/register">
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={false} path="/register">
             <Register />
-          </Route>
-          <Route path="/forgot-password">
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={false} path="/forgot-password">
             <ForgotPassword />
-          </Route>
-          <Route path="/reset-password">
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={false} path="/reset-password">
             <ResetPassword />
-          </Route>
-          <Route path="/profile">
-            <Profile />
-          </Route>
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={true} path="/profile" exact>
+            <Profile>
+              <ProfileForm></ProfileForm>
+            </Profile>
+          </ProtectedRouteElement>
+          <ProtectedRouteElement authNeed={true} path="/profile/orders" exact>
+            <Profile>
+              <OrderHistory />
+            </Profile>
+          </ProtectedRouteElement>
+          {modalState && ( //Если true отобрази модальное окно
+            <>
+              <Route path="/ingredients/:id">
+                <DndProvider backend={HTML5Backend}>
+                  <BurgerIngridients />
+                  <BurgerConstructor />
+                </DndProvider>
+                <Modal onModalClose={handlerModalClose}>
+                  <IngridientDetails />
+                </Modal>
+              </Route>
+              <ProtectedRouteElement authNeed={true} path="/profile/orders/:id" exact>
+                <Profile>
+                  <Modal onModalClose={handlerModalClose}>
+                    <Order />
+                  </Modal>
+                </Profile>
+              </ProtectedRouteElement>
+              <Route path="/feed/:id" exact>
+                <Feed />
+                <Modal onModalClose={handlerModalClose}>
+                  <Order />
+                </Modal>
+              </Route>
+            </>
+          )}
+          {!modalState && (
+            <>
+              <Route path="/ingredients/:id">
+                <IngridientPage />
+              </Route>
+              <Route path="/profile/orders/:id" exact>
+                <Order />
+              </Route>
+              <Route path="/feed/:id" exact>
+                <Order />
+              </Route>
+            </>
+          )}
         </Switch>
       </main>
     </>

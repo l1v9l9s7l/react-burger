@@ -41,10 +41,12 @@
   flex-direction: row;
   align-items: center;
   padding: 0;
+  text-decoration:none
 }
 
 .headerConstructor:hover {
   cursor: pointer;
+  opacity: 0.8;
 }
 
 .headerOrderList {
@@ -61,9 +63,18 @@
   color: aliceblue;
 }
 
+.profile:hover{
+  opacity: 0.8;
+}
+
 .profileText{
   margin-left: 11px;
 }
+
+.text_color_active {
+	color: white;
+}
+
 
 .text_color_inactive {
 	color: var(--text-inactive-color);

@@ -10,8 +10,8 @@ import { sendRegistrationForm } from "../../utils/api";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setUserAuth } from "../../services/actions/userAction";
 import { getCookie } from "../../utils/utils";
+import { useLocation, Redirect } from "react-router-dom";
 
 export function Register() {
   const [nameInputState, setNameInputState] = useState("");
@@ -20,8 +20,7 @@ export function Register() {
   const [user, setUser] = useState({});
   const [requestSuccess, setRequestSuccess] = useState(false);
   let history = useHistory();
-  const dispatch = useDispatch();
-  const auth = useSelector((state) => state.user.isAuthenticated);
+  const location = useLocation();
 
   function handleChangeName(event) {
     setNameInputState(event.target.value);
@@ -35,29 +34,21 @@ export function Register() {
     setEmailInputState(event.target.value);
   }
 
-  const sendForm = () => {
+  const sendForm = (event) => {
+    event.preventDefault();
     sendRegistrationForm(emailInputState, passwordInputState, nameInputState).then((res) => {
       setUser(res);
       setRequestSuccess(res);
-      console.log(res);
-      document.cookie = `user=${nameInputState}; path=/; max-age=1200`;
-      document.cookie = `login=${res.user.email}; path=/; max-age=1200`;
-      document.cookie = `refreshToken=${res.refreshToken} ; path=/; max-age=1200`;
-      document.cookie = `accessToken=${res.accessToken} ; path=/; max-age=1200`;
+      document.cookie = `refreshToken=${res.refreshToken} ; path=/; max-age=12`;
+      document.cookie = `accessToken=${res.accessToken} ; path=/; max-age=12`;
     });
-    console.log(user);
   };
-
-  useEffect(() => {
-    console.log(auth);
-  }, [auth]);
 
   useEffect(() => {
     //Переадресация на главную страницу после регистрации
     const curUser = getCookie("user");
     if (curUser) {
       if (curUser.length > 0) {
-        // dispatch(setUserAuth(true));
         history.push({
           pathname: "/",
         });
@@ -65,8 +56,14 @@ export function Register() {
     }
   }, [requestSuccess]);
 
+  const refreshToken = getCookie("refreshToken");
+
+  if (refreshToken) {
+    return <Redirect to={location?.state?.from || "/"} />;
+  }
+
   return (
-    <>
+    <form onSubmit={sendForm}>
       <div className={styles.content}>
         <h2 className={styles.title}>Регистрация</h2>
         <Input onChange={handleChangeName} placeholder="Имя"></Input>
@@ -75,7 +72,7 @@ export function Register() {
         <div className="pt-6"></div>
         <PasswordInput onChange={handleChangePassword}></PasswordInput>
         <div className={`pt-6 pb-20 ${styles.enterButton}`}>
-          <Button onClick={sendForm} size="large">
+          <Button htmlType="submit" size="large">
             Зарегистрироваться
           </Button>
         </div>
@@ -86,6 +83,6 @@ export function Register() {
           </Link>
         </p>
       </div>
-    </>
+    </form>
   );
 }

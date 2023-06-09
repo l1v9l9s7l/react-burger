@@ -8,9 +8,17 @@ import BurgerConstructorElement from "../BurgerConstructorElement/BurgerConstruc
 import Modal from "../Modal/Modal";
 import { postOrder } from "../../utils/api";
 import { setDraggedIngredients } from "../../services/actions/orderAction";
+import { setDraggedBuns } from "../../services/actions/orderAction";
 import { setOrderIdsArr } from "../../services/actions/orderDetailsAction";
 import { uuidv4 } from "../../utils/utils";
 import diamond from "../../images/diamond.svg";
+import { useHistory, useLocation } from "react-router-dom";
+import { GET_ORDER_NUMBER } from "../../services/actions/orderDetailsAction";
+import { SET_CURRENT_PAGE } from "../../services/actions/pageAction";
+import { OPEN_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
+import { CLOSE_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
+import { UPDATE_KEYS } from "../../services/actions/ingridientsAction";
+import { fetchIngredients } from "../../utils/api";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
@@ -19,31 +27,53 @@ export default function BurgerConstructor() {
   const ingridients = useSelector((state) => state.ingridients.ingridients);
   const modalOpen = useSelector((state) => state.orderDetails.openOrderModal);
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
+  const storeDraggedBuns = useSelector((state) => state.order.dragBuns);
   //Массив с данными пернесенных элементов
-  const [draggedElements, setDraggedElements] = useState([]);
+  const [draggedElements, setDraggedElements] = useState(storeDraggedIngredients);
   //Массив с разметкой перенесенных ингредиентов
   const [selectedIngridients, setSelectedIngridients] = useState([]);
   //Массив с данными пернесенных булок
-  const [draggedBun, setDraggedBun] = useState([]);
+  const [draggedBun, setDraggedBun] = useState(storeDraggedBuns);
   const [ingredientsPrice, setIngredientsPrice] = useState(0);
   const [bunPrice, setBunPrice] = useState(0);
+  let history = useHistory();
+  const location = useLocation();
+  const user = useSelector((state) => state.user.name);
 
   //Связали локальное состояние с глобальным
+
+  //Передаем в глобальное хранилище перенесенные игридиенты из стейта при изменении стейта
   useEffect(() => {
     dispatch(setDraggedIngredients(draggedElements));
   }, [draggedElements]);
+  //Изменяем стейт при изменении глобального хранилища
   useEffect(() => {
     setDraggedElements(storeDraggedIngredients);
   }, [storeDraggedIngredients]);
 
-  const handleDrop = (data) => {
+  //Передаем в глобальное хранилище перенесенные булки из стейта
+  useEffect(() => {
+    dispatch(setDraggedBuns(draggedBun));
+  }, [draggedBun]);
+  //Изменяем стейт при изменении глобального хранилища
+  useEffect(() => {
+    setDraggedBun(storeDraggedBuns);
+  }, [storeDraggedBuns]);
+
+  const handleDrop = (data, key) => {
     //data приходит из item у Drop
 
     if (data.type === "sauce" || data.type === "main") {
-      setDraggedElements([
-        ...draggedElements,
-        ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedElements
-      ]);
+      fetchIngredients().then((res) => {
+        console.log(res.data);
+        const newElement = res.data.find((element) => element._id === data.id);
+        newElement.key = uuidv4();
+        console.log(draggedElements);
+        setDraggedElements([
+          ...draggedElements,
+          newElement, //При броске элемента добавляем его в draggedElements
+        ]);
+      });
     } else if (data.type === "bun") {
       setDraggedBun([
         ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedBuns
@@ -57,6 +87,8 @@ export default function BurgerConstructor() {
     //data - приходит из Ingredient, содержит id и type ингредиента
     //При сбрасывании элемента происходит drop - handleDrop, в data попадает data Дропа
     drop(data) {
+      dispatch({ type: UPDATE_KEYS });
+      console.log(data);
       handleDrop(data);
     },
   });
@@ -67,13 +99,14 @@ export default function BurgerConstructor() {
       return;
     } else {
       postOrder(ingridientsIdArr).then((res) => {
-        dispatch({ type: "GET_ORDER_NUMBER", payload: res.order.number });
+        dispatch({ type: GET_ORDER_NUMBER, payload: res.order.number });
       });
     }
   };
 
   //Получение айдишников выбранных ингредиентов
   useEffect(() => {
+    // console.log(storeDraggedIngredients);
     const ingredientsIdsArr = storeDraggedIngredients.map((i) => {
       return i._id;
     });
@@ -84,7 +117,7 @@ export default function BurgerConstructor() {
     setIngridientsIdArr(commonIdsArr);
     setSelectedIngridients(
       storeDraggedIngredients.map((i, index) => (
-        <BurgerConstructorElement data={i} index={index} key={uuidv4()} />
+        <BurgerConstructorElement data={i} index={index} key={i.key} />
       ))
     );
   }, [storeDraggedIngredients, draggedBun]);
@@ -144,18 +177,27 @@ export default function BurgerConstructor() {
 
   const handlerModalOpen = () => {
     //Создали обработчик открытия модального окна
-    getOrderNumber();
-    dispatch({ type: "OPEN_ORDER_MODAL" }); //Меняем состояние модального окна
-  };
 
-  const handlerModalClose = () => {
-    //Создали обработчик открытия модального окна
-    dispatch({ type: "CLOSE_ORDER_MODAL" }); //Меняем состояние модального окна
+    if (!user) {
+      dispatch({ type: SET_CURRENT_PAGE, payload: location.pathname });
+      history.push({
+        pathname: "/login",
+      });
+    } else {
+      getOrderNumber();
+      dispatch({ type: OPEN_ORDER_MODAL }); //Меняем состояние модального окна
+      // dispatch(setOrderIdsArr(ingridientsIdArr));
+    }
   };
 
   useEffect(() => {
     dispatch(setOrderIdsArr(ingridientsIdArr));
   }, [ingridientsIdArr]);
+
+  const handlerModalClose = () => {
+    //Создали обработчик открытия модального окна
+    dispatch({ type: CLOSE_ORDER_MODAL }); //Меняем состояние модального окна
+  };
 
   return (
     <>

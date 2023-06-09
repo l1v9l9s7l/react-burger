@@ -11,3 +11,63 @@ export function getCookie(name) {
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
+
+export function deleteCookie() {
+  // document.cookie = `login=; path=/; max-age=1200`;
+  // document.cookie = `user=; path=/; max-age=1200`;
+  document.cookie = `refreshToken=; path=/; max-age=1200`;
+  document.cookie = `accessToken=; path=/; max-age=1200`;
+}
+
+export function getAccessToken() {}
+
+export const splitChunks = (array, chunkSize, maxChunks) => {
+  let result = [];
+  for (let i = 0; i < maxChunks * chunkSize; i += chunkSize) {
+    const chunk = array.slice(i, i + chunkSize);
+    result.push(chunk);
+  }
+  return result;
+};
+
+export const fillDetailedInformationOrder = (ingredients, descriptionIngr) => {
+  if (!Array.isArray(ingredients)) return { ingredients: {}, price: 0 };
+
+  return ingredients.reduce(
+    (acc, ingr) => {
+      const detIngr = descriptionIngr.find((descIngr) => descIngr._id === ingr);
+
+      if (detIngr) {
+        if (acc.ingredients[ingr]) {
+          return {
+            ingredients: {
+              ...acc.ingredients,
+              [ingr]: {
+                ...acc.ingredients[ingr],
+                count: acc.ingredients[ingr].count + 1,
+              },
+            },
+            price: acc.price + detIngr.price,
+          };
+        } else {
+          return {
+            ingredients: {
+              ...acc.ingredients,
+              [ingr]: {
+                image: detIngr.image,
+                price: detIngr.price,
+                type: detIngr.type,
+                name: detIngr.name,
+                count: 1,
+              },
+            },
+            price: acc.price + detIngr.price,
+          };
+        }
+      } else {
+        return acc;
+      }
+    },
+    { ingredients: {}, price: 0 }
+  );
+};

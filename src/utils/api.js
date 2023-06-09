@@ -1,3 +1,5 @@
+import { getCookie } from "./utils";
+
 const config = {
   baseURL: "https://norma.nomoreparties.space/api/",
   headers: {
@@ -22,6 +24,7 @@ const postOrder = (ingredientsId) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      authorization: getCookie("accessToken"),
     },
     body: JSON.stringify({
       ingredients: ingredientsId,
@@ -34,6 +37,7 @@ const forgotPasswordPost = (email) => {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      authorization: getCookie("token"),
     },
     body: JSON.stringify({
       email: email,
@@ -81,6 +85,55 @@ const authorization = (email, password) => {
   }).then(checkRes);
 };
 
+const updateUserData = (name, email, password, token) => {
+  return fetch(`${config.baseURL}auth/user`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: token,
+    },
+    body: JSON.stringify({
+      name: name,
+      email: email,
+      password: password,
+    }),
+  }).then(checkRes);
+};
+
+const uploadUserData = (accessToken) => {
+  return fetch(`${config.baseURL}auth/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: accessToken,
+    },
+  }).then(checkRes);
+};
+
+const updateAccessToken = (refreshToken) => {
+  return fetch(`${config.baseURL}auth/token`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: refreshToken,
+    }),
+  }).then(checkRes);
+};
+
+const logOutOnServer = (refreshToken) => {
+  return fetch(`${config.baseURL}auth/logout`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      token: refreshToken,
+    }),
+  }).then(checkRes);
+};
+
 export {
   fetchIngredients,
   postOrder,
@@ -88,4 +141,8 @@ export {
   resetPasswordPost,
   sendRegistrationForm,
   authorization,
+  updateUserData,
+  uploadUserData,
+  updateAccessToken,
+  logOutOnServer,
 };
