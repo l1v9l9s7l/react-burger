@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { useDrag, useDrop } from "react-dnd/dist/hooks";
 import styles from "./BurgerConstructor.module.css";
 import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -19,6 +18,7 @@ import { OPEN_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
 import { CLOSE_ORDER_MODAL } from "../../services/actions/orderDetailsAction";
 import { UPDATE_KEYS } from "../../services/actions/ingridientsAction";
 import { fetchIngredients } from "../../utils/api";
+import { useDispatch, useSelector } from "../../hooks/hooks";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
@@ -60,13 +60,13 @@ export default function BurgerConstructor() {
     setDraggedBun(storeDraggedBuns);
   }, [storeDraggedBuns]);
 
-  const handleDrop = (data, key) => {
+  const handleDrop = (data: any) => {
     //data приходит из item у Drop
 
     if (data.type === "sauce" || data.type === "main") {
       fetchIngredients().then((res) => {
         console.log(res.data);
-        const newElement = res.data.find((element) => element._id === data.id);
+        const newElement = res.data.find((element: any) => element._id === data.id);
         newElement.key = uuidv4();
         console.log(draggedElements);
         setDraggedElements([
@@ -76,7 +76,7 @@ export default function BurgerConstructor() {
       });
     } else if (data.type === "bun") {
       setDraggedBun([
-        ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedBuns
+        ...ingridients.filter((element: any) => element._id === data.id), //При броске элемента добавляем его в draggedBuns
       ]);
       return;
     }
@@ -107,16 +107,16 @@ export default function BurgerConstructor() {
   //Получение айдишников выбранных ингредиентов
   useEffect(() => {
     // console.log(storeDraggedIngredients);
-    const ingredientsIdsArr = storeDraggedIngredients.map((i) => {
+    const ingredientsIdsArr = storeDraggedIngredients.map((i: any) => {
       return i._id;
     });
-    const bunIdsArr = draggedBun.map((i) => {
+    const bunIdsArr = draggedBun.map((i: any) => {
       return i._id;
     });
     const commonIdsArr = bunIdsArr.concat(ingredientsIdsArr, bunIdsArr);
     setIngridientsIdArr(commonIdsArr);
     setSelectedIngridients(
-      storeDraggedIngredients.map((i, index) => (
+      storeDraggedIngredients.map((i: any, index: any) => (
         <BurgerConstructorElement data={i} index={index} key={i.key} />
       ))
     );
@@ -162,7 +162,7 @@ export default function BurgerConstructor() {
 
   //Подсчет стоимости ингредиентов
   useEffect(() => {
-    const sum = storeDraggedIngredients.map((i) => i.price).reduce((a, b) => a + b, 0);
+    const sum = storeDraggedIngredients.map((i: any) => i.price).reduce((a: any, b: any) => a + b, 0);
     setIngredientsPrice(sum);
   }, [storeDraggedIngredients]);
   //Подсчет стоимости булок

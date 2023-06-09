@@ -3,14 +3,45 @@ import {
   GET_MENU_REQUEST_FAILED,
   GET_MENU_REQUEST_FINISH,
   GET_MENU_REQUEST_SUCCESS,
-  UPDATE_KEYS,
 } from "../actions/ingridientsAction";
 
-import { uuidv4 } from "../../utils/utils";
+import { TIngredientsItems } from "../types/data";
 
 import React, { useEffect } from "react";
 
-const defaultState = {
+type TIngredientsState = {
+  ingridients: ReadonlyArray<TIngredientsItems>,
+
+  itemsRequest: null,
+  itemsRequestFailed: null,
+  itemsRequestFailedMessage: null,
+};
+
+
+export interface IGetMenuReqAction {
+  readonly type: typeof GET_MENU_REQUEST;
+}
+export interface IGetMenuReqFailedAction {
+  readonly type: typeof GET_MENU_REQUEST_FAILED;
+  readonly err: string;
+}
+export interface IGetMenuReqFinishAction {
+  readonly type: typeof GET_MENU_REQUEST_FINISH;
+}
+
+export interface IGetMenuReqSuccessAction {
+  readonly type: typeof GET_MENU_REQUEST_SUCCESS;
+  readonly items: TIngredientsItems[];
+}
+
+export type TIngredientsActions = 
+  | IGetMenuReqAction
+  | IGetMenuReqFailedAction
+  | IGetMenuReqFinishAction
+  | IGetMenuReqSuccessAction;
+
+
+const defaultState: TIngredientsState = {
   //Список всех полученных ингредиентов
   ingridients: [],
   itemsRequest: null,
@@ -18,7 +49,7 @@ const defaultState = {
   itemsRequestFailedMessage: null,
 };
 
-export const ingredientsReducer = (state = defaultState, action) => {
+export const ingredientsReducer = (state = defaultState, action: TIngredientsActions) => {
   //Создали редьюсер и задали начальное состояние
   switch (action.type) {
     case GET_MENU_REQUEST_SUCCESS:
@@ -26,11 +57,6 @@ export const ingredientsReducer = (state = defaultState, action) => {
         ...state,
         ingridients: action.items,
       };
-    // case UPDATE_KEYS:
-    //   return {
-    //     ...state,
-    //     ingridients: state.ingridients.map((element) => element),
-    //   };
     case GET_MENU_REQUEST_FAILED: {
       return {
         ...state,

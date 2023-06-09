@@ -1,16 +1,15 @@
 import { useDrag, useDrop } from "react-dnd";
 import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./BurgerConstructorElement.module.css";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "../../hooks/hooks";
 import { setDraggedIngredients } from "../../services/actions/orderAction";
-import { uuidv4 } from "../../utils/utils";
 
-export default function BurgerConstructorElement({ data, index }) {
+export default function BurgerConstructorElement({ data, index }: any) {
   const dispatch = useDispatch();
   const hoverIndex = index;
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
 
-  const onSortHandler = (arr, dragIndex) => {
+  const onSortHandler = (arr: any, dragIndex: any) => {
     const element = arr[dragIndex];
     const newArr = [...arr];
     newArr.splice(dragIndex, 1); //Удалить перетаскиваемый элемент со старого места
@@ -25,14 +24,15 @@ export default function BurgerConstructorElement({ data, index }) {
 
   const [, drop] = useDrop({
     accept: "sort_ingr",
-    drop({ index }) {
+    drop( {index} ) {
+      console.log(index.index)
       const dragIndex = index;
       onSortHandler(storeDraggedIngredients, dragIndex);
     },
   });
 
   const deleteIngredient = () => {
-    const arr = storeDraggedIngredients.map((i) => i);
+    const arr = storeDraggedIngredients.map((i: any) => i);
     const newArr = [...arr];
     newArr.splice(index, 1);
     dispatch(setDraggedIngredients(newArr));

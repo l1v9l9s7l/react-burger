@@ -8,11 +8,10 @@ import {
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { UPLOAD_USER } from "../../services/actions/userAction";
 import { uploadUserData } from "../../utils/api";
-import { useDispatch } from "react-redux";
 import { getCookie } from "../../utils/utils";
+import { useDispatch, useSelector } from "../../hooks/hooks";
 
 export default function AppHeader() {
   const dispatch = useDispatch();
