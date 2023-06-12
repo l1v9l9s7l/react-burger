@@ -10,7 +10,9 @@ const initialState: TFeedState = { wsConnected: false, orders: [], total: 0, tot
 
 type TFeedState = {
     wsConnected: boolean,
-    orders: [],
+    orders: {
+        _id: number,
+    }[],
     total: number,
     totalToday: number
 }
@@ -38,7 +40,7 @@ type TFeedActions =
 | WsFeedConnectionMessage
 | WsFeedConnectionError;
 
-export const wsFeedReducer = (state = initialState, action: TFeedActions) => {
+export const wsFeedReducer = (state = initialState, action: TFeedActions): TFeedState => {
     switch (action.type) {
         case WS_FEED_CONNECTION_SUCCESS: {
             return { ...state, wsConnected: true };

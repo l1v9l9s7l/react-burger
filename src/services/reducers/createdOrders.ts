@@ -10,7 +10,7 @@ type TCreatedOrdersState = {
   wsConnected: boolean, 
   orders:  ReadonlyArray<TCreatedOrders>, 
   total: number, 
-  totalToday: number 
+  totalToday: number,
 }
 
 interface IWsGetMes {

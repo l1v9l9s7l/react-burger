@@ -31,9 +31,9 @@ export default function BurgerConstructor() {
   //Массив с данными пернесенных элементов
   const [draggedElements, setDraggedElements] = useState(storeDraggedIngredients);
   //Массив с разметкой перенесенных ингредиентов
-  const [selectedIngridients, setSelectedIngridients] = useState([]);
+  const [selectedIngridients, setSelectedIngridients] = useState<any>([]);
   //Массив с данными пернесенных булок
-  const [draggedBun, setDraggedBun] = useState(storeDraggedBuns);
+  const [draggedBun, setDraggedBun] = useState<any>(storeDraggedBuns);
   const [ingredientsPrice, setIngredientsPrice] = useState(0);
   const [bunPrice, setBunPrice] = useState(0);
   let history = useHistory();
@@ -65,10 +65,8 @@ export default function BurgerConstructor() {
 
     if (data.type === "sauce" || data.type === "main") {
       fetchIngredients().then((res) => {
-        console.log(res.data);
         const newElement = res.data.find((element: any) => element._id === data.id);
         newElement.key = uuidv4();
-        console.log(draggedElements);
         setDraggedElements([
           ...draggedElements,
           newElement, //При броске элемента добавляем его в draggedElements
@@ -76,7 +74,7 @@ export default function BurgerConstructor() {
       });
     } else if (data.type === "bun") {
       setDraggedBun([
-        ...ingridients.filter((element: any) => element._id === data.id), //При броске элемента добавляем его в draggedBuns
+        ...ingridients.filter((element) => element._id === data.id), //При броске элемента добавляем его в draggedBuns
       ]);
       return;
     }
@@ -116,7 +114,7 @@ export default function BurgerConstructor() {
     const commonIdsArr = bunIdsArr.concat(ingredientsIdsArr, bunIdsArr);
     setIngridientsIdArr(commonIdsArr);
     setSelectedIngridients(
-      storeDraggedIngredients.map((i: any, index: any) => (
+      storeDraggedIngredients.map((i, index) => (
         <BurgerConstructorElement data={i} index={index} key={i.key} />
       ))
     );

@@ -3,13 +3,15 @@ import { ConstructorElement, DragIcon } from "@ya.praktikum/react-developer-burg
 import styles from "./BurgerConstructorElement.module.css";
 import { useDispatch, useSelector } from "../../hooks/hooks";
 import { setDraggedIngredients } from "../../services/actions/orderAction";
+import { TDragIngredients, TIngredientsItems } from "../../services/types/data";
 
-export default function BurgerConstructorElement({ data, index }: any) {
+export default function BurgerConstructorElement({ data, index }: {data: any, index: number}) {
   const dispatch = useDispatch();
   const hoverIndex = index;
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
+  console.log(data)
 
-  const onSortHandler = (arr: any, dragIndex: any) => {
+  const onSortHandler = (arr: TDragIngredients, dragIndex: number) => {
     const element = arr[dragIndex];
     const newArr = [...arr];
     newArr.splice(dragIndex, 1); //Удалить перетаскиваемый элемент со старого места
@@ -22,11 +24,11 @@ export default function BurgerConstructorElement({ data, index }: any) {
     type: "sort_ingr",
   });
 
-  const [, drop] = useDrop({
+  const [, drop] = useDrop<any>({
     accept: "sort_ingr",
-    drop( {index} ) {
+    drop( index ) {
       console.log(index.index)
-      const dragIndex = index;
+      const dragIndex = index.index;
       onSortHandler(storeDraggedIngredients, dragIndex);
     },
   });
@@ -41,7 +43,7 @@ export default function BurgerConstructorElement({ data, index }: any) {
   return (
     <div ref={drop}>
       <div className={`${styles.elementWrapper} pt-4`} key={data.id} ref={drag}>
-        <DragIcon />
+        <DragIcon type="primary" />
         <ConstructorElement
           handleClose={deleteIngredient}
           text={data.name}

@@ -11,10 +11,9 @@ import React, { useEffect } from "react";
 
 type TIngredientsState = {
   ingridients: ReadonlyArray<TIngredientsItems>,
-
-  itemsRequest: null,
-  itemsRequestFailed: null,
-  itemsRequestFailedMessage: null,
+  itemsRequest: boolean | null,
+  itemsRequestFailed: boolean | null,
+  itemsRequestFailedMessage: null | string,
 };
 
 
@@ -49,7 +48,7 @@ const defaultState: TIngredientsState = {
   itemsRequestFailedMessage: null,
 };
 
-export const ingredientsReducer = (state = defaultState, action: TIngredientsActions) => {
+export const ingredientsReducer = (state = defaultState, action: TIngredientsActions) : TIngredientsState => {
   //Создали редьюсер и задали начальное состояние
   switch (action.type) {
     case GET_MENU_REQUEST_SUCCESS:
@@ -60,7 +59,7 @@ export const ingredientsReducer = (state = defaultState, action: TIngredientsAct
     case GET_MENU_REQUEST_FAILED: {
       return {
         ...state,
-        items: [],
+        // items: [],
         itemsRequestFailed: true,
         itemsRequestFailedMessage: action.err,
       };

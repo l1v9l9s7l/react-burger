@@ -1,20 +1,19 @@
 import { CLOSE_INGREDIENT_MODAL, OPEN_INGREDIENT_MODAL } from "../actions/ingredientDetailsAction";
+import { Reducer } from "redux";
 
 type TIngredientModalState = {
   openIngridientModal: boolean,
-  modalDetails: null | []
-}
+  modalDetails: null | [],
+};
 
 const defaultState: TIngredientModalState = {
-  //Список всех полученных ингредиентов
   openIngridientModal: false,
-  //Объект просматриваемого ингредиента
   modalDetails: null,
 };
 
 interface IIngrModalOpen {
   readonly type: typeof OPEN_INGREDIENT_MODAL;
-  readonly payload: TIngredientModalState;
+  readonly payload: [];
 }
 
 interface IIngrModalClose {
@@ -25,7 +24,7 @@ type TIngredientModalActions =
   | IIngrModalOpen
   | IIngrModalClose;
 
-export const ingredientDetailsReducer = (state = defaultState, action: TIngredientModalActions) => {
+export const ingredientDetailsReducer = (state = defaultState, action: TIngredientModalActions) : TIngredientModalState => {
   //Создали редьюсер и задали начальное состояние
   switch (action.type) {
     case OPEN_INGREDIENT_MODAL: {
@@ -33,7 +32,7 @@ export const ingredientDetailsReducer = (state = defaultState, action: TIngredie
         ...state,
         openIngridientModal: true,
         modalDetails: action.payload,
-      };
+      }; 
     }
     case CLOSE_INGREDIENT_MODAL: {
       return {
@@ -42,7 +41,8 @@ export const ingredientDetailsReducer = (state = defaultState, action: TIngredie
         modalDetails: null,
       };
     }
-    default:
+    default:{
       return state;
+    }
   }
 };

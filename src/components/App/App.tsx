@@ -26,7 +26,8 @@ function App() {
   const dispatch = useDispatch();
   const history = useHistory();
   const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
-
+  // const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
+ 
   useEffect(() => {
     dispatch(getIngridients());
   }, [dispatch]);
