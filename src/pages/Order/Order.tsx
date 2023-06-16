@@ -1,7 +1,7 @@
 import OrderDetailedStatus from "../../components/OrderDetailedStatus/OrderDetailedStatus";
 
 import styles from "./Order.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch } from "../../hooks/hooks";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
