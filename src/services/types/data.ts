@@ -11,7 +11,8 @@ export type TIngredientsItems = {
   type: string,
   __v: number,
   id: string,
-  _id: number
+  _id: string,
+  key: string
 }
 
 export type TCreatedOrders = {
@@ -35,4 +36,5 @@ export type TDragIngredients = {
   type: string,
   __v: number,
   _id: string,
+  id: string
 }[] | []

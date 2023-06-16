@@ -5,11 +5,10 @@ import { useDispatch, useSelector } from "../../hooks/hooks";
 import { setDraggedIngredients } from "../../services/actions/orderAction";
 import { TDragIngredients, TIngredientsItems } from "../../services/types/data";
 
-export default function BurgerConstructorElement({ data, index }: {data: any, index: number}) {
+export default function BurgerConstructorElement({ data, index }: {data: {id: string, name: string, image: string, price: number}, index: number}) {
   const dispatch = useDispatch();
   const hoverIndex = index;
   const storeDraggedIngredients = useSelector((state) => state.order.dragIngredients);
-  console.log(data)
 
   const onSortHandler = (arr: TDragIngredients, dragIndex: number) => {
     const element = arr[dragIndex];
@@ -24,17 +23,16 @@ export default function BurgerConstructorElement({ data, index }: {data: any, in
     type: "sort_ingr",
   });
 
-  const [, drop] = useDrop<any>({
+  const [, drop] = useDrop<{index: number}>({
     accept: "sort_ingr",
     drop( index ) {
-      console.log(index.index)
       const dragIndex = index.index;
       onSortHandler(storeDraggedIngredients, dragIndex);
     },
   });
 
   const deleteIngredient = () => {
-    const arr = storeDraggedIngredients.map((i: any) => i);
+    const arr = storeDraggedIngredients.map((i: { calories: number; carbohydrates: number; fat: number; image: string; image_large: string; image_mobile: string; key: string; name: string; price: number; proteins: number; type: string; __v: number; _id: string; id: string; }) => i);
     const newArr = [...arr];
     newArr.splice(index, 1);
     dispatch(setDraggedIngredients(newArr));

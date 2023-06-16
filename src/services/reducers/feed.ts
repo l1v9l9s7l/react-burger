@@ -11,7 +11,12 @@ const initialState: TFeedState = { wsConnected: false, orders: [], total: 0, tot
 type TFeedState = {
     wsConnected: boolean,
     orders: {
-        _id: number,
+        _id: string,
+        status: string,
+        number: number,
+        name: string,
+        ingredients: [],
+        createdAt: string,
     }[],
     total: number,
     totalToday: number

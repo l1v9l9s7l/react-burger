@@ -6,7 +6,7 @@ import Ingridient from "../Ingridient/Ingridient";
 import Modal from "../Modal/Modal";
 import IngridientDetails from "../IngridientDetails/IngridientDetails";
 
-export default function DateCounter({ createdAt } : any)  {
+export default function DateCounter({ createdAt }: {createdAt: string})  {
   const date = new Date(createdAt);
   return (
     <div>

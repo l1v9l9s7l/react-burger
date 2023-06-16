@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { CSSProperties } from "react";
 
 import styles from "./IngredientImage.module.css";
 
-const IngredientImage = ({ image, count, name, mix }: any) => {
+const IngredientImage = ({ image, count, name, mix }: {image: string, count?: number, name: string, mix?: CSSProperties | undefined}) => {
   return (
     <div className={`${styles.Container}`} style={mix}>
       <div className={styles.BordersContainer}>

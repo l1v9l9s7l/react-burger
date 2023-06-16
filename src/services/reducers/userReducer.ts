@@ -78,8 +78,6 @@ export const userReducer = (state = defaultState, action: TUserActions) => {
       return {
         ...state,
         isAuthenticated: action.payload.isAuthenticated,
-        email: action.payload.user.email,
-        name: action.payload.user.name,
       };
     }
     default: {

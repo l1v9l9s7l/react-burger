@@ -11,12 +11,12 @@ import styles from "./OrderDetailedStatus.module.css";
 
 const OrderDetailedStatus = () => {
   const dispatch = useDispatch();
-  const { id }: any = useParams();
+  const { id }: {id: string} = useParams();
   const isFeedRoute = useRouteMatch("/feed/:id");
   const isProfileRoute = useRouteMatch("/profile/orders/:id");
-  let order = {};
-  const [feedsState, setFeedsState] = useState<any>();
-  const [updatedFeedOrder, setUpdatedFeedOrder] = useState<any>();
+  let order: {number?: number,name?: string, status?: string, ingredients: number[], createdAt: string, _id?: string} = {createdAt: '', ingredients: []};
+  const [feedsState, setFeedsState] = useState<{find: Function}>();
+  const [updatedFeedOrder, setUpdatedFeedOrder] = useState();
 
   const feeds = useSelector((state) => state.feed.orders);
 
@@ -27,17 +27,17 @@ const OrderDetailedStatus = () => {
   useEffect(() => {
     if (feeds) {
       if (feedsState) {
-        setUpdatedFeedOrder(feedsState.find((order: any) => order._id === id));
+        setUpdatedFeedOrder(feedsState.find((order: {_id: string}) => order._id === id));
       }
     }
   }, [feeds]);
 
   const feedOrder = useSelector(
-    (state) => state.feed.orders.find((order) => order._id === id) || {}
+    (state) => state.feed.orders.find((order) => order._id === id) || {createdAt: '', ingredients: [1]}
   );
 
   const profileOrder = useSelector(
-    (state) => state.createdOrders.orders.find((order) => order._id === id) || {}
+    (state) => state.createdOrders.orders.find((order) => order._id === id) || {createdAt: '', ingredients: [1]}
   );
 
   if (isFeedRoute) {
@@ -46,7 +46,7 @@ const OrderDetailedStatus = () => {
     order = profileOrder;
   }
 
-  const { number, name, status, ingredients, createdAt }: any = order;
+  const { number, name, status, ingredients, createdAt } = order;
   const descriptionIngr = useSelector((state) => state.ingridients.ingridients);
   const detailedInfo = fillDetailedInformationOrder(ingredients, descriptionIngr);
 

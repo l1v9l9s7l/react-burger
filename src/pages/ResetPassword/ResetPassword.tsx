@@ -13,20 +13,20 @@ import { useSelector } from "../../hooks/hooks";
 import { getCookie } from "../../utils/utils";
 
 export function ResetPassword() {
-  const location = useLocation<any>();
+  const location = useLocation<{from: string}>();
   const [passwordInputState, setPasswordInputState] = useState("");
   const [codeInputState, setCodeInputState] = useState("");
   const resetPassRequest = useSelector((state) => state.page.sendPasswordResetRequest);
 
-  function handleChangePassword(event: any) {
+  function handleChangePassword(event: {target:{value: string}}) {
     setPasswordInputState(event.target.value);
   }
 
-  function handleChangeCode(event: any) {
+  function handleChangeCode(event: {target:{value: string}}) {
     setCodeInputState(event.target.value);
   }
 
-  const sendPassword = (event: any) => {
+  const sendPassword = (event: {preventDefault: Function}) => {
     event.preventDefault();
     resetPasswordPost(passwordInputState, codeInputState).then((res) => {
       console.log(res);

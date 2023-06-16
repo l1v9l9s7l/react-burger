@@ -10,7 +10,7 @@ import { useSelector } from "../../hooks/hooks";
 import { fillDetailedInformationOrder } from "../../utils/utils";
 import IngredientImage from "../IngredientImage/IngredientImage";
 
-const OrderCard = ({ order, onClick, showStatus = false }: any) => {
+const OrderCard = ({ order, onClick, showStatus = false } : {order:{number: number,name: string, status: string, ingredients: [], createdAt: string, _id: string}, onClick: Function, showStatus?: boolean}) => {
   const descriptionIngr = useSelector((state) => state.ingridients.ingridients);
 
   const { number, name, status, ingredients, createdAt } = order;

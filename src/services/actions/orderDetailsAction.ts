@@ -5,7 +5,7 @@ export const OPEN_ORDER_MODAL: "OPEN_ORDER_MODAL" = "OPEN_ORDER_MODAL";
 export const CLOSE_ORDER_MODAL: "CLOSE_ORDER_MODAL" = "CLOSE_ORDER_MODAL";
 export const GET_ORDER_NUMBER: "GET_ORDER_NUMBER" = "GET_ORDER_NUMBER";
 
-export function setOrderIdsArr(orderIds: any) {
+export function setOrderIdsArr(orderIds: string[]) {
   return function (dispatch: FC) {
     dispatch({
       type: SET_ORDER_IDS_ARR,

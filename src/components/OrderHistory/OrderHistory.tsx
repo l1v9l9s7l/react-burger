@@ -25,13 +25,13 @@ const OrderHistory = () => {
   }, [dispatch]);
 
   const redirectModalUrl = useCallback(
-    (id: any) => {
+    (id: string) => {
       history.push({ pathname: `/profile/orders/${id}` }, { profileOrderStatusModal: location });
     },
     [history, location]
   );
 
-  const handleOpenModal = (id: any) => {
+  const handleOpenModal = (id: string) => {
     dispatch({ type: OPEN_INGREDIENT_MODAL });
     redirectModalUrl(id);
   };

@@ -20,21 +20,21 @@ export function Register() {
   const [user, setUser] = useState({});
   const [requestSuccess, setRequestSuccess] = useState(false);
   let history = useHistory();
-  const location = useLocation<any>();
+  const location = useLocation<{from: string}>();
 
-  function handleChangeName(event: any) {
+  function handleChangeName(event: {target: {value: string}}) {
     setNameInputState(event.target.value);
   }
 
-  function handleChangePassword(event: any) {
+  function handleChangePassword(event: {target: {value: string}}) {
     setPasswordInputState(event.target.value);
   }
 
-  function handleChangeEmail(event: any) {
+  function handleChangeEmail(event: {target: {value: string}}) {
     setEmailInputState(event.target.value);
   }
 
-  const sendForm = (event: any) => {
+  const sendForm = (event: {preventDefault: Function}) => {
     event.preventDefault();
     sendRegistrationForm(emailInputState, passwordInputState, nameInputState).then((res) => {
       setUser(res);

@@ -7,9 +7,9 @@ import Modal from "../Modal/Modal";
 import IngridientDetails from "../IngridientDetails/IngridientDetails";
 
 export default function BurgerIngridients() {
-  const [sauces, setSauces] = React.useState<any>([]);
-  const [mains, setMains] = React.useState<any>([]);
-  const [buns, setBuns] = React.useState<any>([]);
+  const [sauces, setSauces] = React.useState<React.ReactNode[]>([]);
+  const [mains, setMains] = React.useState<React.ReactNode[]>([]);
+  const [buns, setBuns] = React.useState<React.ReactNode[]>([]);
   const ingridients = useSelector((state) => state.ingridients.ingridients);
   const [bunsCategoryActive, setBunsCategoryActive] = useState(true);
   const [mainsCategoryActive, setMainsCategoryActive] = useState(false);
@@ -17,27 +17,27 @@ export default function BurgerIngridients() {
 
   //Формирование массивов по категориям и передача их в состояние
   React.useEffect(() => {
-    const saucesArr = ingridients.filter((ingridient: any) => {
+    const saucesArr = ingridients.filter((ingridient) => {
       if (ingridient.type === "sauce") {
         return ingridient;
       }
     });
-    const sauces = saucesArr.map((i: any) => <Ingridient ingridient={i} id={i._id} key={i._id} />);
+    const sauces = saucesArr.map((i) => <Ingridient ingridient={i} id={i._id} key={i._id} />);
     setSauces(sauces);
   }, [ingridients]);
 
   React.useEffect(() => {
-    const mainsArr = ingridients.filter((ingridient: any) => {
+    const mainsArr = ingridients.filter((ingridient) => {
       if (ingridient.type === "main") {
         return ingridient;
       }
     });
-    const mains = mainsArr.map((i: any) => <Ingridient ingridient={i} id={i._id} key={i._id} />);
+    const mains = mainsArr.map((i) => <Ingridient ingridient={i} id={i._id} key={i._id} />);
     setMains(mains);
   }, [ingridients]);
 
   React.useEffect(() => {
-    const bunsArr = ingridients.filter((ingridient: any) => {
+    const bunsArr = ingridients.filter((ingridient) => {
       if (ingridient.type === "bun") {
         return ingridient;
       }
@@ -46,7 +46,7 @@ export default function BurgerIngridients() {
     setBuns(buns);
   }, [ingridients]);
 
-  const [ingridientsTab, setIngridientsTab] = useState<any>();
+  const [ingridientsTab, setIngridientsTab] = useState<HTMLElement | null>();
 
   //Функция переключения состояний кнопок при скролле
   useEffect(() => {
@@ -55,8 +55,8 @@ export default function BurgerIngridients() {
       if (ingridientsTab === null || ingridientsTab === undefined) {
         return;
       } else {
-        ingridientsTab.addEventListener("scroll", (evt: any) => {
-          const scrollPosition = evt.target.scrollTop;
+        ingridientsTab.addEventListener("scroll", (evt) => {
+          const scrollPosition = (evt.target as HTMLElement).scrollTop;
           if (scrollPosition > 280) {
             setBunsCategoryActive(false);
             setSaucesCategoryActive(true);

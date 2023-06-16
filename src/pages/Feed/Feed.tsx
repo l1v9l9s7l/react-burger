@@ -22,13 +22,13 @@ const Feed = () => {
   }, [dispatch]);
 
   const redirectModalUrl = useCallback(
-    (id: any) => {
+    (id: string) => {
       history.push({ pathname: `/feed/${id}` }, { feedOrderStatusModal: location });
     },
     [history, location]
   );
 
-  const handleClick = (id: any) => {
+  const handleClick = (id: string) => {
     dispatch({ type: OPEN_INGREDIENT_MODAL });
     redirectModalUrl(id);
   };

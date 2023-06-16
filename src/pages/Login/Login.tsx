@@ -21,15 +21,15 @@ export function Login() {
   const dispatch = useDispatch();
   const pageState = useSelector((state) => state.page);
 
-  function loginChangeHandler(event: any) {
+  function loginChangeHandler(event: {target: {value: string}}) {
     setLoginInputState(event.target.value);
   }
 
-  function passwordChangeHandler(event: any) {
+  function passwordChangeHandler(event: {target: {value: string}}) {
     setPasswordInputState(event.target.value);
   }
 
-  const signIn = (event: any) => {
+  const signIn = (event: {preventDefault: Function}) => {
     event.preventDefault();
     dispatch(logUser(loginInputState, passwordInputState));
   };

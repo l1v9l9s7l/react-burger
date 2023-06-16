@@ -1,7 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { GenericObject } from "../../utils/utils";
 
-const dicStatus: any = {
+const dicStatus: GenericObject = {
   done: {
     name: "Выполнен",
     color: "#00CCCC",
@@ -16,7 +17,7 @@ const dicStatus: any = {
   },
 };
 
-const OrderStatus = ({ status, number, mix = "" }: any) => {
+const OrderStatus = ({ status, number, mix = "" }: {status: string, number?: number, mix?: string}) => {
   const styledStatus = dicStatus[status];
 
   return (

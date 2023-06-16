@@ -8,7 +8,7 @@ import { TCreatedOrders } from "../types/data";
 
 type TCreatedOrdersState = {
   wsConnected: boolean, 
-  orders:  ReadonlyArray<TCreatedOrders>, 
+  orders:  ReadonlyArray<{number: number,name: string, status: string, ingredients: [], createdAt: string, _id: string}>, 
   total: number, 
   totalToday: number,
 }

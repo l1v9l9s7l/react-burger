@@ -9,12 +9,12 @@ import { useDispatch, useSelector } from "../../hooks/hooks";
 import { useHistory } from "react-router-dom";
 import { OPEN_INGREDIENT_MODAL } from "../../services/actions/ingredientDetailsAction";
 
-export default function Ingridient(props: any) {
+export default function Ingridient(props: {id: number | string, ingridient: {type: string, _id: string}  }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [ingridient, setIngridient] = useState<any>({});
+  const [ingridient, setIngridient] = useState<{_id?: string, image?: string, price?: number, name?: string}>({});
   const idsArr = useSelector((state) => state.orderDetails.orderIds);
-  const [count, setCount] = useState<any>(false);
+  const [count, setCount] = useState<number>(0);
 
   const [{ isDragging }, drag] = useDrag({
     // 1. Выводит булевое значение переносится элемент или нет 2.ref
@@ -51,7 +51,3 @@ export default function Ingridient(props: any) {
     </div>
   );
 }
-
-// Ingridient.propTypes = {
-//   ingridient: PropTypes.shape(ingridientPropTypes),
-// };

@@ -8,10 +8,10 @@ import styles from "./FeedStatus.module.css";
 const ORDER_DONE = "done";
 const ORDER_IN_PROGRESS = "pending";
 
-const FeedStatus = ({ orders, total, totalToday } : any) => {
-  const createOrderDashboard = (title: any, filterStatus: any) => {
+const FeedStatus = ({ orders, total, totalToday } : {orders: {number: number,name: string, status: string, ingredients: [], createdAt: string, _id: string}[], total: number, totalToday: number}) => {
+  const createOrderDashboard = (title: string, filterStatus: string) => {
     const ordersChunks = splitChunks(
-      orders.filter((order: any) => order.status === filterStatus),
+      orders.filter((order: {status: string}) => order.status === filterStatus),
       5,
       2
     );
@@ -21,7 +21,7 @@ const FeedStatus = ({ orders, total, totalToday } : any) => {
         {ordersChunks.map((chunk, index) => {
           return (
             <div key={`${chunk}_${index}`} className={styles.ColumnOrderNumbers}>
-              {chunk.map((order: any) => (
+              {chunk.map((order: {number: number,name: string, status: string, ingredients: [], createdAt: string, _id: string}) => (
                 <OrderStatus
                   key={order._id}
                   status={order.status}

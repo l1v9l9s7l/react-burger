@@ -7,10 +7,16 @@ import ModalOverlay from "../ModalOverlay/ModalOverlay";
 
 const modalRoot = document.getElementById("modal") || document.createElement("react-modals");
 
-export default function Modal(props: any) {
+
+
+export default function Modal(props: {onModalClose: any , children: React.ReactNode }) {
+  // React.MouseEventHandler<any>
+  const closeModalOnEsc: Function = props.onModalClose
+  const closeModalOnClick: React.MouseEventHandler<any>= props.onModalClose
+
   React.useEffect(() => {
-    const closeOnEsc = (evt: any) => {
-      evt.code === "Escape" && props.onModalClose();
+    const closeOnEsc = (evt: {code: string | Function}) => {
+      evt.code === "Escape" && closeModalOnEsc();
     };
     document.addEventListener("keydown", closeOnEsc);
 
@@ -24,7 +30,7 @@ export default function Modal(props: any) {
       <ModalOverlay onClose={props.onModalClose} />
       <div className={styles.modalContent}>
         <div className={styles.modalWrapper}>
-          <div className={`${styles.modalCloseIcon} pt-15 pr-10`} onClick={props.onModalClose}>
+          <div className={`${styles.modalCloseIcon} pt-15 pr-10`} onClick={closeModalOnClick}>
             <CloseIcon type="primary" />
           </div>
           {props.children}
@@ -34,8 +40,3 @@ export default function Modal(props: any) {
     modalRoot
   );
 }
-
-// Modal.propTypes = {
-//   children: PropTypes.object,
-//   onModalClose: PropTypes.func,
-// };

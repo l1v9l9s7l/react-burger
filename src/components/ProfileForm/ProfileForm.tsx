@@ -20,7 +20,7 @@ export function ProfileForm() {
   );
   const cookieAccessTokenDecode = cookieAccessToken
     ? decodeURIComponent(cookieAccessToken[1])
-    : undefined;
+    : '';
 
   const cookieRefreshToken = document.cookie.match(
     new RegExp(
@@ -29,7 +29,7 @@ export function ProfileForm() {
   );
   const cookieRefreshTokenDecode = cookieRefreshToken
     ? decodeURIComponent(cookieRefreshToken[1])
-    : undefined;
+    : '';
 
   const [dataName, setDataName] = useState(userStoreData.name);
   const [dataLogin, setDataLogin] = useState(userStoreData.email);
@@ -64,22 +64,22 @@ export function ProfileForm() {
     }
   }, []);
 
-  const saveData = (event: any) => {
+  const saveData = (event: {preventDefault: Function}) => {
     event.preventDefault();
     updateUserData(dataName, dataLogin, dataPassword, cookieAccessTokenDecode).then((res) => {
       console.log(res);
     });
   };
 
-  function changeDataName(event: any) {
+  function changeDataName(event: {target: {value: string}}) {
     setDataName(event.target.value);
   }
 
-  function changeDataLogin(event: any) {
+  function changeDataLogin(event: {target: {value: string}}) {
     setDataLogin(event.target.value);
   }
 
-  function changeDataPassword(event: any) {
+  function changeDataPassword(event: {target: {value: string}}) {
     setDataPassword(event.target.value);
   }
 

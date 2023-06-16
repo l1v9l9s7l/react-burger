@@ -13,7 +13,7 @@ export function setDraggedIngredients(draggedElements: TDragIngredients) {
   };
 }
 
-export function setDraggedBuns(draggedBuns: TDragIngredients) {
+export function setDraggedBuns(draggedBuns: {}) {
   return function (dispatch: FC) {
     dispatch({
       type: SET_DRAGGED_BUNS,

@@ -23,7 +23,6 @@ const Order = () => {
 
   useEffect(() => {
     if (history.location.pathname.includes("/order")) {
-      console.log("Order1488");
       dispatch({ type: WS_CREATED_ORDERS_CONNECTION_START });
       return () => {
         dispatch({ type: WS_CREATED_ORDERS_CONNECTION_CLOSED });

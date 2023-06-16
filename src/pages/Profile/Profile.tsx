@@ -7,8 +7,9 @@ import { logOutOnServer } from "../../utils/api";
 import { useDispatch} from "../../hooks/hooks";
 import { AUTH_CHECK } from "../../services/actions/userAction";
 import { logoutUser } from "../../services/actions/userAction";
+import React from "react";
 
-export function Profile(props: any) {
+export function Profile(props: {children: React.ReactNode}) {
   const dispatch = useDispatch();
   const [menuProfile, setMenuProfile] = useState(false);
   const [menuOrder, setMenuOrder] = useState(false);

@@ -2,7 +2,7 @@ import styles from "./OrderDetails.module.css";
 import PropTypes from "prop-types";
 import doneImagePath from "../../images/done.png";
 
-export default function OrderDetails(props: any) {
+export default function OrderDetails(props: {orderId: string}) {
   return (
     <div className={`${styles.orderDetails} `}>
       {!props.orderId && (
@@ -17,6 +17,4 @@ export default function OrderDetails(props: any) {
   );
 }
 
-OrderDetails.propTypes = {
-  orderId: PropTypes.number,
-};
+

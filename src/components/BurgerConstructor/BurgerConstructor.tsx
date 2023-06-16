@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, ReactNode } from "react";
 import { useDrag, useDrop } from "react-dnd/dist/hooks";
 import styles from "./BurgerConstructor.module.css";
 import { ConstructorElement, Button } from "@ya.praktikum/react-developer-burger-ui-components";
@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from "../../hooks/hooks";
 
 export default function BurgerConstructor() {
   const dispatch = useDispatch();
-  const [ingridientsIdArr, setIngridientsIdArr] = useState([]);
+  const [ingridientsIdArr, setIngridientsIdArr] = useState<string[]>([]);
   const orderNumber = useSelector((state) => state.orderDetails.orderNumber);
   const ingridients = useSelector((state) => state.ingridients.ingridients);
   const modalOpen = useSelector((state) => state.orderDetails.openOrderModal);
@@ -30,15 +30,19 @@ export default function BurgerConstructor() {
   const storeDraggedBuns = useSelector((state) => state.order.dragBuns);
   //Массив с данными пернесенных элементов
   const [draggedElements, setDraggedElements] = useState(storeDraggedIngredients);
+
+  type TSelectedIngridients = ReactNode
   //Массив с разметкой перенесенных ингредиентов
-  const [selectedIngridients, setSelectedIngridients] = useState<any>([]);
+  const [selectedIngridients, setSelectedIngridients] = useState<TSelectedIngridients>([]);
   //Массив с данными пернесенных булок
-  const [draggedBun, setDraggedBun] = useState<any>(storeDraggedBuns);
+  type TDraggedBun = { calories: number; carbohydrates: number; fat: number; image: string; image_large: string; image_mobile: string; key: string; name: string; price: number; proteins: number; type: string; __v: number; _id: string; }[]
+  const [draggedBun, setDraggedBun] = useState<TDraggedBun>(storeDraggedBuns);
   const [ingredientsPrice, setIngredientsPrice] = useState(0);
   const [bunPrice, setBunPrice] = useState(0);
   let history = useHistory();
   const location = useLocation();
   const user = useSelector((state) => state.user.name);
+
 
   //Связали локальное состояние с глобальным
 
@@ -60,12 +64,12 @@ export default function BurgerConstructor() {
     setDraggedBun(storeDraggedBuns);
   }, [storeDraggedBuns]);
 
-  const handleDrop = (data: any) => {
+  const handleDrop = (data: {type: string, id: string}) => {
     //data приходит из item у Drop
 
     if (data.type === "sauce" || data.type === "main") {
       fetchIngredients().then((res) => {
-        const newElement = res.data.find((element: any) => element._id === data.id);
+        const newElement = res.data.find((element: {_id: string}) => element._id === data.id);
         newElement.key = uuidv4();
         setDraggedElements([
           ...draggedElements,
@@ -84,9 +88,8 @@ export default function BurgerConstructor() {
     accept: "drop_ingr",
     //data - приходит из Ingredient, содержит id и type ингредиента
     //При сбрасывании элемента происходит drop - handleDrop, в data попадает data Дропа
-    drop(data) {
+    drop(data: { type: string; id: string; }) {
       dispatch({ type: UPDATE_KEYS });
-      console.log(data);
       handleDrop(data);
     },
   });
@@ -104,11 +107,10 @@ export default function BurgerConstructor() {
 
   //Получение айдишников выбранных ингредиентов
   useEffect(() => {
-    // console.log(storeDraggedIngredients);
-    const ingredientsIdsArr = storeDraggedIngredients.map((i: any) => {
+    const ingredientsIdsArr = storeDraggedIngredients.map((i: {_id: string}) => {
       return i._id;
     });
-    const bunIdsArr = draggedBun.map((i: any) => {
+    const bunIdsArr = draggedBun.map((i: {_id: string}) => {
       return i._id;
     });
     const commonIdsArr = bunIdsArr.concat(ingredientsIdsArr, bunIdsArr);
@@ -160,7 +162,7 @@ export default function BurgerConstructor() {
 
   //Подсчет стоимости ингредиентов
   useEffect(() => {
-    const sum = storeDraggedIngredients.map((i: any) => i.price).reduce((a: any, b: any) => a + b, 0);
+    const sum = storeDraggedIngredients.map((i: {price: number}) => i.price).reduce((a: number, b: number) => a + b, 0);
     setIngredientsPrice(sum);
   }, [storeDraggedIngredients]);
   //Подсчет стоимости булок

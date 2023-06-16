@@ -7,7 +7,7 @@ const config = {
   },
 };
 
-const checkRes = (res: any) => {
+const checkRes = (res: Response) => {
   if (res.ok) {
     return res.json();
   }
@@ -19,7 +19,7 @@ const fetchIngredients = () => {
   return fetch(`${config.baseURL}ingredients`).then(checkRes);
 };
 
-const postOrder = (ingredientsId: any) => {
+const postOrder = (ingredientsId: string[]) => {
   return fetch(`${config.baseURL}orders`, {
     method: "POST",
     headers: {
@@ -32,7 +32,7 @@ const postOrder = (ingredientsId: any) => {
   }).then(checkRes);
 };
 
-const forgotPasswordPost = (email: any) => {
+const forgotPasswordPost = (email: string) => {
   return fetch(`${config.baseURL}password-reset`, {
     method: "POST",
     headers: {
@@ -45,7 +45,7 @@ const forgotPasswordPost = (email: any) => {
   }).then(checkRes);
 };
 
-const resetPasswordPost = (password: any, token: any) => {
+const resetPasswordPost = (password: string, token: string) => {
   return fetch(`${config.baseURL}password-reset/reset`, {
     method: "POST",
     headers: {
@@ -58,7 +58,7 @@ const resetPasswordPost = (password: any, token: any) => {
   }).then(checkRes);
 };
 
-const sendRegistrationForm = (email: any, password: any, name: any) => {
+const sendRegistrationForm = (email: string, password: string, name: string) => {
   return fetch(`${config.baseURL}auth/register`, {
     method: "POST",
     headers: {
@@ -72,7 +72,7 @@ const sendRegistrationForm = (email: any, password: any, name: any) => {
   }).then(checkRes);
 };
 
-const authorization = (email: any, password: any) => {
+const authorization = (email: string, password: string) => {
   return fetch(`${config.baseURL}auth/login`, {
     method: "POST",
     headers: {
@@ -85,7 +85,7 @@ const authorization = (email: any, password: any) => {
   }).then(checkRes);
 };
 
-const updateUserData = (name: any, email: any, password: any, token: any) => {
+const updateUserData = (name: string, email: string, password: string, token: string) => {
   return fetch(`${config.baseURL}auth/user`, {
     method: "PATCH",
     headers: {
@@ -100,7 +100,7 @@ const updateUserData = (name: any, email: any, password: any, token: any) => {
   }).then(checkRes);
 };
 
-const uploadUserData = (accessToken: any) => {
+const uploadUserData = (accessToken: string) => {
   return fetch(`${config.baseURL}auth/user`, {
     method: "GET",
     headers: {
@@ -110,7 +110,7 @@ const uploadUserData = (accessToken: any) => {
   }).then(checkRes);
 };
 
-const updateAccessToken = (refreshToken: any) => {
+const updateAccessToken = (refreshToken: string) => {
   return fetch(`${config.baseURL}auth/token`, {
     method: "POST",
     headers: {
@@ -122,7 +122,7 @@ const updateAccessToken = (refreshToken: any) => {
   }).then(checkRes);
 };
 
-const logOutOnServer = (refreshToken: any) => {
+const logOutOnServer = (refreshToken: string) => {
   return fetch(`${config.baseURL}auth/logout`, {
     method: "POST",
     headers: {

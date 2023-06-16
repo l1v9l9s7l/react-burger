@@ -24,7 +24,7 @@ export const RESET_PASSWORD_REQUEST_SUCCESS: "RESET_PASSWORD_REQUEST_SUCCESS" = 
 export const RESET_PASSWORD_REQUEST_FAILED: "RESET_PASSWORD_REQUEST_FAILED" = "RESET_PASSWORD_REQUEST_FAILED";
 export const RESET_PASSWORD_REQUEST_FINISH: "RESET_PASSWORD_REQUEST_FINISH" = "RESET_PASSWORD_REQUEST_FINISH";
 
-export function uploadUser(payload: any) {
+export function uploadUser(payload: {}) {
   return function (dispatch: FC) {
     dispatch({
       type: UPLOAD_USER,
@@ -94,7 +94,7 @@ export function logoutUser() {
   };
 }
 
-export function resetPassword(inputState: string, history: any) {
+export function resetPassword(inputState: string, history: {push: Function}) {
   return function (dispatch: FC) {
     dispatch({ type: RESET_PASSWORD_REQUEST });
     forgotPasswordPost(inputState)

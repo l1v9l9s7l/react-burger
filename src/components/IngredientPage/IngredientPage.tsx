@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "../../hooks/hooks";
 
 export default function IngridientPage() {
-  const { id }: any = useParams();
+  const { id }: {id: string} = useParams();
   const ingredient = useSelector((state) =>
-    state.ingridients.ingridients.find((item: any) => item._id === id)
+    state.ingridients.ingridients.find((item) => item._id === id)
   );
 
   return (

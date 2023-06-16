@@ -10,7 +10,7 @@ import { TIngredientsItems } from "../types/data";
 import React, { useEffect } from "react";
 
 type TIngredientsState = {
-  ingridients: ReadonlyArray<TIngredientsItems>,
+  ingridients: Array<TIngredientsItems>,
   itemsRequest: boolean | null,
   itemsRequestFailed: boolean | null,
   itemsRequestFailedMessage: null | string,

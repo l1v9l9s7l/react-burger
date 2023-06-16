@@ -15,15 +15,15 @@ import { resetPassword } from "../../services/actions/userAction";
 
 export function ForgotPassword() {
   const dispatch = useDispatch();
-  const location = useLocation<any>();
+  const location = useLocation<{ from: string }>();
   const [inputState, setInputState] = useState("");
   let history = useHistory();
 
-  function handleChange(event: any) {
+  function handleChange(event: {target: {value: string}}) {
     setInputState(event.target.value);
   }
 
-  const sendEmail = (event: any) => {
+  const sendEmail = (event: {preventDefault: Function}) => {
     event.preventDefault();
     if (inputState) {
       if (inputState.length > 3) {

@@ -5,14 +5,13 @@ import ingridientPropTypes from "../../utils/types";
 import { useParams } from "react-router-dom";
 import { useSelector } from "../../hooks/hooks";
 
-export default function IngridientDetails(props: any) {
-  const { id }: any = useParams();
+export default function IngridientDetails() {
+  const { id } : {id: string} = useParams();
   const ingredient = useSelector((state) =>
     state.ingridients.ingridients.find((item) => item._id === id)
   );
 
   const modalState = useSelector((state) => state.ingredientDetails.openIngridientModal);
-  console.log(modalState);
 
   return (
     <div className={styles.details}>

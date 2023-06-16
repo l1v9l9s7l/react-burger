@@ -7,13 +7,13 @@ import {
 
 type TOrderDetailsState = {
   orderIds: number[],
-  orderNumber: null | number,
+  orderNumber: string,
   openOrderModal: boolean
 };
 
 const defaultState: TOrderDetailsState = {
   orderIds: [],
-  orderNumber: null,
+  orderNumber: '',
   openOrderModal: false,
 };
 
@@ -32,7 +32,7 @@ interface ICloseOrderModal {
 
 interface IGetOrderNumber {
   readonly type: typeof GET_ORDER_NUMBER;
-  readonly payload: number;
+  readonly payload: string;
 }
 
 
