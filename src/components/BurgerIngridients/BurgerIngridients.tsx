@@ -83,15 +83,18 @@ export default function BurgerIngridients() {
       <h1 className={`${styles.title} pt-10 pb-5`}>Соберите бургер</h1>
 
       <div className={styles.menu}>
-        <Tab className={styles.menuButton} active={bunsCategoryActive}>
-          Булки
-        </Tab>
-        <Tab className={styles.menuButton} active={saucesCategoryActive}>
-          Соусы
-        </Tab>
-        <Tab className={styles.menuButton} active={mainsCategoryActive}>
+        <div className={styles.menuButton}>
+          <Tab value="" onClick={console.log}  active={bunsCategoryActive}>
+            Булки
+          </Tab>
+        </div>
+        <div className={styles.menuButton}>
+          <Tab value="" onClick={console.log} active={saucesCategoryActive}>
+            Соусы
+          </Tab></div>
+        <div className={styles.menuButton}><Tab value="" onClick={console.log} active={mainsCategoryActive}>
           Начинки
-        </Tab>
+        </Tab></div>
       </div>
 
       <div className={`${styles.scrollDiv} pt-10`} id="ingridientsTab">

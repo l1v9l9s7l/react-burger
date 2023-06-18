@@ -66,11 +66,11 @@ export function Register() {
     <form onSubmit={sendForm}>
       <div className={styles.content}>
         <h2 className={styles.title}>Регистрация</h2>
-        <Input onChange={handleChangeName} placeholder="Имя"></Input>
+        <Input value={nameInputState} onChange={handleChangeName} placeholder="Имя"></Input>
         <div className="pt-6"></div>
-        <EmailInput onChange={handleChangeEmail} placeholder="E-mail"></EmailInput>
+        <EmailInput value={emailInputState} onChange={handleChangeEmail} placeholder="E-mail"></EmailInput>
         <div className="pt-6"></div>
-        <PasswordInput onChange={handleChangePassword}></PasswordInput>
+        <PasswordInput value={passwordInputState} onChange={handleChangePassword}></PasswordInput>
         <div className={`pt-6 pb-20 ${styles.enterButton}`}>
           <Button htmlType="submit" size="large">
             Зарегистрироваться
